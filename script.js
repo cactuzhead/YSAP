@@ -205,7 +205,23 @@ function applyControls() {
     const sort = sortBy.value;
     if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
     if (sort === 'author') list.sort((a, b) => a.author.localeCompare(b.author));
-    if (sort === 'date') list.sort((a, b) => new Date(b.stats.Date) - new Date(a.stats.Date));
+    // if (sort === 'date') list.sort((a, b) => new Date(b.stats.Date) - new Date(a.stats.Date));
+    if (sort === 'date') {
+        list.sort((a, b) => {
+            const dateA = a.stats?.Date ? new Date(a.stats.Date) : new Date('1970-01-01');
+            const dateB = b.stats?.Date ? new Date(b.stats.Date) : new Date('1970-01-01');
+            return dateB - dateA; // newest first
+        });
+    }
+
+    if (sort === 'dateAsc') {
+        list.sort((a, b) => {
+            const dateA = a.stats?.Date ? new Date(a.stats.Date) : new Date('1970-01-01');
+            const dateB = b.stats?.Date ? new Date(b.stats.Date) : new Date('1970-01-01');
+            return dateA - dateB; // oldest first
+        });
+    }
+
     if (sort === 'round') list.sort((a, b) => (a.stats?.["Round Time"] || 0) - (b.stats?.["Round Time"] || 0));
     if (sort === 'fuel') list.sort((a, b) => (a.stats?.["Fuel Time"] || 0) - (b.stats?.["Fuel Time"] || 0));
 
