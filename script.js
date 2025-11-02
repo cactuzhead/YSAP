@@ -202,13 +202,23 @@ function applyControls() {
     const sort = sortBy.value;
     if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
     if (sort === 'author') list.sort((a, b) => a.author.localeCompare(b.author));
+    
+    // --- Sort by date (newest first) ---
     if (sort === 'date') {
-        list.sort((a, b) => {
-            const dateA = new Date(a.stats?.Date);
-            const dateB = new Date(b.stats?.Date);
-            return dateB - dateA; // newest first
-        });
+        const monthMap = {
+        Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
+        Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
+        };
+
+        function parseDate(str) {
+        // str format: "2 Nov 2025"
+        const [day, mon, year] = str.split(" ");
+        return new Date(year, monthMap[mon], parseInt(day));
+        }
+
+        list.sort((a, b) => parseDate(b.stats.Date) - parseDate(a.stats.Date)); // newest first
     }
+
     if (sort === 'round') list.sort((a, b) => (a.stats?.["Round Time"] || 0) - (b.stats?.["Round Time"] || 0));
     if (sort === 'fuel') list.sort((a, b) => (a.stats?.["Fuel Time"] || 0) - (b.stats?.["Fuel Time"] || 0));
 
