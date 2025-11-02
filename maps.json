@@ -34,16 +34,16 @@
     }
   },
   {
-    "name": "2nd test",
+    "name": "Spine",
     "author": "Cactuzhead",
-    "thumbnail": "images/coast_thumb.jpg",
-    "screenshots": ["images/coast1.jpg", "images/coast2.jpg"],
+    "thumbnail": "images/0221627f-8778-4f7f-a73e-151c09e79ed0_thumb",
+    "screenshots": ["images/0221627f-8778-4f7f-a73e-151c09e79ed0"],
     "video": null,
     "description": "A test.",
     "stats": {
       "Date": "1 Nov 2025",
       "Biome": "Lava",
-      "Parking Spots": 8,
+      "Parking Spots": 9,
       "Round Time": 180,
       "Fuel Time": 30,
       "Difficulty": "Medium",
