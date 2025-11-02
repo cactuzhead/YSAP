@@ -201,7 +201,8 @@ function applyControls() {
 
     const sort = sortBy.value;
     if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
-    if (sort === 'author') list.sort((a, b) => a.author.localeCompare(b.author));  
+    if (sort === 'author') list.sort((a, b) => a.author.localeCompare(b.author));
+    if (sort === 'date') list.sort((a, b) => a.date.localeCompare(b.date));
     if (sort === 'round') list.sort((a, b) => (a.stats?.["Round Time"] || 0) - (b.stats?.["Round Time"] || 0));
     if (sort === 'fuel') list.sort((a, b) => (a.stats?.["Fuel Time"] || 0) - (b.stats?.["Fuel Time"] || 0));
 
