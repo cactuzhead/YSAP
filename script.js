@@ -41,9 +41,9 @@ function renderCard(map) {
   card.innerHTML = `
     <img class="thumb" src="${map.thumbnail}" alt="${map.name} thumbnail">
     <div class="card-body">
-      <h3 class="card-title">${map.name}</h3>
-      <div class="meta">
-        <span>${map.author || ''}</span>
+      <h3 class="card-title">${map.name || ''}</h3>
+      <h5 class="card-title">${map.author || ''}</h5>
+      <div class="meta">        
         <span>${map.stats.Biome || ''}</span>
         <span>${map.stats.Difficulty || ''}</span>
         <span>${map.stats.Mode || ''}</span>
