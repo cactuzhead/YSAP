@@ -101,12 +101,6 @@ function openModal(map) {
     if (map.stats) {
         Object.entries(map.stats).forEach(([key, value]) => {
             let displayValue = value;
-            if (map.stats && map.stats.Date) {
-                const statRow = document.createElement('div');
-                statRow.className = 'stat-row';
-                statRow.innerHTML = `<strong>Date</strong><span>${formatDate(map.stats.Date)}</span>`;
-                modalStats.appendChild(statRow);
-            }
             if (key === 'Round Time' || key === 'Fuel Time') displayValue = secToMinSec(value);            
             const statRow = document.createElement('div');
             statRow.className = 'stat-row';
@@ -114,7 +108,12 @@ function openModal(map) {
             modalStats.appendChild(statRow);
         });
     }
-
+if (map.stats && map.stats.Date) {
+                const statRow = document.createElement('div');
+                statRow.className = 'stat-row';
+                statRow.innerHTML = `<strong>Date</strong><span>${formatDate(map.stats.Date)}</span>`;
+                modalStats.appendChild(statRow);
+            }
     // Thumbnails and video buttons
     thumbs.innerHTML = '';
     current.media.forEach((src, i) => {
