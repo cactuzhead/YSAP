@@ -44,7 +44,7 @@ function renderCard(map) {
         <h3 class="card-title">${map.name || ''}</h3>
         <h5 class="card-title">${map.author || ''}</h5>
         <div class="meta">
-            <span>${map.stats.Date || ''}</span>
+            <span>${formatDate(map.stats.Date || '')}</span>
             <span>${map.stats.Biome || ''}</span>
             <span>${map.stats.Difficulty || ''}</span>
             <span>${map.stats.Mode || ''}</span>
@@ -100,12 +100,18 @@ function openModal(map) {
     modalStats.innerHTML = '';
     if (map.stats) {
         Object.entries(map.stats).forEach(([key, value]) => {
-        let displayValue = value;
-        if (key === 'Round Time' || key === 'Fuel Time') displayValue = secToMinSec(value);
-        const statRow = document.createElement('div');
-        statRow.className = 'stat-row';
-        statRow.innerHTML = `<strong>${key}</strong><span>${displayValue}</span>`;
-        modalStats.appendChild(statRow);
+            let displayValue = value;
+            if (key === 'Round Time' || key === 'Fuel Time') displayValue = secToMinSec(value);
+            if (map.stats && map.stats.Date) {
+                const statRow = document.createElement('div');
+                statRow.className = 'stat-row';
+                statRow.innerHTML = `<strong>Date</strong><span>${formatDate(map.stats.Date)}</span>`;
+                modalStats.appendChild(statRow);
+            }
+            const statRow = document.createElement('div');
+            statRow.className = 'stat-row';
+            statRow.innerHTML = `<strong>${key}</strong><span>${displayValue}</span>`;
+            modalStats.appendChild(statRow);
         });
     }
 
@@ -202,23 +208,7 @@ function applyControls() {
     const sort = sortBy.value;
     if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
     if (sort === 'author') list.sort((a, b) => a.author.localeCompare(b.author));
-    
-    // --- Sort by date (newest first) ---
-    if (sort === 'date') {
-        const monthMap = {
-        Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
-        Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11
-        };
-
-        function parseDate(str) {
-        // str format: "2 Nov 2025"
-        const [day, mon, year] = str.split(" ");
-        return new Date(year, monthMap[mon], parseInt(day));
-        }
-
-        list.sort((a, b) => parseDate(b.stats.Date) - parseDate(a.stats.Date)); // newest first
-    }
-
+    if (sort === 'date') list.sort((a, b) => new Date(b.stats.Date) - new Date(a.stats.Date));
     if (sort === 'round') list.sort((a, b) => (a.stats?.["Round Time"] || 0) - (b.stats?.["Round Time"] || 0));
     if (sort === 'fuel') list.sort((a, b) => (a.stats?.["Fuel Time"] || 0) - (b.stats?.["Fuel Time"] || 0));
 
@@ -261,3 +251,12 @@ fetch('maps.json')
         console.error('Failed to load maps.json', err);
         grid.innerHTML = '<p style="padding:40px;text-align:center;color:var(--muted)">Failed to load maps.json</p>';
     });
+
+function formatDate(str) {
+    const date = new Date(str);
+    const day = date.getDate();
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+}
