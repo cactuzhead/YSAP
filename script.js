@@ -134,7 +134,7 @@ function openModal(map) {
 
 // Show a specific screenshot in the modal
 function showMedia(idx) {
-  modalImage.style.display = '';
+  modalImage.style.display = 'block';
   modalVideo.style.display = 'none';
 
   modalImage.src = current.media[idx] || '';
@@ -147,7 +147,7 @@ function showVideo() {
   if (!current.video) return;
 
   modalImage.style.display = 'none';
-  modalVideo.style.display = '';
+  modalVideo.style.display = 'block';
 
   let url = current.video;
 
