@@ -108,12 +108,12 @@ function openModal(map) {
             modalStats.appendChild(statRow);
         });
     }
-if (map.stats && map.stats.Date) {
-                const statRow = document.createElement('div');
-                statRow.className = 'stat-row';
-                statRow.innerHTML = `<strong>Date</strong><span>${formatDate(map.stats.Date)}</span>`;
-                modalStats.appendChild(statRow);
-            }
+    if (map.stats && map.stats.Date) {
+        const statRow = document.createElement('div');
+        statRow.className = 'stat-row';
+        statRow.innerHTML = `<strong>Date</strong><span>${formatDate(map.stats.Date)}</span>`;
+        modalStats.appendChild(statRow);
+    }
     // Thumbnails and video buttons
     thumbs.innerHTML = '';
     current.media.forEach((src, i) => {
@@ -228,6 +228,15 @@ function setTheme(isDark) {
     } catch (e) {}
 }
 
+function formatDate(str) {
+    const date = new Date(str);
+    const day = date.getDate();
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    const month = monthNames[date.getMonth()];
+    const year = date.getFullYear();
+    return `${day} ${month} ${year}`;
+}
+
 themeToggle.addEventListener('change', () => setTheme(themeToggle.checked));
 
 (function initTheme() {
@@ -250,12 +259,3 @@ fetch('maps.json')
         console.error('Failed to load maps.json', err);
         grid.innerHTML = '<p style="padding:40px;text-align:center;color:var(--muted)">Failed to load maps.json</p>';
     });
-
-function formatDate(str) {
-    const date = new Date(str);
-    const day = date.getDate();
-    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    const month = monthNames[date.getMonth()];
-    const year = date.getFullYear();
-    return `${day} ${month} ${year}`;
-}
