@@ -101,18 +101,16 @@ function openModal(map) {
     if (map.stats) {
         Object.entries(map.stats).forEach(([key, value]) => {
             let displayValue = value;
-            if (key === 'Round Time' || key === 'Fuel Time') displayValue = secToMinSec(value);            
+            if (key === 'Round Time' || key === 'Fuel Time') displayValue = secToMinSec(value);
+            // ✅ Format date (YYYY-MM-DD format)
+            if (key.toLowerCase() === 'date' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+                displayValue = formatDate(value);
+            }      
             const statRow = document.createElement('div');
             statRow.className = 'stat-row';
             statRow.innerHTML = `<strong>${key}</strong><span>${displayValue}</span>`;
             modalStats.appendChild(statRow);
         });
-    }
-    if (map.stats && map.stats.Date) {
-        const statRow = document.createElement('div');
-        statRow.className = 'stat-row';
-        statRow.innerHTML = `<strong>Date</strong><span>${formatDate(map.stats.Date)}</span>`;
-        modalStats.appendChild(statRow);
     }
     // Thumbnails and video buttons
     thumbs.innerHTML = '';
@@ -231,7 +229,7 @@ function setTheme(isDark) {
 function formatDate(str) {
     const date = new Date(str);
     const day = date.getDate();
-    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","November","Dec"];
+    const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const month = monthNames[date.getMonth()];
     const year = date.getFullYear();
     return `${day} ${month} ${year}`;
