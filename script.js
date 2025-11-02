@@ -102,7 +102,7 @@ function openModal(map) {
         Object.entries(map.stats).forEach(([key, value]) => {
             let displayValue = value;
             if (key === 'Round Time' || key === 'Fuel Time') displayValue = secToMinSec(value);
-            // ✅ Format date (YYYY-MM-DD format)
+            // Format date (YYYY-MM-DD format)
             if (key.toLowerCase() === 'date' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
                 displayValue = formatDate(value);
             }      
@@ -205,7 +205,15 @@ function applyControls() {
     const sort = sortBy.value;
     if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
     if (sort === 'author') list.sort((a, b) => a.author.localeCompare(b.author));
-    if (sort === 'date') list.sort((a, b) => new Date(b.stats.Date) - new Date(a.stats.Date));
+
+    if (sort === 'date') {
+        list.sort((a, b) => {
+            const dateA = a.stats?.Date ? new Date(a.stats.Date) : 0;
+            const dateB = b.stats?.Date ? new Date(b.stats.Date) : 0;
+            return dateB - dateA; // newest first
+        });
+    }
+
     if (sort === 'round') list.sort((a, b) => (a.stats?.["Round Time"] || 0) - (b.stats?.["Round Time"] || 0));
     if (sort === 'fuel') list.sort((a, b) => (a.stats?.["Fuel Time"] || 0) - (b.stats?.["Fuel Time"] || 0));
 
