@@ -43,7 +43,7 @@ function renderCard(map) {
     <div class="card-body">
       <h3 class="card-title">${map.name}</h3>
       <div class="meta">
-        <span>${map.stats.Author || ''}</span>
+        <span>${map.author || ''}</span>
         <span>${map.stats.Biome || ''}</span>
         <span>${map.stats.Difficulty || ''}</span>
         <span>${map.stats.Mode || ''}</span>
