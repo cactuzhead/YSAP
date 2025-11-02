@@ -208,9 +208,16 @@ function applyControls() {
 
     if (sort === 'date') {
         list.sort((a, b) => {
-            const dateA = a.stats?.Date ? new Date(a.stats.Date) : 0;
-            const dateB = b.stats?.Date ? new Date(b.stats.Date) : 0;
-            return dateB - dateA; // newest first
+            // Extract date strings
+            const dateA = a.stats?.Date || '1970-01-01';
+            const dateB = b.stats?.Date || '1970-01-01';
+
+            // Convert to Date objects
+            const dA = new Date(dateA);
+            const dB = new Date(dateB);
+
+            // Newest first
+            return dB - dA;
         });
     }
 
