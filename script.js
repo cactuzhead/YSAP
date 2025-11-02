@@ -208,16 +208,9 @@ function applyControls() {
 
     if (sort === 'date') {
         list.sort((a, b) => {
-            // Extract date strings
-            const dateA = a.stats?.Date || '1970-01-01';
-            const dateB = b.stats?.Date || '1970-01-01';
-
-            // Convert to Date objects
-            const dA = new Date(dateA);
-            const dB = new Date(dateB);
-
-            // Newest first
-            return dB - dA;
+            const dateA = a.stats?.Date ? new Date(a.stats.Date) : new Date('1970-01-01');
+            const dateB = b.stats?.Date ? new Date(b.stats.Date) : new Date('1970-01-01');
+            return dateB - dateA; // newest first
         });
     }
 
@@ -230,6 +223,7 @@ function applyControls() {
 // Event listeners for controls
 searchInput.addEventListener('input', applyControls);
 filterEnv.addEventListener('change', applyControls);
+sortBy.addEventListener('change', applyControls);
 sortBy.addEventListener('change', applyControls);
 
 // Dark/light theme toggle
