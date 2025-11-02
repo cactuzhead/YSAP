@@ -1,0 +1,36 @@
+[
+  {
+    "name": "Mountain Pass",
+    "author": "John Doe",
+    "thumbnail": "images/mountain_thumb.jpg",
+    "screenshots": ["images/mountain1.jpg", "images/mountain2.jpg"],
+    "video": "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    "description": "A challenging winding mountain road with hairpin turns.",
+    "stats": {
+      "Date": "23 May 2025",
+      "Biome": "Mountain",
+      "Parking Spots": 3,
+      "Round Time": 875,
+      "Fuel Time": 600,
+      "Difficulty": "Hard",
+      "Mode": "SP"
+    }
+  },
+  {
+    "name": "Coastal Run",
+    "author": "Jane Smith",
+    "thumbnail": "images/coast_thumb.jpg",
+    "screenshots": ["images/coast1.jpg", "images/coast2.jpg"],
+    "video": null,
+    "description": "A scenic route along the coastline.",
+    "stats": {
+      "Date": "10 Apr 2025",
+      "Biome": "Grass",
+      "Parking Spots": 5,
+      "Round Time": 480,
+      "Fuel Time": 420,
+      "Difficulty": "Medium",
+      "Mode": "MP"
+    }
+  }
+]
