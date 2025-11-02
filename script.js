@@ -33,8 +33,7 @@ function secToMinSec(seconds) {
   return `${minutes}:${sec < 10 ? '0' : ''}${sec}`;
 }
 
-// Render a single map card in the grid
-function renderCard(map, index) {
+function renderCard(map) {
   const card = document.createElement('article');
   card.className = 'card';
   card.tabIndex = 0;
@@ -51,14 +50,13 @@ function renderCard(map, index) {
     </div>
   `;
 
-  // Open modal on click or Enter key
-  card.addEventListener('click', () => openModal(index));
-  card.addEventListener('keyup', (e) => {
-    if (e.key === 'Enter') openModal(index);
-  });
+  // Open modal passing the map object directly
+  card.addEventListener('click', () => openModal(map));
+  card.addEventListener('keyup', (e) => { if (e.key === 'Enter') openModal(map); });
 
   return card;
 }
+
 
 // Populate biome filter dropdown
 function populateFilters(maps) {
@@ -76,23 +74,18 @@ function populateFilters(maps) {
 }
 
 // Render the grid of map cards
-function renderGrid(list) {
+function renderGrid(list){
   grid.innerHTML = '';
-
-  if (list.length === 0) {
+  if(list.length === 0){
     grid.innerHTML = '<p style="padding:40px;text-align:center;color:var(--muted)">No maps found.</p>';
     return;
   }
-
-  list.forEach((map, i) => {
-    grid.appendChild(renderCard(map, i));
-  });
+  list.forEach(map => grid.appendChild(renderCard(map)));
 }
 
 // Open modal for a specific map
-function openModal(index) {
-  const map = maps[index];
-  current.index = index;
+function openModal(map) {
+  current.index = maps.indexOf(map); // optional if you need the index
   current.media = map.screenshots || (map.thumbnail ? [map.thumbnail] : []);
   current.video = map.video || null;
 
@@ -102,15 +95,11 @@ function openModal(index) {
   modalAuthor.textContent = map.author || '';
   modalDesc.textContent = map.description || '';
 
-  // Display stats
   modalStats.innerHTML = '';
   if (map.stats) {
     Object.entries(map.stats).forEach(([key, value]) => {
       let displayValue = value;
-      if (key === 'Round Time' || key === 'Fuel Time') {
-        displayValue = secToMinSec(value);
-      }
-
+      if (key === 'Round Time' || key === 'Fuel Time') displayValue = secToMinSec(value);
       const statRow = document.createElement('div');
       statRow.className = 'stat-row';
       statRow.innerHTML = `<strong>${key}</strong><span>${displayValue}</span>`;
@@ -118,7 +107,7 @@ function openModal(index) {
     });
   }
 
-  // Display thumbnails for additional screenshots or video
+  // Thumbnails and video buttons
   thumbs.innerHTML = '';
   current.media.forEach((src, i) => {
     const thumb = document.createElement('img');
@@ -133,13 +122,14 @@ function openModal(index) {
     const videoBtn = document.createElement('button');
     videoBtn.textContent = 'Video';
     videoBtn.className = 'thumb-btn';
-    videoBtn.addEventListener('click', () => showVideo());
+    videoBtn.addEventListener('click', showVideo);
     thumbs.appendChild(videoBtn);
   }
 
   modal.classList.add('show');
   modal.setAttribute('aria-hidden', 'false');
 }
+
 
 // Show a specific screenshot in the modal
 function showMedia(idx) {
