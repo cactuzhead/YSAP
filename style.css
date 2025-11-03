@@ -135,9 +135,9 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 
 .parking-badge {
     position: absolute;
-    bottom: 8px;
-    right: 8px;
-    font-size: 2rem;
+    bottom: 5px;
+    right: 5px;
+    font-size: 1rem;
     font-weight: 700;
     color: #fff;
     background-color: rgba(0,0,0,0.6);
