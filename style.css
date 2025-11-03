@@ -41,7 +41,18 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .thumb{height:140px;object-fit:cover;width:100%;display:block}
 .card-body{padding:12px}
 .card-title{font-weight:500;margin:0 0 6px 0}
-.meta{font-size:13px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color:var(--muted);
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
 .chips{display:flex;gap:6px;margin-top:8px}
 .chip{background:rgba(0,0,0,0.06);padding:6px 8px;border-radius:999px;font-size:12px}
 
@@ -62,17 +73,17 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden; /* ensures content doesn't spill out */
+  overflow: hidden;
 }
 
 .media-wrap img,
 .media-wrap iframe {
-  position: absolute;    /* fill the container */
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;     /* fill container, crop if needed */
+  object-fit: cover;
   border-radius: 8px;
 }
 
@@ -91,14 +102,14 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 
 /* Card difficulty badge */
 .card .difficulty {
-  font-weight: 600;
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.85rem;
+    margin-left: auto; /* pushes it to the far right */
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 50px;
+    font-size: 0.85rem;
 }
 
 /* Reuse the same colors as modal */
-.diff-easy { background-color: #e8f5e9; color: #2e7d32; }
-.diff-medium { background-color: #fff3e0; color: #ef6c00; }
-.diff-hard { background-color: #ffebee; color: #c62828; }
-
+.diff-easy { color: #4caf50; }
+.diff-medium { color: #ff9800; }
+.diff-hard { color: #f44336; }
