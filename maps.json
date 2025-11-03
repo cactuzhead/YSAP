@@ -13,7 +13,7 @@
       "Round Time": 180,
       "Fuel Time": 30,
       "Difficulty": "Hard",
-      "Mode": "MP"
+      "Map Type": "Custom"
     }
   },
   {
@@ -30,7 +30,7 @@
       "Round Time": 480,
       "Fuel Time": 420,
       "Difficulty": "Medium",
-      "Mode": "MP"
+      "Map Type": "Campaign"
     }
   },
   {
@@ -47,7 +47,7 @@
       "Round Time": 180,
       "Fuel Time": 30,
       "Difficulty": "Medium",
-      "Mode": "MP"
+      "Map Type": "Custom"
     }
   }
 ]

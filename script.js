@@ -73,6 +73,25 @@ function populateFilters(maps) {
         option.textContent = biome;
         filterEnv.appendChild(option);
     });
+
+    // --- Map Type filter ---
+    const mapTypeSelect = document.getElementById('mapTypeFilter');
+    if (mapTypeSelect) {
+        // Clear old options (except the first "All" one)
+        mapTypeSelect.innerHTML = `<option value="">All Map Types</option>`;
+
+        const mapTypes = new Set();
+        maps.forEach(map => {
+            if (map.stats && map.stats["Map Type"]) mapTypes.add(map.stats["Map Type"]);
+        });
+
+        Array.from(mapTypes).sort().forEach(type => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = type;
+            mapTypeSelect.appendChild(option);
+        });
+    }
 }
 
 // Render the grid of map cards
@@ -283,6 +302,8 @@ fetch('maps.json')
 
         populateFilters(maps);
         applyControls();
+
+        document.getElementById('mapTypeFilter').addEventListener('change', applyControls);
     })
     .catch(err => {
         console.error('Failed to load maps.json', err);

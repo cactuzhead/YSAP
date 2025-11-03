@@ -1,64 +1,67 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Driving Maps Gallery</title>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header class="topbar">
-  <div class="brand">YSAP Maps</div>
-  <div class="controls">
-    <input id="search" type="search" placeholder="Search maps..." aria-label="Search maps">
-    <select id="filterEnv" aria-label="Filter by biome">
-      <option value="">All Biomes</option>
-    </select>
-    <select id="sortBy" aria-label="Sort maps">
-      <option value="name">Name (A–Z)</option>
-      <option value="author">Author (A-Z)</option>
-      <option value="date" selected>Date (newest first)</option>
-      <option value="dateAsc">Date (oldest first)</option>
-      <option value="round">Round Time (asc)</option>
-      <option value="fuel">Fuel Time (asc)</option>
-    </select>
-    <label class="switch">
-      <input id="themeToggle" type="checkbox">
-      <span class="slider"></span>
-    </label>
-  </div>
-</header>
-
-<main class="container">
-  <section id="grid" class="grid" aria-live="polite"></section>
-</main>
-
-<div id="modal" class="modal" aria-hidden="true">
-  <div class="modal-backdrop" id="modalBackdrop"></div>
-  <div class="modal-content" role="dialog" aria-modal="true">
-    <button id="closeModal" class="close-btn" aria-label="Close">✕</button>
-    <div class="modal-body">
-      <div class="gallery">
-        <button id="prevShot" class="nav-btn">‹</button>
-        <div class="media-wrap">
-          <img id="modalImage" src="" alt="">
-          <iframe id="modalVideo" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:none"></iframe>
-        </div>
-        <button id="nextShot" class="nav-btn">›</button>
-      </div>
-      <aside class="details">
-        <h2 id="modalTitle"></h2>
-        <h4 id="modalAuthor"></h4>
-        <div id="modalStats" class="stats"></div>
-        <p id="modalDesc"></p>
-        <div id="thumbs" class="thumbs"></div>
-      </aside>
+    <!doctype html>
+    <html lang="en">
+    <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Driving Maps Gallery</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+    <header class="topbar">
+    <div class="brand">YSAP Maps</div>
+    <div class="controls">
+        <input id="search" type="search" placeholder="Search maps..." aria-label="Search maps">
+        <select id="filterEnv" aria-label="Filter by biome">
+            <option value="">All Biomes</option>
+        </select>
+        <select id="mapTypeFilter" aria-label="Filter by Map Type">
+            <option value="">All Map Types</option>
+        </select>
+        <select id="sortBy" aria-label="Sort maps">
+            <option value="name">Name (A–Z)</option>
+            <option value="author">Author (A-Z)</option>
+            <option value="date" selected>Date (newest first)</option>
+            <option value="dateAsc">Date (oldest first)</option>
+            <option value="round">Round Time (asc)</option>
+            <option value="fuel">Fuel Time (asc)</option>
+        </select>
+        <label class="switch">
+        <input id="themeToggle" type="checkbox">
+        <span class="slider"></span>
+        </label>
     </div>
-  </div>
-</div>
+    </header>
 
-<script src="script.js"></script>
-</body>
-</html>
+    <main class="container">
+    <section id="grid" class="grid" aria-live="polite"></section>
+    </main>
+
+    <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+    <div class="modal-content" role="dialog" aria-modal="true">
+        <button id="closeModal" class="close-btn" aria-label="Close">✕</button>
+        <div class="modal-body">
+        <div class="gallery">
+            <button id="prevShot" class="nav-btn">‹</button>
+            <div class="media-wrap">
+            <img id="modalImage" src="" alt="">
+            <iframe id="modalVideo" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="display:none"></iframe>
+            </div>
+            <button id="nextShot" class="nav-btn">›</button>
+        </div>
+        <aside class="details">
+            <h2 id="modalTitle"></h2>
+            <h4 id="modalAuthor"></h4>
+            <div id="modalStats" class="stats"></div>
+            <p id="modalDesc"></p>
+            <div id="thumbs" class="thumbs"></div>
+        </aside>
+        </div>
+    </div>
+    </div>
+
+    <script src="script.js"></script>
+    </body>
+    </html>
