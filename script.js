@@ -211,6 +211,7 @@ function applyControls() {
     let list = [...maps];
     const query = searchInput.value.trim().toLowerCase();
 
+    // Search filter
     if (query) {
         list = list.filter(
         m => (m.name && m.name.toLowerCase().includes(query)) ||
@@ -218,8 +219,14 @@ function applyControls() {
         );
     }
 
+    // Biome filter
     const biome = filterEnv.value;
     if (biome) list = list.filter(m => m.stats && m.stats.Biome === biome);
+
+    // Map Type filter
+    const typeFilter = document.getElementById('mapTypeFilter')?.value;
+    if (typeFilter) list = list.filter(m => m.stats && m.stats["Map Type"] === typeFilter);
+
 
     const sort = sortBy.value;
     if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
