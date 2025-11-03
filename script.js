@@ -135,6 +135,11 @@ function openModal(map) {
     Object.entries(map.stats).forEach(([key, value]) => {
         let displayValue = value;
 
+        // Format Date
+        if (key.toLowerCase() === 'date' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+            displayValue = formatDate(value); // assumes you have a formatDate() function
+        }
+
         // Format time values
         if (key === 'Round Time' || key === 'Fuel Time') {
             displayValue = secToMinSec(value);
@@ -156,7 +161,7 @@ function openModal(map) {
     });
 }
 
-}
+
     // Thumbnails and video buttons
     thumbs.innerHTML = '';
     current.media.forEach((src, i) => {
