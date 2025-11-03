@@ -1,0 +1,21 @@
+Images go in a folder with the base name of the images
+These MUST include the following two files
+  
+${map.base}_thumb.jpg
+${map.base}_full.jpg
+
+You can include additional extra screenshots via the maps.json file
+i.e.
+"extra_screenshots": ["alt", "close"],
+
+The base is also set in the via the maps.json file
+i.e.
+"base": "f3da3765-2566-4cdc-9959-f5d09cdc1f2c",
+
+This base is used as the name of the folder in images/
+As well as the prefix for all images
+i.e.
+images/f3da3765-2566-4cdc-9959-f5d09cdc1f2c/f3da3765-2566-4cdc-9959-f5d09cdc1f2c_thumb.jpg
+images/f3da3765-2566-4cdc-9959-f5d09cdc1f2c/f3da3765-2566-4cdc-9959-f5d09cdc1f2c_full.jpg
+images/f3da3765-2566-4cdc-9959-f5d09cdc1f2c/f3da3765-2566-4cdc-9959-f5d09cdc1f2c_alt.jpg
+images/f3da3765-2566-4cdc-9959-f5d09cdc1f2c/f3da3765-2566-4cdc-9959-f5d09cdc1f2c_close.jpg
