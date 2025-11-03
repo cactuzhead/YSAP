@@ -42,7 +42,7 @@ function renderCard(map) {
     const difficultyClass = map.stats?.Difficulty ? `diff-${map.stats.Difficulty.toLowerCase()}` : '';
     const biome = map.stats?.Biome || '';
     const biomeClass = map.stats?.Biome ? `${map.stats.Biome.toLowerCase()}` : '';
-    const biomeIcon = biome ? `<img src="images/${biomeClass}.png" alt="${biome}" class="biome-icon">` : '';
+    const biomeIcon = biome ? `<img src="images/biome/${biomeClass}.png" alt="${biome}" class="biome-icon">` : '';
 
     card.innerHTML = `
         <div class="card-thumb-wrapper">
