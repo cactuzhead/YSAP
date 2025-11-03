@@ -2,10 +2,10 @@
   {
     "name": "Forwards",
     "author": "Cactuzhead",
-    "thumbnail": "images/f3da3765-2566-4cdc-9959-f5d09cdc1f2c_thumb.png",
-    "screenshots": ["images/f3da3765-2566-4cdc-9959-f5d09cdc1f2c.png", "images/f3da3765-2566-4cdc-9959-f5d09cdc1f2c_alt.png", "images/f3da3765-2566-4cdc-9959-f5d09cdc1f2c_close.png"],
+    "base": "f3da3765-2566-4cdc-9959-f5d09cdc1f2c",
+    "extra_screenshots": ["alt", "close"],
     "video": "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    "description": "A challenging mountainious road with long jumps, portals and narrow roads.",
+    "description": "aA challenging mountainous road with long jumps portals and narrow roads.",
     "stats": {
       "Date": "2025-11-02",
       "Biome": "Grass",
@@ -19,8 +19,8 @@
   {
     "name": "Coastal Run",
     "author": "Jane Smith",
-    "thumbnail": "images/coast_thumb.jpg",
-    "screenshots": ["images/coast1.jpg", "images/coast2.jpg"],
+    "base": "coast",
+    "extra_screenshots": ["coast1", "coast2"],
     "video": null,
     "description": "A scenic route along the coastline.",
     "stats": {
@@ -36,8 +36,8 @@
   {
     "name": "Spine",
     "author": "Cactuzhead",
-    "thumbnail": "images/0221627f-8778-4f7f-a73e-151c09e79ed0_thumb.png",
-    "screenshots": ["images/0221627f-8778-4f7f-a73e-151c09e79ed0.png"],
+    "base": "0221627f-8778-4f7f-a73e-151c09e79ed0",
+    "extra_screenshots": [],
     "video": null,
     "description": "A test.",
     "stats": {

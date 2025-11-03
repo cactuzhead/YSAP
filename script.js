@@ -266,6 +266,21 @@ fetch('maps.json')
     .then(res => res.json())
     .then(data => {
         maps = data;
+
+    const IMAGE_PATH = 'images/';
+        maps.forEach(map => {
+        if (map.base && !map.thumbnail && !map.screenshots) {
+            map.thumbnail = `${IMAGE_PATH}${map.base}_thumb.png`;
+            map.screenshots = [`${IMAGE_PATH}${map.base}_full.png`];
+
+            if (map.extra_screenshots && Array.isArray(map.extra_screenshots)) {
+            map.extra_screenshots.forEach(suffix => {
+                map.screenshots.push(`${IMAGE_PATH}${map.base}_${suffix}.png`);
+            });
+            }
+        }
+        });
+
         populateFilters(maps);
         applyControls();
     })
