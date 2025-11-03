@@ -215,7 +215,8 @@ function applyControls() {
     if (query) {
         list = list.filter(
         m => (m.name && m.name.toLowerCase().includes(query)) ||
-            (m.description && m.description.toLowerCase().includes(query))
+            (m.description && m.description.toLowerCase().includes(query)) ||
+            (m.author && m.author.toLowerCase().includes(query))
         );
     }
 
