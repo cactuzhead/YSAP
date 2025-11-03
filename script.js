@@ -270,12 +270,12 @@ fetch('maps.json')
     const IMAGE_PATH = 'images/';
         maps.forEach(map => {
         if (map.base && !map.thumbnail && !map.screenshots) {
-            map.thumbnail = `${IMAGE_PATH}${map.base}_thumb.png`;
-            map.screenshots = [`${IMAGE_PATH}${map.base}_full.png`];
+            map.thumbnail = `${IMAGE_PATH}/${map.base}/${map.base}_thumb.jpg`;
+            map.screenshots = [`${IMAGE_PATH}/${map.base}/${map.base}_full.jpg`];
 
             if (map.extra_screenshots && Array.isArray(map.extra_screenshots)) {
             map.extra_screenshots.forEach(suffix => {
-                map.screenshots.push(`${IMAGE_PATH}${map.base}_${suffix}.png`);
+                map.screenshots.push(`${IMAGE_PATH}/${map.base}/${map.base}_${suffix}.jpg`);
             });
             }
         }
