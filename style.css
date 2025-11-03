@@ -1,5 +1,6 @@
 :root{
     --bg: #f6f7fb;
+    --bg_alt: #ffffff;
     --card: #ffffff;
     --muted: #6b7280;
     --accent: #6200ee;
@@ -10,6 +11,7 @@
 
 [data-theme="dark"]{
     --bg: #0b1220;
+    --bg_alt: #172745;
     --card: #0f1724;
     --muted: #9ca3af;
     --accent: #8b5cf6;
@@ -19,7 +21,7 @@
 }
 
 *{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;color:var(--text);background:linear-gradient(180deg,var(--bg), #fff);}
+html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;color:var(--text);background:linear-gradient(180deg,var(--bg), --bg_alt);}
 
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--glass);backdrop-filter: blur(6px);box-shadow:var(--shadow);position:sticky;top:0;z-index:30}
 .brand{font-weight:700;font-size:1.1rem}
