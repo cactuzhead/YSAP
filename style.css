@@ -100,38 +100,21 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     .media-wrap{width:100%;height:56vw}
 }
 
-/* Card difficulty badge */
-/* .card .difficulty {
-    margin-left: auto;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 50px;
-    font-size: 0.85rem;
-}
-
-.diff-easy { color: #4caf50; }
-.diff-medium { color: #ff9800; }
-.diff-hard { color: #f44336; } */
-
 /* Biome badge */
-.biome {
+/* .biome {
     margin-left: auto;
     font-weight: 600;
     padding: 2px 8px;
     border-radius: 50px;
     font-size: 0.85rem;
 }
-
-/* .biome-lava { color: #f44336; }
-.biome-grass { color: #4caf50; }
-.biome-ice { color: #2196f3; }
-.biome-fantasy { color: #9c27b0; } */
 
 .biome-lava { background-color: #ffebee; color: #c62828; }
 .biome-grass { background-color: #e8f5e9; color: #2e7d32; }
 .biome-ice { background-color: #e3f2fd; color: #1565c0; }
-.biome-fantasy { background-color: #f3e5f5; color: #681b98; }
+.biome-fantasy { background-color: #f3e5f5; color: #681b98; } */
 
+/* Biome icon */
 .card-thumb-wrapper {
     position: relative;
     display: inline-block;
@@ -139,10 +122,10 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 
 .card-thumb-wrapper .biome-icon {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 40px;
-    height: 40px;
+    top: 5px;
+    right: 5px;
+    width: 30px;
+    height: 30px;
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     z-index: 10;
