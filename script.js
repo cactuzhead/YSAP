@@ -251,6 +251,7 @@ function applyControls() {
 searchInput.addEventListener('input', applyControls);
 filterEnv.addEventListener('change', applyControls);
 sortBy.addEventListener('change', applyControls);
+document.getElementById('mapTypeFilter').addEventListener('change', applyControls);
 
 // Dark/light theme toggle
 function setTheme(isDark) {
@@ -302,8 +303,6 @@ fetch('maps.json')
 
         populateFilters(maps);
         applyControls();
-
-        document.getElementById('mapTypeFilter').addEventListener('change', applyControls);
     })
     .catch(err => {
         console.error('Failed to load maps.json', err);
