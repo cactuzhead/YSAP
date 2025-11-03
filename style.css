@@ -100,8 +100,8 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     .media-wrap{width:100%;height:56vw}
 }
 
-/* Biome badge */
-/* .biome {
+/* Spots badge */
+.spots {
     margin-left: auto;
     font-weight: 600;
     padding: 2px 8px;
@@ -109,10 +109,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     font-size: 0.85rem;
 }
 
-.biome-lava { background-color: #ffebee; color: #c62828; }
-.biome-grass { background-color: #e8f5e9; color: #2e7d32; }
-.biome-ice { background-color: #e3f2fd; color: #1565c0; }
-.biome-fantasy { background-color: #f3e5f5; color: #681b98; } */
+.spot-badge { background-color: #e3f2fd; color: #1565c0; }
 
 /* Biome icon */
 .card-thumb-wrapper {
@@ -130,3 +127,23 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     z-index: 10;
 }
+
+.card-thumb-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.parking-badge {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    background-color: rgba(0,0,0,0.6);
+    padding: 4px 8px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    z-index: 15;
+}
+

@@ -43,11 +43,16 @@ function renderCard(map) {
     const biome = map.stats?.Biome || '';
     const biomeClass = map.stats?.Biome ? `${map.stats.Biome.toLowerCase()}` : '';
     const biomeIcon = biome ? `<img src="images/biome/${biomeClass}.png" alt="${biome}" class="biome-icon">` : '';
+    const parking = map.stats?.["Parking Spots"] || '';
+    const parkingBadge = parking 
+        ? `<span class="parking-badge">${parking}</span>` 
+        : '';
 
     card.innerHTML = `
         <div class="card-thumb-wrapper">
             <img class="thumb" src="${map.thumbnail}" alt="${map.name} thumbnail">
             ${biomeIcon}  <!-- Biome icon overlaid -->
+            ${parkingBadge}  <!-- Parking spots overlay -->
         </div>
         <div class="card-body">
             <h3 class="card-title">${map.name || ''}</h3>
