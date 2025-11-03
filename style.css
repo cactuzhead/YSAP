@@ -111,6 +111,19 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 
 .spot-badge { background-color: #e3f2fd; color: #1565c0; }
 
+/* Biome text */
+.biome {
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.biome-lava { color: #f44336; }
+.biome-grass { color: #4caf50; }
+.biome-ice { color: #2196f3; }
+.biome-fantasy { color: #9c27b0; }
+
 /* Biome icon */
 .card-thumb-wrapper {
     position: relative;
