@@ -113,3 +113,17 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .diff-easy { color: #4caf50; }
 .diff-medium { color: #ff9800; }
 .diff-hard { color: #f44336; }
+
+/* Biome badge */
+.biome {
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+/* Material Design-style colors */
+.biome-lava { color: #f44336; }
+.biome-grass { color: #4caf50; }
+.biome-ice { color: #2196f3; }
+.biome-fantasy { color: #9c27b0; }
