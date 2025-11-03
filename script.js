@@ -47,7 +47,7 @@ function renderCard(map) {
         <div class="meta">
             <span>${formatDate(map.stats.Date || '')}</span>
             <span>${map.stats.Biome || ''}</span>
-            <span class="difficulty ${difficultyClass}">${map.stats.Difficulty || ''}</span>
+            ${map.stats?.Difficulty ? `<span class="difficulty ${difficultyClass}">${map.stats.Difficulty}</span>` : ''}
             <span>${map.stats.Mode || ''}</span>
         </div>
     </div>
