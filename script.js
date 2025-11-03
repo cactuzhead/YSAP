@@ -39,6 +39,8 @@ function renderCard(map) {
   card.tabIndex = 0;
 
   const difficultyClass = map.stats?.Difficulty ? `diff-${map.stats.Difficulty.toLowerCase()}` : '';
+  const biomeClass = map.stats?.Biome ? `biome-${map.stats.Biome.toLowerCase()}` : '';
+
   card.innerHTML = `
     <img class="thumb" src="${map.thumbnail}" alt="${map.name} thumbnail">
     <div class="card-body">
