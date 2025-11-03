@@ -88,3 +88,18 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
   .modal-body{flex-direction:column}
   .media-wrap{width:100%;height:56vw}
 }
+
+.diff-easy {
+  color: var(--diff-easy, #4caf50); /* Green 500 */
+  font-weight: 600;
+}
+
+.diff-medium {
+  color: var(--diff-medium, #ff9800); /* Orange 500 */
+  font-weight: 600;
+}
+
+.diff-hard {
+  color: var(--diff-hard, #f44336); /* Red 500 */
+  font-weight: 600;
+}

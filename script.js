@@ -117,20 +117,46 @@ function openModal(map) {
     modalDesc.textContent = map.description || '';
 
     modalStats.innerHTML = '';
+    // if (map.stats) {
+    //     Object.entries(map.stats).forEach(([key, value]) => {
+    //         let displayValue = value;
+    //         if (key === 'Round Time' || key === 'Fuel Time') displayValue = secToMinSec(value);
+    //         // Format date (YYYY-MM-DD format)
+    //         if (key.toLowerCase() === 'date' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    //             displayValue = formatDate(value);
+    //         }      
+    //         const statRow = document.createElement('div');
+    //         statRow.className = 'stat-row';
+    //         statRow.innerHTML = `<strong>${key}</strong><span>${displayValue}</span>`;
+    //         modalStats.appendChild(statRow);
+    //     });
+    // }
     if (map.stats) {
-        Object.entries(map.stats).forEach(([key, value]) => {
-            let displayValue = value;
-            if (key === 'Round Time' || key === 'Fuel Time') displayValue = secToMinSec(value);
-            // Format date (YYYY-MM-DD format)
-            if (key.toLowerCase() === 'date' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
-                displayValue = formatDate(value);
-            }      
-            const statRow = document.createElement('div');
-            statRow.className = 'stat-row';
+    Object.entries(map.stats).forEach(([key, value]) => {
+        let displayValue = value;
+
+        // Format time values
+        if (key === 'Round Time' || key === 'Fuel Time') {
+            displayValue = secToMinSec(value);
+        }
+
+        // Create stat row
+        const statRow = document.createElement('div');
+        statRow.className = 'stat-row';
+
+        // Add difficulty classes instead of inline color
+        if (key === 'Difficulty') {
+            const diffClass = `diff-${value.toLowerCase()}`;
+            statRow.innerHTML = `<strong>${key}</strong><span class="${diffClass}">${displayValue}</span>`;
+        } else {
             statRow.innerHTML = `<strong>${key}</strong><span>${displayValue}</span>`;
-            modalStats.appendChild(statRow);
-        });
-    }
+        }
+
+        modalStats.appendChild(statRow);
+    });
+}
+
+}
     // Thumbnails and video buttons
     thumbs.innerHTML = '';
     current.media.forEach((src, i) => {
@@ -211,10 +237,10 @@ function applyControls() {
     let list = [...maps];
     const query = searchInput.value.trim().toLowerCase();
 
-    // Search filter
+    // Search filter (now checks map name, description, and author)
     if (query) {
-        list = list.filter(
-        m => (m.name && m.name.toLowerCase().includes(query)) ||
+        list = list.filter( m =>
+            (m.name && m.name.toLowerCase().includes(query)) ||
             (m.description && m.description.toLowerCase().includes(query)) ||
             (m.author && m.author.toLowerCase().includes(query))
         );
