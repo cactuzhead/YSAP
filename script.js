@@ -48,8 +48,8 @@ function renderCard(map) {
         <h5 class="card-title">${map.author || ''}</h5>
         <div class="meta">
             <span>${formatDate(map.stats.Date || '')}</span>
-            ${map.stats?.Biome ? `<span class="biome ${biomeClass}">${map.stats.Biome}</span>` : ''}
             ${map.stats?.Difficulty ? `<span class="difficulty ${difficultyClass}">${map.stats.Difficulty}</span>` : ''}
+            ${map.stats?.Biome ? `<span class="biome ${biomeClass}">${map.stats.Biome}</span>` : ''}
             <span>${map.stats.Mode || ''}</span>
         </div>
     </div>
