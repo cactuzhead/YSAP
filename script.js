@@ -34,32 +34,37 @@ function secToMinSec(seconds) {
 }
 
 function renderCard(map) {
-  const card = document.createElement('article');
-  card.className = 'card';
-  card.tabIndex = 0;
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.tabIndex = 0;
 
-  const difficultyClass = map.stats?.Difficulty ? `diff-${map.stats.Difficulty.toLowerCase()}` : '';
-  const biomeClass = map.stats?.Biome ? `biome-${map.stats.Biome.toLowerCase()}` : '';
+  
+    const difficultyClass = map.stats?.Difficulty ? `diff-${map.stats.Difficulty.toLowerCase()}` : '';
+    const biome = map.stats?.Biome || '';
+    const biomeClass = map.stats?.Biome ? `${map.stats.Biome.toLowerCase()}` : '';
+    const biomeIcon = biome ? `<img src="images/${biomeClass}.png" alt="${biome}" class="biome-icon">` : '';
 
-  card.innerHTML = `
-    <img class="thumb" src="${map.thumbnail}" alt="${map.name} thumbnail">
-    <div class="card-body">
-        <h3 class="card-title">${map.name || ''}</h3>
-        <h5 class="card-title">${map.author || ''}</h5>
-        <div class="meta">
-            <span>${formatDate(map.stats.Date || '')}</span>
-            ${map.stats?.Difficulty ? `<span class="difficulty ${difficultyClass}">${map.stats.Difficulty}</span>` : ''}
-            ${map.stats?.Biome ? `<span class="biome ${biomeClass}">${map.stats.Biome}</span>` : ''}
-            <span>${map.stats.Mode || ''}</span>
+    card.innerHTML = `
+        <div class="card-thumb-wrapper">
+            <img class="thumb" src="${map.thumbnail}" alt="${map.name} thumbnail">
+            ${biomeIcon}  <!-- Biome icon overlaid -->
         </div>
-    </div>
-  `;
+        <div class="card-body">
+            <h3 class="card-title">${map.name || ''}</h3>
+            <h5 class="card-title">${map.author || ''}</h5>
+            <div class="meta">
+                <span>${formatDate(map.stats.Date || '')}</span>
+                ${map.stats?.Difficulty ? `<span class="difficulty ${difficultyClass}">${map.stats.Difficulty}</span>` : ''}
+                <span>${map.stats.Mode || ''}</span>
+            </div>
+        </div>
+    `;
 
-  // Open modal passing the map object directly
-  card.addEventListener('click', () => openModal(map));
-  card.addEventListener('keyup', (e) => { if (e.key === 'Enter') openModal(map); });
+    // Open modal passing the map object directly
+    card.addEventListener('click', () => openModal(map));
+    card.addEventListener('keyup', (e) => { if (e.key === 'Enter') openModal(map); });
 
-  return card;
+    return card;
 }
 
 
