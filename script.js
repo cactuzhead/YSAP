@@ -293,8 +293,8 @@ function applyControls() {
         });
     }
 
-    if (sort === 'round') list.sort((a, b) => (a.stats?.["Round Time"] || 0) - (b.stats?.["Round Time"] || 0));
-    if (sort === 'fuel') list.sort((a, b) => (a.stats?.["Fuel Time"] || 0) - (b.stats?.["Fuel Time"] || 0));
+    // if (sort === 'round') list.sort((a, b) => (a.stats?.["Round Time"] || 0) - (b.stats?.["Round Time"] || 0));
+    // if (sort === 'fuel') list.sort((a, b) => (a.stats?.["Fuel Time"] || 0) - (b.stats?.["Fuel Time"] || 0));
 
     renderGrid(list);
 }
