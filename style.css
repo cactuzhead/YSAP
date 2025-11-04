@@ -63,20 +63,20 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .modal.show{display:flex}
 .modal-backdrop{position:absolute;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.4));backdrop-filter: blur(6px)}
 .modal-content{
-    position:relative;
-    max-width:1300px;
-    width:95%;
-    max-height:92vh;
-    border-radius:14px;
-    overflow:hidden;
-    background:var(--card);
-    box-shadow:var(--shadow);
-    z-index:61;
+    position: relative;
+    max-width: 1400px;
+    width: 96%;
+    max-height: 92vh;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--card);
+    box-shadow: var(--shadow);
+    z-index: 61;
 }
 .modal-body{
-    display:flex;
-    gap:18px;
-    padding:18px;
+    display: flex;
+    gap: 18px;
+    padding: 18px;
     height: 100%;
 }
 .gallery{display:flex;align-items:center;gap:12px}
@@ -87,7 +87,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     max-width: 52vw;
     height: 75vh;
     border-radius: 8px;
-    flex: 3;
+    flex: 4;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -108,9 +108,9 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 
 .nav-btn{background:none;border:1px solid rgba(15,23,42,0.06);padding:8px;border-radius:8px;cursor:pointer}
 .details{
-    flex: 1.2;
-    flex:1;
-    min-width:240px;
+    flex: 1;
+    min-width: 240px;
+    overflow-y: auto;
 }
 .stats{display:flex;flex-direction:column;gap:6px;margin:12px 0}
 .stat-row{display:flex;justify-content:space-between;padding:8px;border-radius:8px;background:var(--glass)}
