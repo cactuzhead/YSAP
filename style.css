@@ -183,3 +183,14 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     z-index: 15;
 }
 
+
+@media (max-width: 900px) {
+    .modal-body {
+        flex-direction: column;
+    }
+
+    .media-wrap {
+        width: 100%;
+        height: 56vw;
+    }
+}
