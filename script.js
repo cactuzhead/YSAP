@@ -38,7 +38,6 @@ function renderCard(map) {
     card.className = 'card';
     card.tabIndex = 0;
 
-  
     const biome = map.stats?.Biome || '';
     const biomeClass = map.stats?.Biome ? `${map.stats.Biome.toLowerCase()}` : '';
     const biomeIcon = biome ? `<img src="images/biome/${biomeClass}.png" alt="${biome}" class="biome-icon">` : '';
@@ -159,6 +158,7 @@ function openModal(map) {
         // Create stat row
         const statRow = document.createElement('div');
         statRow.className = 'stat-row';
+        statRow.innerHTML = `<strong>${key}</strong><span>${displayValue}</span>`;
 
         modalStats.appendChild(statRow);
     });
