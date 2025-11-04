@@ -62,15 +62,32 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:60}
 .modal.show{display:flex}
 .modal-backdrop{position:absolute;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.4));backdrop-filter: blur(6px)}
-.modal-content{position:relative;max-width:1100px;width:95%;max-height:90vh;border-radius:14px;overflow:hidden;background:var(--card);box-shadow:var(--shadow);z-index:61}
-.modal-body{display:flex;gap:18px;padding:18px}
+.modal-content{
+    position:relative;
+    max-width:1300px;
+    width:95%;
+    max-height:92vh;
+    border-radius:14px;
+    overflow:hidden;
+    background:var(--card);
+    box-shadow:var(--shadow);
+    z-index:61;
+}
+.modal-body{
+    display:flex;
+    gap:18px;
+    padding:18px;
+    height: 100%;
+}
 .gallery{display:flex;align-items:center;gap:12px}
 /* .media-wrap{width:720px;max-width:52vw;height:420px;display:flex;align-items:center;justify-content:center;position:relative}
 .media-wrap img, .media-wrap iframe{max-width:100%;max-height:100%;border-radius:8px} */
-.media-wrap {
+.media-wrap {    
     width: 720px;
     max-width: 52vw;
-    height: 420px;
+    height: 75vh;
+    border-radius: 8px;
+    flex: 3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -85,12 +102,16 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 8px;
 }
 
 .nav-btn{background:none;border:1px solid rgba(15,23,42,0.06);padding:8px;border-radius:8px;cursor:pointer}
-.details{flex:1;min-width:240px}
+.details{
+    flex: 1.2;
+    flex:1;
+    min-width:240px;
+}
 .stats{display:flex;flex-direction:column;gap:6px;margin:12px 0}
 .stat-row{display:flex;justify-content:space-between;padding:8px;border-radius:8px;background:var(--glass)}
 .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
