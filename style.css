@@ -79,7 +79,6 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     gap: 18px;
     padding: 18px;
     height: 100%;
-    width: 100%;
 }
 .gallery{display:flex;align-items:center;gap:12px}
 /* .media-wrap{width:720px;max-width:52vw;height:420px;display:flex;align-items:center;justify-content:center;position:relative}
@@ -87,14 +86,14 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .media-wrap {    
     height: 78vh;
     border-radius: 8px;
-    flex: 1 1 0;
+    flex: 1.9;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
     background: var(--glass);
-    min-width: 65%;
+    min-width: 0;
 }
 
 .media-wrap img,
@@ -130,8 +129,8 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 
 .nav-btn{background:none;border:1px solid rgba(15,23,42,0.06);padding:8px;border-radius:8px;cursor:pointer}
 .details{
-    flex: 1 1 0;
-    min-width: 30%;
+    flex: 1.1;
+    min-width: 320px;
     max-width: 420px;
     overflow-y: auto;
 }
