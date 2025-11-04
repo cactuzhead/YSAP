@@ -204,6 +204,7 @@ function showVideo() {
     if (!current.video) return;
 
     modalImage.style.display = 'none';
+    modalVideo.parentElement.style.display = '';
     modalVideo.style.display = '';
 
     let url = current.video;
