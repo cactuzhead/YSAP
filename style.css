@@ -115,12 +115,16 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .media-wrap::before {
     content: "No image available";
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
     color: var(--muted);
     font-size: 1rem;
     font-style: italic;
     text-align: center;
-    opacity: 0.6;
+    opacity: 0.7;
     pointer-events: none;
+    z-index: 2;
 }
 
 .nav-btn{background:none;border:1px solid rgba(15,23,42,0.06);padding:8px;border-radius:8px;cursor:pointer}
