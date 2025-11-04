@@ -65,7 +65,8 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .modal-content{
     position: relative;
     max-width: none;
-    width: 92vw;
+    width: 95%;
+    max-width: 1400px;
     max-height: 90vh;
     border-radius: 14px;
     overflow: hidden;
@@ -85,7 +86,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .media-wrap {    
     height: 78vh;
     border-radius: 8px;
-    flex: 3;
+    flex: 1.9;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -112,9 +113,9 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 
 .nav-btn{background:none;border:1px solid rgba(15,23,42,0.06);padding:8px;border-radius:8px;cursor:pointer}
 .details{
-    flex: 1.4;
-    min-width: 260px;
-    max-width: 380px;
+    flex: 1.1;
+    min-width: 280px;
+    max-width: 420px;
     overflow-y: auto;
 }
 .stats{display:flex;flex-direction:column;gap:6px;margin:12px 0}
