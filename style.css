@@ -65,8 +65,8 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .modal-content{
     position: relative;
     max-width: none;
-    width: 95vw;
-    max-height: 92vh;
+    width: 92vw;
+    max-height: 90vh;
     border-radius: 14px;
     overflow: hidden;
     background: var(--card);
@@ -83,9 +83,9 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 /* .media-wrap{width:720px;max-width:52vw;height:420px;display:flex;align-items:center;justify-content:center;position:relative}
 .media-wrap img, .media-wrap iframe{max-width:100%;max-height:100%;border-radius:8px} */
 .media-wrap {    
-    height: 80vh;
+    height: 78vh;
     border-radius: 8px;
-    flex: 5;
+    flex: 3;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -112,9 +112,9 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 
 .nav-btn{background:none;border:1px solid rgba(15,23,42,0.06);padding:8px;border-radius:8px;cursor:pointer}
 .details{
-    flex: 1;
-    min-width: 240px;
-    max-width: 320px;
+    flex: 1.4;
+    min-width: 260px;
+    max-width: 380px;
     overflow-y: auto;
 }
 .stats{display:flex;flex-direction:column;gap:6px;margin:12px 0}
