@@ -93,7 +93,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     position: relative;
     overflow: hidden;
     background: var(--glass);
-    min-width: 0;
+    min-width: 65%;
 }
 
 .media-wrap .media-img {
@@ -102,11 +102,27 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     object-fit: contain;
 }
 
-.media-wrap .media-video {
+.media-wrap .video-container {
     width: 100%;
     height: 100%;
-    object-fit: contain;   /* fill the container but keep natural ratio */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.media-wrap .media-video {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
     border: none;
+}
+
+#modalVideo {
+    width: 100%;
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
 }
 
 /* .media-wrap img,
