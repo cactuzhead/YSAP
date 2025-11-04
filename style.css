@@ -115,7 +115,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .media-wrap::before {
     content: "No image available";
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -55%);
     color: var(--muted);
