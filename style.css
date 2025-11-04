@@ -64,8 +64,8 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .modal-backdrop{position:absolute;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.4));backdrop-filter: blur(6px)}
 .modal-content{
     position: relative;
-    max-width: 1400px;
-    width: 96%;
+    max-width: none;
+    width: 95vw;
     max-height: 92vh;
     border-radius: 14px;
     overflow: hidden;
@@ -83,11 +83,9 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 /* .media-wrap{width:720px;max-width:52vw;height:420px;display:flex;align-items:center;justify-content:center;position:relative}
 .media-wrap img, .media-wrap iframe{max-width:100%;max-height:100%;border-radius:8px} */
 .media-wrap {    
-    width: 720px;
-    max-width: 52vw;
-    height: 75vh;
+    height: 80vh;
     border-radius: 8px;
-    flex: 4;
+    flex: 5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -110,6 +108,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .details{
     flex: 1;
     min-width: 240px;
+    max-width: 320px;
     overflow-y: auto;
 }
 .stats{display:flex;flex-direction:column;gap:6px;margin:12px 0}
