@@ -93,6 +93,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     position: relative;
     overflow: hidden;
     background: var(--glass);
+    min-width: 850px;
 }
 
 .media-wrap img,
@@ -111,10 +112,21 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     transition: opacity 0.3s ease;
 }
 
+.media-wrap::before {
+    content: "No image available";
+    position: absolute;
+    color: var(--muted);
+    font-size: 1rem;
+    font-style: italic;
+    text-align: center;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
 .nav-btn{background:none;border:1px solid rgba(15,23,42,0.06);padding:8px;border-radius:8px;cursor:pointer}
 .details{
     flex: 1.1;
-    min-width: 280px;
+    min-width: 320px;
     max-width: 420px;
     overflow-y: auto;
 }
