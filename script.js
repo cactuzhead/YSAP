@@ -39,7 +39,6 @@ function renderCard(map) {
     card.tabIndex = 0;
 
   
-    const difficultyClass = map.stats?.Difficulty ? `diff-${map.stats.Difficulty.toLowerCase()}` : '';
     const biome = map.stats?.Biome || '';
     const biomeClass = map.stats?.Biome ? `${map.stats.Biome.toLowerCase()}` : '';
     const biomeIcon = biome ? `<img src="images/biome/${biomeClass}.png" alt="${biome}" class="biome-icon">` : '';
@@ -58,8 +57,7 @@ function renderCard(map) {
             <h3 class="card-title">${map.name || ''}</h3>
             <h5 class="card-title">${map.author || ''}</h5>
             <div class="meta">
-                <span>${formatDate(map.stats.Date || '')}</span>
-                ${map.stats?.Difficulty ? `<span class="difficulty ${difficultyClass}">${map.stats.Difficulty}</span>` : ''}
+                <span>${formatDate(map.stats.Date || '')}</span>                
                 <span>${map.stats.Mode || ''}</span>
             </div>
         </div>
@@ -161,14 +159,6 @@ function openModal(map) {
         // Create stat row
         const statRow = document.createElement('div');
         statRow.className = 'stat-row';
-
-        // Add difficulty classes instead of inline color
-        if (key === 'Difficulty') {
-            const diffClass = `diff-${value.toLowerCase()}`;
-            statRow.innerHTML = `<strong>${key}</strong><span class="${diffClass}">${displayValue}</span>`;
-        } else {
-            statRow.innerHTML = `<strong>${key}</strong><span>${displayValue}</span>`;
-        }
 
         modalStats.appendChild(statRow);
     });

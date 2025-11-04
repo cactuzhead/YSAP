@@ -46,7 +46,6 @@
         "Parking Spots": 8,
         "Round Time": 300,
         "Fuel Time": 30,
-        "Difficulty": "Medium",
         "Map Type": "Campaign"
         }
     },
@@ -63,7 +62,6 @@
         "Parking Spots": 10,
         "Round Time": 300,
         "Fuel Time": 30,
-        "Difficulty": "Easy",
         "Map Type": "Custom"
         }
     },
@@ -80,7 +78,6 @@
         "Parking Spots": 9,
         "Round Time": 180,
         "Fuel Time": 30,
-        "Difficulty": "Medium",
         "Map Type": "Custom"
         }
     }
