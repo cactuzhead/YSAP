@@ -26,7 +26,7 @@
             "Date": "2025-04-10",
             "Biome": "Grass",
             "Parking Spots": 5,
-            "Round Time": 300,
+            "Round Time": 180,
             "Fuel Time": 25,
             "Map Type": "Campaign"
         }
@@ -42,7 +42,7 @@
             "Date": "2025-11-05",
             "Biome": "Ice",
             "Parking Spots": 11,
-            "Round Time": 300,
+            "Round Time": 180,
             "Fuel Time": 30,
             "Map Type": "Custom"
         }
@@ -58,7 +58,7 @@
             "Date": "2025-11-05",
             "Biome": "Ice",
             "Parking Spots": 8,
-            "Round Time": 300,
+            "Round Time": 180,
             "Fuel Time": 30,
             "Map Type": "Custom"
         }
