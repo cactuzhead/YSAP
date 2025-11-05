@@ -20,7 +20,7 @@
         "author": "Jane Smith",
         "base": "coast",
         "extra_screenshots": ["coast1", "coast2"],
-        "video": null,
+        "video": "https://youtu.be/T0xt2vlq2no",
         "description": "A scenic route along the coastline.",
         "stats": {
             "Date": "2025-04-10",
@@ -32,19 +32,18 @@
         }
     },
         {
-        "name": "Another Long Title Test",
-        "author": "Bob Jones",
-        "base": "coast",
-        "extra_screenshots": [],
-        "video": "https://youtu.be/T0xt2vlq2no",
-        "description": "A test map.",
+        "name": "4x4",
+        "author": "Cactuzhead",
+        "base": "f9ca3913-c162-491f-aaa6-bacf67492a5a",
+        "extra_screenshots": ["alt", "close"],
+        "video": null,
+        "description": "An ice map with lots of slopes and parking spots.",
         "stats": {
-            "Date": "2025-09-16",
+            "Date": "2025-11-05",
             "Biome": "Ice",
-            "Parking Spots": 8,
             "Round Time": 300,
             "Fuel Time": 30,
-            "Map Type": "Campaign"
+            "Map Type": "Custom"
         }
     },
             {
