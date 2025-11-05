@@ -78,5 +78,21 @@
             "Fuel Time": 30,
             "Map Type": "Custom"
         }
+    },
+    {
+        "name": "cARPE dIEM",
+        "author": "Cactuzhead",
+        "base": "BASE",
+        "extra_screenshots": ["alt", "close"],
+        "video": null,
+        "description": "Weave your way around a snow and ice covered harbour with some tricky and long parking spots.",
+        "stats": {
+            "Date": "2025-11-01",
+            "Biome": "Ice",
+            "Parking Spots": 8,
+            "Round Time": 180,
+            "Fuel Time": 30,
+            "Map Type": "Custom"
+        }
     }
     ]
