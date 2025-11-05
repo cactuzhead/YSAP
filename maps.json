@@ -36,7 +36,7 @@
         "author": "Bob Jones",
         "base": "coast",
         "extra_screenshots": [],
-        "video": null,
+        "video": "https://youtu.be/T0xt2vlq2no",
         "description": "A test map.",
         "stats": {
             "Date": "2025-09-16",
@@ -68,7 +68,7 @@
         "author": "Cactuzhead",
         "base": "0221627f-8778-4f7f-a73e-151c09e79ed0",
         "extra_screenshots": ["alt", "close"],
-        "video": "https://youtu.be/T0xt2vlq2no",
+        "video": null,
         "description": "A test.",
         "stats": {
             "Date": "2025-11-01",
