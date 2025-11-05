@@ -80,9 +80,9 @@
         }
     },
     {
-        "name": "cARPE dIEM",
+        "name": "Carpe Diem",
         "author": "Cactuzhead",
-        "base": "BASE",
+        "base": "25220892-4f37-4909-8adb-e290c8e53507",
         "extra_screenshots": ["alt", "close"],
         "video": null,
         "description": "Weave your way around a snow and ice covered harbour with some tricky and long parking spots.",
