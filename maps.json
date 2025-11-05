@@ -41,6 +41,7 @@
         "stats": {
             "Date": "2025-11-05",
             "Biome": "Ice",
+            "Parking Spots": 11,
             "Round Time": 300,
             "Fuel Time": 30,
             "Map Type": "Custom"
