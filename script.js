@@ -190,14 +190,39 @@ function openModal(map) {
 
 
 // Show a specific screenshot in the modal
+// function showMedia(idx) {
+//     modalImage.style.display = '';
+//     modalVideo.style.display = 'none';
+
+//     modalImage.src = current.media[idx] || '';
+//     modalImage.alt = `${modalTitle.textContent} screenshot ${idx + 1}`;
+//     modal.dataset.idx = idx;
+// }
 function showMedia(idx) {
+    const mediaWrap = modalImage.closest('.media-wrap');
     modalImage.style.display = '';
     modalVideo.style.display = 'none';
-
-    modalImage.src = current.media[idx] || '';
-    modalImage.alt = `${modalTitle.textContent} screenshot ${idx + 1}`;
     modal.dataset.idx = idx;
+
+    // Remove no-image state initially
+    mediaWrap.classList.remove('no-image');
+
+    // Set new image source
+    const src = current.media[idx] || '';
+    modalImage.src = src;
+    modalImage.alt = `${modalTitle.textContent} screenshot ${idx + 1}`;
+
+    // Handle missing or broken image
+    modalImage.onerror = () => {
+        modalImage.style.display = 'none';
+        mediaWrap.classList.add('no-image');
+    };
+
+    modalImage.onload = () => {
+        mediaWrap.classList.remove('no-image');
+    };
 }
+
 
 // Show video in the modal
 function showVideo() {

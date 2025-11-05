@@ -150,6 +150,11 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 }
 
 .media-wrap::before {
+    display: none;
+}
+
+.media-wrap.no-image::before {
+    display: block;
     content: "No image available";
     position: absolute;
     top: 45%;
