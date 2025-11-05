@@ -69,7 +69,7 @@
         "base": "0221627f-8778-4f7f-a73e-151c09e79ed0",
         "extra_screenshots": ["alt", "close"],
         "video": null,
-        "description": "A test.",
+        "description": "Drive above a lava field as you jump back and forth over skeletons.",
         "stats": {
             "Date": "2025-11-01",
             "Biome": "Lava",
