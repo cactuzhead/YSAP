@@ -67,7 +67,7 @@
         "name": "Spine",
         "author": "Cactuzhead",
         "base": "0221627f-8778-4f7f-a73e-151c09e79ed0",
-        "extra_screenshots": [],
+        "extra_screenshots": ["alt", "close"],
         "video": "https://youtu.be/T0xt2vlq2no",
         "description": "A test.",
         "stats": {
