@@ -111,4 +111,21 @@
             "Map Type": "Custom"
         }
     }
+    ,
+    {
+        "name": "Hard Shoulder",
+        "author": "Cactuzhead",
+        "base": "5583eeed-60d9-4782-b838-9326bbf37ab3",
+        "extra_screenshots": ["alt", "close"],
+        "video": null,
+        "description": "Drift and slide around the tight corners and avoid the crushers as you bounce up various levels.",
+        "stats": {
+            "Date": "2025-11-06",
+            "Biome": "Ice",
+            "Parking Spots": 8,
+            "Round Time": 180,
+            "Fuel Time": 30,
+            "Map Type": "Custom"
+        }
+    }
     ]
