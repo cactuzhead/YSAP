@@ -94,5 +94,21 @@
             "Fuel Time": 30,
             "Map Type": "Custom"
         }
+    },
+    {
+        "name": "Exhausted",
+        "author": "Cactuzhead",
+        "base": "eb024ae2-0b8a-4648-9f9d-88b6471091af",
+        "extra_screenshots": ["alt", "close"],
+        "video": null,
+        "description": "A small island with many portals, loops and avoide the lighthouse with a split jump.",
+        "stats": {
+            "Date": "2025-11-06",
+            "Biome": "Grass",
+            "Parking Spots": 8,
+            "Round Time": 180,
+            "Fuel Time": 30,
+            "Map Type": "Custom"
+        }
     }
     ]
