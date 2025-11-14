@@ -127,8 +127,23 @@
             "Fuel Time": 30,
             "Map Type": "Custom"
         }
-    }
-        ,
+    },
+    {
+        "name": "Kickflip",
+        "author": "Cactuzhead",
+        "base": "7b8d224d-ca76-4ae9-95fe-c5cd7a4a2efb",
+        "extra_screenshots": ["alt", "close"],
+        "video": null,
+        "description": ".",
+        "stats": {
+            "Date": "2025-11-14",
+            "Biome": "Lava",
+            "Parking Spots": 8,
+            "Round Time": 180,
+            "Fuel Time": 30,
+            "Map Type": "Custom"
+        }
+    },
     {
         "name": "Parking Tickets",
         "author": "Cactuzhead",
