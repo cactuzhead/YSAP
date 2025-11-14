@@ -128,4 +128,21 @@
             "Map Type": "Custom"
         }
     }
+        ,
+    {
+        "name": "Parking Tickets",
+        "author": "Cactuzhead",
+        "base": "BOXING GLOVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+        "extra_screenshots": ["alt", "close"],
+        "video": null,
+        "description": "On this compact layout the roads may be out, so jump those gaps and avoid the fire.",
+        "stats": {
+            "Date": "2025-11-14",
+            "Biome": "Grass",
+            "Parking Spots": 8,
+            "Round Time": 180,
+            "Fuel Time": 30,
+            "Map Type": "Custom"
+        }
+    }
     ]
