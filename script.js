@@ -56,7 +56,7 @@ function renderCard(map) {
             <h3 class="card-title">${map.name || ''}</h3>
             <h5 class="card-title">${map.author || ''}</h5>
             <div class="meta">
-                <span>${formatDate(map.stats.Release_Date || '')}</span>                
+                <span>${formatDate(map.stats.releaseDate || '')}</span>                
                 <span>${map.stats.Mode || ''}</span>
             </div>
         </div>
