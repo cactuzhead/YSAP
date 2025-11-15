@@ -7,7 +7,7 @@
         "video": "https://www.youtube.com/embed/dQw4w9WgXcQ",
         "description": "A challenging mountainous road with long jumps portals and narrow roads.",
         "stats": {
-            "Date": "2025-11-02",
+            "Release Date": "2025-11-02",
             "Biome": "Grass",
             "Parking Spots": 11,
             "Round Time": 180,
@@ -23,7 +23,7 @@
         "video": "https://youtu.be/T0xt2vlq2no",
         "description": "A scenic route along the coastline.",
         "stats": {
-            "Date": "2025-04-10",
+            "Release Date": "2025-04-10",
             "Biome": "Grass",
             "Parking Spots": 5,
             "Round Time": 180,
@@ -39,7 +39,7 @@
         "video": null,
         "description": "An ice map with lots of slopes and parking spots.",
         "stats": {
-            "Date": "2025-11-05",
+            "Release Date": "2025-11-05",
             "Biome": "Ice",
             "Parking Spots": 11,
             "Round Time": 180,
@@ -47,7 +47,7 @@
             "Map Type": "Custom"
         }
     },
-            {
+        {
         "name": "Ice Snake Run",
         "author": "Cactuzhead",
         "base": "07903fc7-94b8-4e22-8fd4-cf2149ff24ee",
@@ -55,7 +55,7 @@
         "video": null,
         "description": "A reworking of the official game map 'Ice Run' without fans, and using the ice biome.",
         "stats": {
-            "Date": "2025-11-05",
+            "Release Date": "2025-11-05",
             "Biome": "Ice",
             "Parking Spots": 8,
             "Round Time": 180,
@@ -71,7 +71,7 @@
         "video": null,
         "description": "Drive above a lava field as you jump back and forth over skeletons.",
         "stats": {
-            "Date": "2025-11-01",
+            "Release Date": "2025-11-01",
             "Biome": "Lava",
             "Parking Spots": 9,
             "Round Time": 180,
@@ -87,7 +87,7 @@
         "video": null,
         "description": "Weave your way around a snow and ice covered harbour with some tricky and long parking spots.",
         "stats": {
-            "Date": "2025-11-01",
+            "Release Date": "2025-11-01",
             "Biome": "Ice",
             "Parking Spots": 8,
             "Round Time": 180,
@@ -103,15 +103,14 @@
         "video": null,
         "description": "A small island with many portals, loops and avoide the lighthouse with a split jump.",
         "stats": {
-            "Date": "2025-11-06",
+            "Release Date": "2025-11-06",
             "Biome": "Grass",
             "Parking Spots": 8,
             "Round Time": 180,
             "Fuel Time": 30,
             "Map Type": "Custom"
         }
-    }
-    ,
+    },
     {
         "name": "Hard Shoulder",
         "author": "Cactuzhead",
@@ -120,7 +119,7 @@
         "video": null,
         "description": "Drift and slide around the tight corners and avoid the crushers as you bounce up various levels.",
         "stats": {
-            "Date": "2025-11-06",
+            "Release Date": "2025-11-06",
             "Biome": "Ice",
             "Parking Spots": 8,
             "Round Time": 180,
@@ -136,7 +135,7 @@
         "video": null,
         "description": "Perform tricks to hit those parking spots, whilst avoiding the lava.",
         "stats": {
-            "Date": "2025-11-14",
+            "Release Date": "2025-11-14",
             "Biome": "Lava",
             "Parking Spots": 8,
             "Round Time": 180,
@@ -152,7 +151,7 @@
         "video": null,
         "description": "On this compact layout the roads may be out, so jump those gaps and avoid the fire borders.",
         "stats": {
-            "Date": "2025-11-14",
+            "Release Date": "2025-11-14",
             "Biome": "Grass",
             "Parking Spots": 8,
             "Round Time": 180,
