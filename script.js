@@ -285,21 +285,33 @@ function applyControls() {
     if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
     if (sort === 'author') list.sort((a, b) => a.author.localeCompare(b.author));
     // if (sort === 'date') list.sort((a, b) => new Date(b.stats.Date) - new Date(a.stats.Date));
-    if (sort === 'date') {
+    // if (sort === 'date') {
+    //     list.sort((a, b) => {
+    //         const dateA = a.stats?.["Release Date"] ? new Date(a.stats["Release Date"]) : new Date('1970-01-01');
+    //         const dateB = b.stats?.["Release Date"] ? new Date(b.stats["Release Date"]) : new Date('1970-01-01');
+    //         return dateB - dateA; // newest first
+    //     });
+    // }
+
+    // if (sort === 'dateAsc') {
+    //     list.sort((a, b) => {
+    //         const dateA = a.stats?.["Release Date"] ? new Date(a.stats["Release Date"]) : new Date('1970-01-01');
+    //         const dateB = b.stats?.["Release Date"] ? new Date(b.stats["Release Date"]) : new Date('1970-01-01');
+    //         return dateA - dateB; // oldest first
+    //     });
+    // }
+
+    if (sort === 'date' || sort === 'dateAsc') {
         list.sort((a, b) => {
-            const dateA = a.stats?.["Release Date"] ? new Date(a.stats["Release Date"]) : new Date('1970-01-01');
-            const dateB = b.stats?.["Release Date"] ? new Date(b.stats["Release Date"]) : new Date('1970-01-01');
-            return dateB - dateA; // newest first
+            const dateA = new Date(a.stats?.["Release Date"] || '1970-01-01');
+            const dateB = new Date(b.stats?.["Release Date"] || '1970-01-01');
+            return sort === 'date' ? dateB - dateA : dateA - dateB;
         });
     }
 
-    if (sort === 'dateAsc') {
-        list.sort((a, b) => {
-            const dateA = a.stats?.["Release Date"] ? new Date(a.stats["Release Date"]) : new Date('1970-01-01');
-            const dateB = b.stats?.["Release Date"] ? new Date(b.stats["Release Date"]) : new Date('1970-01-01');
-            return dateA - dateB; // oldest first
-        });
-    }
+    // Update the map count label
+    document.getElementById('mapCount').textContent =
+        `${list.length} map${list.length !== 1 ? 's' : ''}`;
 
     // if (sort === 'round') list.sort((a, b) => (a.stats?.["Round Time"] || 0) - (b.stats?.["Round Time"] || 0));
     // if (sort === 'fuel') list.sort((a, b) => (a.stats?.["Fuel Time"] || 0) - (b.stats?.["Fuel Time"] || 0));
