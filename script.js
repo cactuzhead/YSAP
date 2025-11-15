@@ -287,16 +287,16 @@ function applyControls() {
     // if (sort === 'date') list.sort((a, b) => new Date(b.stats.Date) - new Date(a.stats.Date));
     if (sort === 'date') {
         list.sort((a, b) => {
-            const dateA = a.stats?["Release Date"] ? new Date(a.stats["Release Date"]) : new Date('1970-01-01');
-            const dateB = b.stats?["Release Date"] ? new Date(b.stats["Release Date"]) : new Date('1970-01-01');
+            const dateA = a.stats?.["Release Date"] ? new Date(a.stats.["Release Date"]) : new Date('1970-01-01');
+            const dateB = b.stats?.["Release Date"] ? new Date(b.stats.["Release Date"]) : new Date('1970-01-01');
             return dateB - dateA; // newest first
         });
     }
 
     if (sort === 'dateAsc') {
         list.sort((a, b) => {
-            const dateA = a.stats?["Release Date"] ? new Date(a.stats["Release Date"]) : new Date('1970-01-01');
-            const dateB = b.stats?["Release Date"] ? new Date(b.stats["Release Date"]) : new Date('1970-01-01');
+            const dateA = a.stats?.["Release Date"] ? new Date(a.stats.["Release Date"]) : new Date('1970-01-01');
+            const dateB = b.stats?.["Release Date"] ? new Date(b.stats.["Release Date"]) : new Date('1970-01-01');
             return dateA - dateB; // oldest first
         });
     }
