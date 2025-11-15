@@ -25,7 +25,17 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;background:var(--glass);backdrop-filter: blur(6px);box-shadow:var(--shadow);position:sticky;top:0;z-index:30}
 .brand{font-weight:700;font-size:1.1rem}
-.controls{display:flex;gap:8px;align-items:center}
+.controls {
+    display:flex;
+    gap:8px;
+    align-items:center
+}
+.map-count {
+    font-size: 0.95rem;
+    color: var(--muted);
+    padding-right: 6px;
+    white-space: nowrap;
+}
 .controls input[type=search]{padding:8px 12px;border-radius:10px;border:1px solid rgba(15,23,42,0.06);min-width:180px}
 .controls select{padding:8px 10px;border-radius:10px;border:1px solid rgba(15,23,42,0.06)}
 
