@@ -36,6 +36,9 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     padding-right: 6px;
     white-space: nowrap;
 }
+[data-theme="dark"] .map-count {
+    color: #ccc;
+}
 .controls input[type=search]{padding:8px 12px;border-radius:10px;border:1px solid rgba(15,23,42,0.06);min-width:180px}
 .controls select{padding:8px 10px;border-radius:10px;border:1px solid rgba(15,23,42,0.06)}
 
