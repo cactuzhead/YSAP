@@ -127,20 +127,7 @@ function openModal(map) {
     modalDesc.textContent = map.description || '';
 
     modalStats.innerHTML = '';
-    // if (map.stats) {
-    //     Object.entries(map.stats).forEach(([key, value]) => {
-    //         let displayValue = value;
-    //         if (key === 'Round Time' || key === 'Fuel Time') displayValue = secToMinSec(value);
-    //         // Format date (YYYY-MM-DD format)
-    //         if (key.toLowerCase() === 'date' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
-    //             displayValue = formatDate(value);
-    //         }      
-    //         const statRow = document.createElement('div');
-    //         statRow.className = 'stat-row';
-    //         statRow.innerHTML = `<strong>${key}</strong><span>${displayValue}</span>`;
-    //         modalStats.appendChild(statRow);
-    //     });
-    // }
+
     if (map.stats) {
     Object.entries(map.stats).forEach(([key, value]) => {
         let displayValue = value;
@@ -284,22 +271,6 @@ function applyControls() {
     const sort = sortBy.value;
     if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
     if (sort === 'author') list.sort((a, b) => a.author.localeCompare(b.author));
-    // if (sort === 'date') list.sort((a, b) => new Date(b.stats.Date) - new Date(a.stats.Date));
-    // if (sort === 'date') {
-    //     list.sort((a, b) => {
-    //         const dateA = a.stats?.["Release Date"] ? new Date(a.stats["Release Date"]) : new Date('1970-01-01');
-    //         const dateB = b.stats?.["Release Date"] ? new Date(b.stats["Release Date"]) : new Date('1970-01-01');
-    //         return dateB - dateA; // newest first
-    //     });
-    // }
-
-    // if (sort === 'dateAsc') {
-    //     list.sort((a, b) => {
-    //         const dateA = a.stats?.["Release Date"] ? new Date(a.stats["Release Date"]) : new Date('1970-01-01');
-    //         const dateB = b.stats?.["Release Date"] ? new Date(b.stats["Release Date"]) : new Date('1970-01-01');
-    //         return dateA - dateB; // oldest first
-    //     });
-    // }
 
     if (sort === 'date' || sort === 'dateAsc') {
         list.sort((a, b) => {
@@ -310,11 +281,31 @@ function applyControls() {
     }
 
     // Update the map count label
-    document.getElementById('mapCount').textContent =
-        `${list.length} map${list.length !== 1 ? 's' : ''}`;
+    // document.getElementById('mapCount').textContent =
+    //     `${list.length} map${list.length !== 1 ? 's' : ''}`;
 
-    // if (sort === 'round') list.sort((a, b) => (a.stats?.["Round Time"] || 0) - (b.stats?.["Round Time"] || 0));
-    // if (sort === 'fuel') list.sort((a, b) => (a.stats?.["Fuel Time"] || 0) - (b.stats?.["Fuel Time"] || 0));
+
+    const countLabel = document.getElementById('mapCount');
+
+// Fade out
+countLabel.style.opacity = 0;
+
+setTimeout(() => {
+    // Update label text
+    countLabel.textContent = `${list.length} map${list.length !== 1 ? 's' : ''}`;
+
+    // Remove old classes
+    countLabel.classList.remove('high', 'medium', 'low');
+
+    // Add new color class based on quantity
+    if (list.length > 20) countLabel.classList.add('high');
+    else if (list.length > 5) countLabel.classList.add('medium');
+    else countLabel.classList.add('low');
+
+    // Fade in
+    countLabel.style.opacity = 1;
+
+}, 150); // matches the fade-out timing
 
     renderGrid(list);
 }
