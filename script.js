@@ -56,7 +56,7 @@ function renderCard(map) {
             <h3 class="card-title">${map.name || ''}</h3>
             <h5 class="card-title">${map.author || ''}</h5>
             <div class="meta">
-                <span>${formatDate(map.stats.Date || '')}</span>                
+                <span>${formatDate(map.stats.Release_Date || '')}</span>                
                 <span>${map.stats.Mode || ''}</span>
             </div>
         </div>
@@ -190,14 +190,6 @@ function openModal(map) {
 
 
 // Show a specific screenshot in the modal
-// function showMedia(idx) {
-//     modalImage.style.display = '';
-//     modalVideo.style.display = 'none';
-
-//     modalImage.src = current.media[idx] || '';
-//     modalImage.alt = `${modalTitle.textContent} screenshot ${idx + 1}`;
-//     modal.dataset.idx = idx;
-// }
 function showMedia(idx) {
     const mediaWrap = modalImage.closest('.media-wrap');
     modalImage.style.display = '';
