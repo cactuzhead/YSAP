@@ -97,10 +97,12 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     height: 100%;
 }
 .gallery{
-    display: flex;
-    flex: 1;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    /* flex: 1; */
     align-items: center;
     gap: 12px;
+    width: 100%;
 }
 .media-wrap {    
     height: 78vh;
@@ -173,8 +175,15 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     z-index: 2;
 }
 
-.nav-btn{background:none;border:1px solid rgba(15,23,42,0.06);padding:8px;border-radius:8px;cursor:pointer}
-.details{
+.nav-btn {
+    background: none;
+    border: 1px solid rgba(15,23,42,0.06);
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    height: fit-content;
+}
+.details {
     flex: 1.1;
     min-width: 320px;
     max-width: 420px;
