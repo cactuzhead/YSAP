@@ -149,7 +149,6 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     position: relative;
     /* width: 100%; */
     display: block;
-    height: auto !important; 
 }
 
 .img-container img,
@@ -344,22 +343,18 @@ overflow-wrap: break-word;
 @media (max-width: 900px) {
     .modal-body {
         flex-direction: column;
+        /* align-items: center; */
     }
 
     .media-wrap {
-        width: 100%;
-        height: auto !important;   /* FIX */
+        /* width: 100%; */
+        /* height: 56vw; */
+        height: auto !important;
+        min-height: unset !important;
     }
 
-    .img-container {
-        height: auto !important;    /* FIX */
-    }
-
-    .media-img,
-    .media-video,
-    #drawCanvas {
-        height: auto !important; 
-        max-height: none !important; /* FIX */
+    .gallery {
+        align-items: flex-start !important;
     }
 
     .details {
