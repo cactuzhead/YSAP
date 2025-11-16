@@ -508,7 +508,22 @@ function showMedia(idx) {
 
     modalImage.onload = () => {
         mediaWrap.classList.remove('no-image');
+        resizeDrawCanvas();
     };
+}
+
+function resizeDrawCanvas() {
+    const img = document.getElementById("modalImage");
+    const canvas = document.getElementById("drawCanvas");
+
+    canvas.width = img.clientWidth;
+    canvas.height = img.clientHeight;
+
+    canvas.style.width = img.clientWidth + "px";
+    canvas.style.height = img.clientHeight + "px";
+
+    canvas.style.top = img.offsetTop + "px";
+    canvas.style.left = img.offsetLeft + "px";
 }
 
 
@@ -626,6 +641,7 @@ searchInput.addEventListener('input', applyControls);
 filterEnv.addEventListener('change', applyControls);
 sortBy.addEventListener('change', applyControls);
 document.getElementById('mapTypeFilter').addEventListener('change', applyControls);
+window.addEventListener("resize", resizeDrawCanvas);
 
 // Dark/light theme toggle
 function setTheme(isDark) {
