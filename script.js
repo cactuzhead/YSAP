@@ -51,34 +51,34 @@ if (!drawCanvas || !modalImage) {
 
     // Prepare canvases to match the image natural size (and scale for DPR)
     function prepareDrawCanvas() {
-        if (!modalImage.complete || modalImage.naturalWidth === 0) return;
+    if (!modalImage.complete || modalImage.naturalWidth === 0) return;
 
-        imgNaturalW = modalImage.naturalWidth;
-        imgNaturalH = modalImage.naturalHeight;
-        dpr = Math.max(window.devicePixelRatio || 1, 1);
+    const imgRect = modalImage.getBoundingClientRect();
+    imgNaturalW = modalImage.naturalWidth;
+    imgNaturalH = modalImage.naturalHeight;
+    dpr = Math.max(window.devicePixelRatio || 1, 1);
 
-        // Internal hi-res buffer
-        const internalW = Math.round(imgNaturalW * dpr);
-        const internalH = Math.round(imgNaturalH * dpr);
-        drawCanvas.width = internalW;
-        drawCanvas.height = internalH;
-        tempCanvas.width = internalW;
-        tempCanvas.height = internalH;
+    // Internal pixel size = natural image size * DPR (for crisp strokes)
+    const internalW = Math.round(imgNaturalW * dpr);
+    const internalH = Math.round(imgNaturalH * dpr);
 
-        // On-screen overlay CSS matches **actual image display**
-        const rect = modalImage.getBoundingClientRect();
-        drawCanvas.style.position = 'absolute';
-        drawCanvas.style.width = rect.width + 'px';
-        drawCanvas.style.height = rect.height + 'px';
-        drawCanvas.style.left = rect.left + 'px';
-        drawCanvas.style.top = rect.top + 'px';
+    drawCanvas.width = internalW;
+    drawCanvas.height = internalH;
 
-        // Clear contexts
-        drawCtx.clearRect(0, 0, internalW, internalH);
-        tempCtx.clearRect(0, 0, internalW, internalH);
-        tempCtx.lineCap = 'round';
-        tempCtx.lineJoin = 'round';
-    }
+    // Position the canvas exactly over the image
+    drawCanvas.style.position = 'absolute';
+    drawCanvas.style.left = imgRect.left + 'px';
+    drawCanvas.style.top = imgRect.top + 'px';
+    drawCanvas.style.width = imgRect.width + 'px';
+    drawCanvas.style.height = imgRect.height + 'px';
+
+    // Temp canvas same internal size
+    tempCanvas.width = internalW;
+    tempCanvas.height = internalH;
+
+    // Clear contexts and set linecap
+    drawCtx.clearRect(0, 0, internal
+
 
     function updateCanvasOverlay() {
         if (!modalImage.complete) return;
