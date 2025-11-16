@@ -26,163 +26,314 @@ let current = {
     video: null
 };
 
-// --- Drawing System (Improved High-Resolution Version) ---
+// --- Drawing System (working, hi-res, touch) ---
 const drawCanvas = document.getElementById('drawCanvas');
 const drawCtx = drawCanvas.getContext('2d');
+
 const drawColor = document.getElementById('drawColor');
 const drawWidth = document.getElementById('drawWidth');
 const drawMode = document.getElementById('drawMode');
 const drawClear = document.getElementById('drawClear');
 const drawCopy = document.getElementById('drawCopy');
 
-let drawing = false;
-let startX = 0, startY = 0;
-let scaleX = 1, scaleY = 1; // maps screen → natural image
-let imgNaturalW = 0, imgNaturalH = 0;
+if (!drawCanvas || !modalImage) {
+    console.warn('Drawing elements not found.');
+} else {
+    // Offscreen temp canvas that stores committed strokes (internal resolution)
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d');
 
-// Resize canvas to match the *natural* resolution of the image
-function prepareDrawCanvas() {
-    if (!modalImage.complete || modalImage.naturalWidth === 0) return;
+    let drawing = false;
+    let startX = 0, startY = 0;
+    let prevX = 0, prevY = 0;
+    let imgNaturalW = 0, imgNaturalH = 0;
+    let dpr = Math.max(window.devicePixelRatio || 1, 1);
 
-    imgNaturalW = modalImage.naturalWidth;
-    imgNaturalH = modalImage.naturalHeight;
+    // Prepare canvases to match the image natural size (and scale for DPR)
+    function prepareDrawCanvas() {
+        if (!modalImage.complete || modalImage.naturalWidth === 0) return;
 
-    // Canvas actual resolution = image resolution
-    drawCanvas.width = imgNaturalW;
-    drawCanvas.height = imgNaturalH;
+        imgNaturalW = modalImage.naturalWidth;
+        imgNaturalH = modalImage.naturalHeight;
+        dpr = Math.max(window.devicePixelRatio || 1, 1);
 
-    // Canvas CSS matches the on-screen <img> size
-    const rect = modalImage.getBoundingClientRect();
-    drawCanvas.style.width = rect.width + "px";
-    drawCanvas.style.height = rect.height + "px";
+        // Internal pixel size = natural image size * dpr (keeps export accurate + crisp on HiDPI)
+        const internalW = Math.round(imgNaturalW * dpr);
+        const internalH = Math.round(imgNaturalH * dpr);
 
-    // Mouse coordinate scaling
-    scaleX = imgNaturalW / rect.width;
-    scaleY = imgNaturalH / rect.height;
+        drawCanvas.width = internalW;
+        drawCanvas.height = internalH;
+        drawCanvas.style.width = modalImage.getBoundingClientRect().width + 'px';
+        drawCanvas.style.height = modalImage.getBoundingClientRect().height + 'px';
 
-    drawCtx.lineCap = "round";
-}
+        // temp canvas same internal size
+        tempCanvas.width = internalW;
+        tempCanvas.height = internalH;
 
-modalImage.onload = prepareDrawCanvas;
-window.addEventListener("resize", prepareDrawCanvas);
-
-// Convert mouse → natural pixel coordinates
-function getPos(e) {
-    const r = drawCanvas.getBoundingClientRect();
-    return {
-        x: (e.clientX - r.left) * scaleX,
-        y: (e.clientY - r.top) * scaleY
-    };
-}
-
-drawCanvas.addEventListener("mousedown", e => {
-    if (modalVideo.style.display !== "none") return;
-
-    drawing = true;
-    const p = getPos(e);
-    startX = p.x;
-    startY = p.y;
-
-    drawCtx.beginPath();
-});
-
-drawCanvas.addEventListener("mouseup", () => drawing = false);
-drawCanvas.addEventListener("mouseleave", () => drawing = false);
-
-drawCanvas.addEventListener("mousemove", e => {
-    if (!drawing) return;
-
-    const p = getPos(e);
-    drawCtx.strokeStyle = drawColor.value;
-    drawCtx.lineWidth = parseInt(drawWidth.value);
-
-    const dx = p.x - startX;
-    const dy = p.y - startY;
-    const size = Math.sqrt(dx * dx + dy * dy);
-
-    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-    drawCtx.drawImage(tempCanvas, 0, 0);
-
-    drawCtx.beginPath();
-
-    switch (drawMode.value) {
-        case "free":
-            drawCtx.moveTo(startX, startY);
-            drawCtx.lineTo(p.x, p.y);
-            drawCtx.stroke();
-            startX = p.x;
-            startY = p.y;
-            tempCtx.drawImage(drawCanvas, 0, 0);
-            return;
-
-        case "circle":
-            drawCtx.arc(startX, startY, size, 0, Math.PI * 2);
-            break;
-
-        case "square":
-            drawCtx.rect(startX - size, startY - size, size * 2, size * 2);
-            break;
-
-        case "triangle":
-            drawCtx.moveTo(startX, startY - size);
-            drawCtx.lineTo(startX - size, startY + size);
-            drawCtx.lineTo(startX + size, startY + size);
-            drawCtx.closePath();
-            break;
-
-        case "hex":
-            for (let i = 0; i < 6; i++) {
-                const angle = Math.PI / 3 * i;
-                const px = startX + Math.cos(angle) * size;
-                const py = startY + Math.sin(angle) * size;
-                if (i === 0) drawCtx.moveTo(px, py);
-                else drawCtx.lineTo(px, py);
-            }
-            drawCtx.closePath();
-            break;
-
-        case "star":
-            for (let i = 0; i < 10; i++) {
-                const angle = Math.PI / 5 * i;
-                const radius = (i % 2 === 0) ? size : size * 0.4;
-                const px = startX + Math.cos(angle) * radius;
-                const py = startY + Math.sin(angle) * radius;
-                if (i === 0) drawCtx.moveTo(px, py);
-                else drawCtx.lineTo(px, py);
-            }
-            drawCtx.closePath();
-            break;
+        // Clear contexts and set linecap
+        drawCtx.clearRect(0, 0, internalW, internalH);
+        tempCtx.clearRect(0, 0, internalW, internalH);
+        tempCtx.lineCap = 'round';
+        tempCtx.lineJoin = 'round';
     }
-    drawCtx.stroke();
-});
 
-// Clear
-drawClear.addEventListener("click", () => {
-    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-});
+    // compute internal coordinate from client event
+    function getPosFromEvent(e) {
+        const rect = drawCanvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        // Map to natural-image pixels, then to internal pixels multiplied by dpr
+        const xNatural = (clientX - rect.left) * (imgNaturalW / rect.width);
+        const yNatural = (clientY - rect.top) * (imgNaturalH / rect.height);
+        return { x: xNatural * dpr, y: yNatural * dpr };
+    }
 
-// Copy (full-resolution PNG!)
-drawCopy.addEventListener("click", async () => {
-    const exportCanvas = document.createElement("canvas");
-    exportCanvas.width = imgNaturalW;
-    exportCanvas.height = imgNaturalH;
+    // draw the temp canvas onto visible canvas (scale already internal->internal)
+    function redrawVisibleFromTemp() {
+        drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+        drawCtx.drawImage(tempCanvas, 0, 0);
+    }
 
-    const ctx = exportCanvas.getContext("2d");
+    // Commit a shape to tempCtx (used on mouseup)
+    function commitShapeToTemp(shapeDrawFn) {
+        // shapeDrawFn(ctx) should draw the shape into ctx using internal-pixel coords
+        tempCtx.save();
+        shapeDrawFn(tempCtx);
+        tempCtx.restore();
+        redrawVisibleFromTemp();
+    }
 
-    const baseImg = new Image();
-    baseImg.src = modalImage.src;
-    await baseImg.decode();
+    // Mouse / touch handlers
+    function onPointerDown(e) {
+        if (modalVideo.style.display !== 'none') return;
+        e.preventDefault();
+        if (!modalImage.complete) return;
 
-    ctx.drawImage(baseImg, 0, 0);
-    ctx.drawImage(drawCanvas, 0, 0);
+        drawing = true;
+        const p = getPosFromEvent(e);
+        startX = prevX = p.x;
+        startY = prevY = p.y;
 
-    exportCanvas.toBlob(async blob => {
-        await navigator.clipboard.write([
-            new ClipboardItem({ "image/png": blob })
-        ]);
-        alert("Copied to clipboard in FULL resolution!");
+        // Copy current visible content into tempCanvas as committed baseline
+        tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+        tempCtx.drawImage(drawCanvas, 0, 0);
+    }
+
+    function onPointerMove(e) {
+        if (!drawing) return;
+        e.preventDefault();
+        const p = getPosFromEvent(e);
+        const mode = drawMode.value;
+        const lw = Math.max(1, Number(drawWidth.value || 1)) * dpr;
+        const color = drawColor.value || '#ff0000';
+
+        // For freehand, draw directly into tempCtx so strokes accumulate smoothly
+        if (mode === 'free') {
+            tempCtx.strokeStyle = color;
+            tempCtx.lineWidth = lw;
+            tempCtx.lineCap = 'round';
+            tempCtx.beginPath();
+            tempCtx.moveTo(prevX, prevY);
+            tempCtx.lineTo(p.x, p.y);
+            tempCtx.stroke();
+            prevX = p.x;
+            prevY = p.y;
+
+            // show current committed temp onto visible
+            redrawVisibleFromTemp();
+            return;
+        }
+
+        // For shape preview: draw temp (committed) to visible, then overlay preview
+        redrawVisibleFromTemp();
+
+        drawCtx.save();
+        drawCtx.strokeStyle = color;
+        drawCtx.lineWidth = lw;
+        drawCtx.lineCap = 'round';
+
+        const dx = p.x - startX;
+        const dy = p.y - startY;
+        const size = Math.sqrt(dx*dx + dy*dy);
+
+        drawCtx.beginPath();
+        switch (mode) {
+            case 'circle':
+                drawCtx.arc(startX, startY, size, 0, Math.PI * 2);
+                break;
+            case 'square':
+                drawCtx.rect(startX - size, startY - size, size*2, size*2);
+                break;
+            case 'triangle':
+                drawCtx.moveTo(startX, startY - size);
+                drawCtx.lineTo(startX - size, startY + size);
+                drawCtx.lineTo(startX + size, startY + size);
+                drawCtx.closePath();
+                break;
+            case 'hex':
+                for (let i = 0; i < 6; i++) {
+                    const angle = Math.PI/3 * i;
+                    const px = startX + Math.cos(angle) * size;
+                    const py = startY + Math.sin(angle) * size;
+                    if (i === 0) drawCtx.moveTo(px, py); else drawCtx.lineTo(px, py);
+                }
+                drawCtx.closePath();
+                break;
+            case 'star':
+                for (let i = 0; i < 10; i++) {
+                    const angle = Math.PI/5 * i;
+                    const radius = (i % 2 === 0) ? size : size * 0.45;
+                    const px = startX + Math.cos(angle) * radius;
+                    const py = startY + Math.sin(angle) * radius;
+                    if (i === 0) drawCtx.moveTo(px, py); else drawCtx.lineTo(px, py);
+                }
+                drawCtx.closePath();
+                break;
+        }
+        drawCtx.stroke();
+        drawCtx.restore();
+    }
+
+    function onPointerUp(e) {
+        if (!drawing) return;
+        drawing = false;
+        const p = getPosFromEvent(e);
+        const mode = drawMode.value;
+        const lw = Math.max(1, Number(drawWidth.value || 1)) * dpr;
+        const color = drawColor.value || '#ff0000';
+
+        if (mode === 'free') {
+            // already committed incrementally to tempCtx while moving
+            redrawVisibleFromTemp();
+            return;
+        }
+
+        // commit the final shape to tempCtx
+        tempCtx.save();
+        tempCtx.strokeStyle = color;
+        tempCtx.lineWidth = lw;
+        tempCtx.lineCap = 'round';
+        tempCtx.beginPath();
+
+        const dx = p.x - startX;
+        const dy = p.y - startY;
+        const size = Math.sqrt(dx*dx + dy*dy);
+
+        switch (mode) {
+            case 'circle':
+                tempCtx.arc(startX, startY, size, 0, Math.PI * 2);
+                break;
+            case 'square':
+                tempCtx.rect(startX - size, startY - size, size*2, size*2);
+                break;
+            case 'triangle':
+                tempCtx.moveTo(startX, startY - size);
+                tempCtx.lineTo(startX - size, startY + size);
+                tempCtx.lineTo(startX + size, startY + size);
+                tempCtx.closePath();
+                break;
+            case 'hex':
+                for (let i = 0; i < 6; i++) {
+                    const angle = Math.PI/3 * i;
+                    const px = startX + Math.cos(angle) * size;
+                    const py = startY + Math.sin(angle) * size;
+                    if (i === 0) tempCtx.moveTo(px, py); else tempCtx.lineTo(px, py);
+                }
+                tempCtx.closePath();
+                break;
+            case 'star':
+                for (let i = 0; i < 10; i++) {
+                    const angle = Math.PI/5 * i;
+                    const radius = (i % 2 === 0) ? size : size * 0.45;
+                    const px = startX + Math.cos(angle) * radius;
+                    const py = startY + Math.sin(angle) * radius;
+                    if (i === 0) tempCtx.moveTo(px, py); else tempCtx.lineTo(px, py);
+                }
+                tempCtx.closePath();
+                break;
+        }
+
+        tempCtx.stroke();
+        tempCtx.restore();
+
+        // show final
+        redrawVisibleFromTemp();
+    }
+
+    // Attach pointer events (mouse + touch)
+    drawCanvas.addEventListener('mousedown', onPointerDown);
+    drawCanvas.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+
+    // Touch equivalents
+    drawCanvas.addEventListener('touchstart', onPointerDown, { passive: false });
+    drawCanvas.addEventListener('touchmove', onPointerMove, { passive: false });
+    window.addEventListener('touchend', onPointerUp);
+
+    // Clear button: clear both temp and visible
+    drawClear.addEventListener('click', () => {
+        tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+        drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
     });
-});
+
+    // Copy to clipboard: produce FULL-RES PNG matching image natural size
+    drawCopy.addEventListener('click', async () => {
+        if (!modalImage.src) return alert('No image to copy.');
+
+        // Export canvas that matches natural image size (no DPR here)
+        const exportCanvas = document.createElement('canvas');
+        exportCanvas.width = imgNaturalW;
+        exportCanvas.height = imgNaturalH;
+        const exportCtx = exportCanvas.getContext('2d');
+
+        // draw base image at natural resolution
+        const baseImg = new Image();
+        baseImg.crossOrigin = 'anonymous';
+        baseImg.src = modalImage.src;
+        try {
+            await baseImg.decode();
+        } catch (err) {
+            console.warn('Image decode failed for export', err);
+        }
+
+        exportCtx.drawImage(baseImg, 0, 0, imgNaturalW, imgNaturalH);
+
+        // draw tempCanvas scaled down from internal (internal = natural * dpr) to natural
+        exportCtx.drawImage(tempCanvas, 0, 0, tempCanvas.width, tempCanvas.height, 0, 0, imgNaturalW, imgNaturalH);
+
+        exportCanvas.toBlob(async (blob) => {
+            try {
+                await navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ]);
+                alert('Copied full-resolution image to clipboard.');
+            } catch (err) {
+                // fallback: open image in new tab
+                const url = URL.createObjectURL(blob);
+                window.open(url, '_blank');
+                alert('Clipboard failed — opened exported image in new tab.');
+            }
+        }, 'image/png');
+    });
+
+    // ensure canvas prepared when modal image loads and when modal opens/resize
+    modalImage.addEventListener('load', () => {
+        prepareDrawCanvas();
+        // if there is already drawing data in tempCanvas (e.g. cached), show it
+        redrawVisibleFromTemp();
+    });
+    window.addEventListener('resize', () => {
+        // keep on-screen CSS size aligned, but do NOT resize internal pixel buffers (we keep internal = natural*DPR)
+        if (modalImage.naturalWidth) {
+            drawCanvas.style.width = modalImage.getBoundingClientRect().width + 'px';
+            drawCanvas.style.height = modalImage.getBoundingClientRect().height + 'px';
+        }
+    });
+}
+
+
+
+
+
+
 
 // Convert seconds to "minutes:seconds" format
 function secToMinSec(seconds) {
