@@ -263,6 +263,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .draw-tools {
     display: flex;
     flex-wrap: wrap;
+    justify-content: flex-start;
     gap: 6px;
     margin-top: 8px;
     width: 100%;
@@ -274,10 +275,11 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     /* box-shadow: 0 6px 18px rgba(2,6,23,0.15); */
 }
 
+.draw-tools label,
 .draw-tools input,
 .draw-tools select,
 .draw-tools button {
-    width: 100%;
+    flex: 0 0 auto;
     padding: 4px;
 }
 
