@@ -76,7 +76,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 
 /* Modal */
 .modal {position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:60}
-.modal.show {display: block;}
+.modal.show {display: flex;}
 .modal-backdrop {
     display: absolute;
     position: fixed;
