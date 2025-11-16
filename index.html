@@ -48,29 +48,25 @@
                 <div class="img-container">
                     <img id="modalImage" src="" class="media-img" alt="">
                     <iframe id="modalVideo" class="media-video" frameborder="0" allowfullscreen></iframe>
-
-                    <!-- DRAWING CANVAS -->
                     <canvas id="drawCanvas" class="draw-canvas"></canvas>
                 </div>
 
-                <!-- DRAWING TOOLBAR BELOW IMAGE -->
+                <!-- DRAWING CONTROLS BELOW IMAGE -->
                 <div id="drawTools" class="draw-tools">
                     <label>Color <input type="color" id="drawColor" value="#ff0000"></label>
                     <label>Width <input type="range" id="drawWidth" min="1" max="20" value="4"></label>
-
                     <select id="drawMode">
-                        <option value="free">✏ Freehand</option>
-                        <option value="circle">● Circle</option>
-                        <option value="square">■ Square</option>
-                        <option value="triangle">▲ Triangle</option>
-                        <option value="hex">⬣ Hexagon</option>
-                        <option value="star">★ Star</option>
+                    <option value="free">✏ Freehand</option>
+                    <option value="circle">● Circle</option>
+                    <option value="square">■ Square</option>
+                    <option value="triangle">▲ Triangle</option>
+                    <option value="hex">⬣ Hexagon</option>
+                    <option value="star">★ Star</option>
                     </select>
-
                     <button id="drawClear">Clear</button>
                     <button id="drawCopy">Copy to Clipboard</button>
                 </div>
-
+                </div>
                 <button id="nextShot" class="nav-btn">›</button>
             </div>
 
