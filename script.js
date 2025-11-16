@@ -36,6 +36,7 @@ const drawMode = document.getElementById('drawMode');
 const drawClear = document.getElementById('drawClear');
 const drawCopy = document.getElementById('drawCopy');
 
+
 if (!drawCanvas || !modalImage) {
     console.warn('Drawing elements not found.');
 } else {
