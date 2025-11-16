@@ -75,10 +75,17 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .chip{background:rgba(0,0,0,0.06);padding:6px 8px;border-radius:999px;font-size:12px}
 
 /* Modal */
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:60}
-.modal.show{display:flex}
-.modal-backdrop{position:absolute;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.4));backdrop-filter: blur(6px)}
-.modal-content{
+.modal {position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:60}
+.modal.show {display: block;}
+.modal-backdrop {
+    display: absolute;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.4));
+    backdrop-filter: blur(6px);
+}
+.modal-content {
     position: relative;
     max-width: none;
     width: 95%;
@@ -88,10 +95,11 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     overflow: hidden;
     background: var(--card);
     box-shadow: var(--shadow);
-    z-index: 61;
+    z-index: 1001;
 }
-.modal-body{
+.modal-body {
     display: flex;
+    flex-direction: column;
     gap: 18px;
     padding: 18px;
     height: 100%;
