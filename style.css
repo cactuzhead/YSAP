@@ -267,10 +267,10 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     margin-top: 8px;
     width: 100%;
     box-sizing: border-box;
-    background: var(--card);
+    background: var(--glass);
     padding: 6px 10px;
     border-radius: 12px;
-    border: 2px solid #cccccc;
+    /* border: 2px solid #cccccc; */
     /* box-shadow: 0 6px 18px rgba(2,6,23,0.15); */
 }
 
