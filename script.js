@@ -82,12 +82,19 @@ if (!drawCanvas || !modalImage) {
 
     function updateCanvasOverlay() {
         if (!modalImage.complete) return;
-        const rect = modalImage.getBoundingClientRect();
-        drawCanvas.style.width = rect.width + 'px';
-        drawCanvas.style.height = rect.height + 'px';
-        drawCanvas.style.left = rect.left + 'px';
-        drawCanvas.style.top = rect.top + 'px';
+
+        // get image visible rect
+        const imgRect = modalImage.getBoundingClientRect();
+        const containerRect = modalImage.parentElement.getBoundingClientRect();
+
+        // position canvas relative to container
+        drawCanvas.style.position = 'absolute';
+        drawCanvas.style.left = (imgRect.left - containerRect.left) + 'px';
+        drawCanvas.style.top = (imgRect.top - containerRect.top) + 'px';
+        drawCanvas.style.width = imgRect.width + 'px';
+        drawCanvas.style.height = imgRect.height + 'px';
     }
+
 
 function updateCanvasPosition() {
     const rect = modalImage.getBoundingClientRect();
