@@ -99,9 +99,15 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .gallery{
     display: flex;
     /* flex: 1; */
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     gap: 12px;    
+}
+.media-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
 }
 .media-wrap {    
     height: 78vh;

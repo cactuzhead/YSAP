@@ -42,15 +42,15 @@
     <div class="modal-content" role="dialog" aria-modal="true">
         <button id="closeModal" class="close-btn" aria-label="Close">✕</button>
         <div class="modal-body">
+
             <div class="gallery">
                 <button id="prevShot" class="nav-btn">‹</button>
 
-                <div class="media-wrap">
+                <!-- IMAGE + CANVAS BLOCK -->
+                <div class="media-block">
                     <div class="img-container">
                         <img id="modalImage" src="" class="media-img" alt="">
                         <iframe id="modalVideo" class="media-video" frameborder="0" allowfullscreen></iframe>
-
-                        <!-- DRAWING CANVAS -->
                         <canvas id="drawCanvas" class="draw-canvas"></canvas>
                     </div>
                 </div>
@@ -74,18 +74,18 @@
                 <button id="drawCopy">Copy to Clipboard</button>
             </div>
 
+            <aside class="details">
+                <h2 id="modalTitle"></h2>
+                <h4 id="modalAuthor"></h4>
+                <div id="modalStats" class="stats"></div>
+                <p id="modalDesc"></p>
+                <div id="thumbs" class="thumbs"></div>
+            </aside>
 
-
-        <aside class="details">
-            <h2 id="modalTitle"></h2>
-            <h4 id="modalAuthor"></h4>
-            <div id="modalStats" class="stats"></div>
-            <p id="modalDesc"></p>
-            <div id="thumbs" class="thumbs"></div>
-        </aside>
         </div>
     </div>
-    </div>
+</div>
+
 
     <script src="script.js"></script>
     </body>
