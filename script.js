@@ -53,12 +53,11 @@ if (!drawCanvas || !modalImage) {
     function prepareDrawCanvas() {
         if (!modalImage.complete || modalImage.naturalWidth === 0) return;
 
-        const container = modalImage.parentElement; // .media-wrap
         imgNaturalW = modalImage.naturalWidth;
         imgNaturalH = modalImage.naturalHeight;
         dpr = Math.max(window.devicePixelRatio || 1, 1);
 
-        // Internal pixel size (high-res)
+        // Internal pixel size (for high-res export)
         const internalW = Math.round(imgNaturalW * dpr);
         const internalH = Math.round(imgNaturalH * dpr);
 
@@ -67,21 +66,17 @@ if (!drawCanvas || !modalImage) {
         tempCanvas.width = internalW;
         tempCanvas.height = internalH;
 
-        // Make canvas fill container
+        // Get actual visible image size & position
+        const imgRect = modalImage.getBoundingClientRect();
+        const containerRect = modalImage.parentElement.getBoundingClientRect();
+
         drawCanvas.style.position = 'absolute';
-        drawCanvas.style.top = '0';
-        drawCanvas.style.left = '0';
-        drawCanvas.style.width = '100%';
-        drawCanvas.style.height = '100%';
-
-        // Ensure pointer-events active
-        drawCanvas.style.pointerEvents = 'auto';
-
-        drawCtx.clearRect(0, 0, internalW, internalH);
-        tempCtx.clearRect(0, 0, internalW, internalH);
-        tempCtx.lineCap = 'round';
-        tempCtx.lineJoin = 'round';
+        drawCanvas.style.left = (imgRect.left - containerRect.left) + 'px';
+        drawCanvas.style.top = (imgRect.top - containerRect.top) + 'px';
+        drawCanvas.style.width = imgRect.width + 'px';
+        drawCanvas.style.height = imgRect.height + 'px';
     }
+
 
 
 
