@@ -101,8 +101,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     /* flex: 1; */
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    width: 100%;
+    gap: 12px;    
 }
 .media-wrap {    
     height: 78vh;
