@@ -126,7 +126,8 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     position: relative;
 }
 .media-wrap {    
-    height: 78vh;
+    /* height: 78vh; */
+    max-height: 78vh;
     border-radius: 8px;
     flex: 1.9;
     display: flex;
