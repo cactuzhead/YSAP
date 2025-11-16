@@ -110,9 +110,14 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     gap: 16px;
     max-width: 90vw;
 }
+.gallery-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+}
 .gallery{
     display: flex;
-    /* flex: 1; */
+    flex: 1 1 65%;
     align-items: center;
     justify-content: center;
     gap: 12px;    
@@ -225,7 +230,7 @@ overflow-wrap: break-word;
 }
 
 .details {
-    flex: 1.1;
+    flex: 1.1 1.1 30%;
     min-width: 320px;
     max-width: 420px;
     overflow-y: auto;
