@@ -77,7 +77,11 @@ if (!drawCanvas || !modalImage) {
     tempCanvas.height = internalH;
 
     // Clear contexts and set linecap
-    drawCtx.clearRect(0, 0, internal
+    drawCtx.clearRect(0, 0, internalW, internalH);
+    tempCtx.clearRect(0, 0, internalW, internalH);
+    tempCtx.lineCap = 'round';
+    tempCtx.lineJoin = 'round';
+}
 
 
     function updateCanvasOverlay() {
