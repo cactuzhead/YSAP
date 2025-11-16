@@ -158,5 +158,21 @@
             "Fuel Time": 30,
             "Map Type": "Custom"
         }
+    },
+    {
+        "name": "Tunnel Vision",
+        "author": "Cactuzhead",
+        "base": "f1bfe9a5-6169-4ae9-84e0-c57edacc67eb",
+        "extra_screenshots": ["alt", "close"],
+        "video": null,
+        "description": "Navigate the lava islands, jump and tunnel your way to success.",
+        "stats": {
+            "Release Date": "2025-11-16",
+            "Biome": "Lava",
+            "Parking Spots": 10,
+            "Round Time": 180,
+            "Fuel Time": 30,
+            "Map Type": "Custom"
+        }
     }
     ]
