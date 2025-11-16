@@ -36,22 +36,22 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     padding-right: 6px;
     white-space: nowrap;
 
-    opacity: 1;
-    transition: opacity 0.25s ease, color 0.25s ease;
+    /* opacity: 1;
+    transition: opacity 0.25s ease, color 0.25s ease; */
 }
 
 /* Colors depending on result count */
-.map-count.high {
-    color: #3cb371; /* green */
+/* .map-count.high {
+    color: #3cb371;
 }
 
 .map-count.medium {
-    color: #d8b400; /* yellow */
+    color: #d8b400;
 }
 
 .map-count.low {
-    color: #d9534f; /* red */
-}
+    color: #d9534f;
+} */
 
 [data-theme="dark"] .map-count {
     color: #ccc;

@@ -283,29 +283,31 @@ function applyControls() {
     // Update the map count label
     // document.getElementById('mapCount').textContent =
     //     `${list.length} map${list.length !== 1 ? 's' : ''}`;
-
-
     const countLabel = document.getElementById('mapCount');
+    countLabel.textContent =
+        `${list.length} / ${maps.length} map${maps.length !== 1 ? 's' : ''}`;
 
-// Fade out
-countLabel.style.opacity = 0;
+//     const countLabel = document.getElementById('mapCount');
 
-setTimeout(() => {
-    // Update label text
-    countLabel.textContent = `${list.length} map${list.length !== 1 ? 's' : ''}`;
+// // Fade out
+// countLabel.style.opacity = 0;
 
-    // Remove old classes
-    countLabel.classList.remove('high', 'medium', 'low');
+// setTimeout(() => {
+//     // Update label text
+//     countLabel.textContent = `${list.length} map${list.length !== 1 ? 's' : ''}`;
 
-    // Add new color class based on quantity
-    if (list.length > 20) countLabel.classList.add('high');
-    else if (list.length > 5) countLabel.classList.add('medium');
-    else countLabel.classList.add('low');
+//     // Remove old classes
+//     countLabel.classList.remove('high', 'medium', 'low');
 
-    // Fade in
-    countLabel.style.opacity = 1;
+//     // Add new color class based on quantity
+//     if (list.length > 20) countLabel.classList.add('high');
+//     else if (list.length > 5) countLabel.classList.add('medium');
+//     else countLabel.classList.add('low');
 
-}, 150); // matches the fade-out timing
+//     // Fade in
+//     countLabel.style.opacity = 1;
+
+// }, 150); // matches the fade-out timing
 
     renderGrid(list);
 }
@@ -349,7 +351,8 @@ fetch('maps.json')
     .then(res => res.json())
     .then(data => {
         maps = data;
-
+    
+    const TOTAL_MAPS = maps.length;
     const IMAGE_PATH = 'images/';
         maps.forEach(map => {
         if (map.base && !map.thumbnail && !map.screenshots) {
