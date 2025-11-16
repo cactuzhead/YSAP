@@ -343,12 +343,22 @@ overflow-wrap: break-word;
 @media (max-width: 900px) {
     .modal-body {
         flex-direction: column;
-        /* align-items: center; */
     }
 
     .media-wrap {
         width: 100%;
-        height: 56vw;
+        height: auto !important;   /* FIX */
+    }
+
+    .img-container {
+        height: auto !important;    /* FIX */
+    }
+
+    .media-img,
+    .media-video,
+    #drawCanvas {
+        height: auto !important; 
+        max-height: none !important; /* FIX */
     }
 
     .details {
