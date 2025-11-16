@@ -107,17 +107,13 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     border-radius: 8px;
     flex: 1.9;
     display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    box-sizing: border-box;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    gap: 8px;
     position: relative;
     overflow: hidden;
-    background: var(--card);
-    padding: 6px 10px;
-    border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(2,6,23,0.15);
+    background: var(--glass);
     min-width: 65%;
 }
 
