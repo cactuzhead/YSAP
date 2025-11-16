@@ -43,49 +43,54 @@
     <button id="closeModal" class="close-btn" aria-label="Close">✕</button>
 
     <div class="modal-body">
-
-      <!-- Gallery with prev/next and image block -->
-      <div class="gallery">
-        <button id="prevShot" class="nav-btn">‹</button>
-
-        <div class="media-block">
-          <div class="img-container">
-            <img id="modalImage" src="" class="media-img" alt="">
-            <iframe id="modalVideo" class="media-video" frameborder="0" allowfullscreen></iframe>
-            <canvas id="drawCanvas" class="draw-canvas"></canvas>
-          </div>
+  <div class="gallery-wrapper">
+    <div class="gallery">
+      <button id="prevShot" class="nav-btn">‹</button>
+      <div class="media-wrap">
+        <div class="img-container">
+          <img id="modalImage" src="" class="media-img" alt="">
+          <iframe id="modalVideo" class="media-video" frameborder="0" allowfullscreen></iframe>
+          <canvas id="drawCanvas" class="draw-canvas"></canvas>
         </div>
-
-        <button id="nextShot" class="nav-btn">›</button>
       </div>
+      <button id="nextShot" class="nav-btn">›</button>
+    </div>
 
-      <!-- Toolbar below image -->
-      <div id="drawTools" class="draw-tools">
+    <!-- DRAWING TOOLBAR BELOW IMAGE -->
+    <div id="drawTools" class="draw-tools">
         <label>Color <input type="color" id="drawColor" value="#ff0000"></label>
-        <label>Width <input type="range" id="drawWidth" min="1" max="20" value="4"></label>
+        <label>
+            Width 
+            <input type="range" id="drawWidth" min="1" max="20" value="4">
+            <span id="drawWidthValue">4</span>
+        </label>
         <select id="drawMode">
-          <option value="free">✏ Freehand</option>
-          <option value="circle">● Circle</option>
-          <option value="square">■ Square</option>
-          <option value="triangle">▲ Triangle</option>
-          <option value="hex">⬣ Hexagon</option>
-          <option value="star">★ Star</option>
+            <option value="free">✏ Freehand</option>
+            <option value="circle">● Circle</option>
+            <option value="square">■ Square</option>
+            <option value="triangle">▲ Triangle</option>
+            <option value="hex">⬣ Hexagon</option>
+            <option value="star">★ Star</option>
         </select>
         <button id="drawClear">Clear</button>
         <button id="drawCopy">Copy to Clipboard</button>
-      </div>
-
-      <aside class="details">
-        <h2 id="modalTitle"></h2>
-        <h4 id="modalAuthor"></h4>
-        <div id="modalStats" class="stats"></div>
-        <p id="modalDesc"></p>
-        <div id="thumbs" class="thumbs"></div>
-      </aside>
-
     </div>
+
+    <aside class="details">
+      <h2 id="modalTitle"></h2>
+      <h4 id="modalAuthor"></h4>
+      <div id="modalStats" class="stats"></div>
+      <p id="modalDesc"></p>
+      <div id="thumbs" class="thumbs"></div>
+    </aside>
   </div>
 </div>
+
+  </div>
+</div>
+
+
+
 
 
 
