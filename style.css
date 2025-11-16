@@ -270,7 +270,8 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     background: var(--card);
     padding: 6px 10px;
     border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(2,6,23,0.15);
+    border: 2px solid #cccccc;
+    /* box-shadow: 0 6px 18px rgba(2,6,23,0.15); */
 }
 
 .draw-tools input,
