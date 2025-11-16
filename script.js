@@ -507,8 +507,8 @@ function showMedia(idx) {
     };
 
     modalImage.onload = () => {
-        mediaWrap.classList.remove('no-image');
         resizeDrawCanvas();
+        mediaWrap.classList.remove('no-image');        
     };
 }
 
@@ -516,15 +516,19 @@ function resizeDrawCanvas() {
     const img = document.getElementById("modalImage");
     const canvas = document.getElementById("drawCanvas");
 
-    canvas.width = img.clientWidth;
-    canvas.height = img.clientHeight;
+    if (!img.complete || img.naturalWidth === 0) return;
 
-    canvas.style.width = img.clientWidth + "px";
-    canvas.style.height = img.clientHeight + "px";
+    const w = img.clientWidth;
+    const h = img.clientHeight;
 
-    canvas.style.top = img.offsetTop + "px";
+    canvas.width = w;
+    canvas.height = h;
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
     canvas.style.left = img.offsetLeft + "px";
+    canvas.style.top = img.offsetTop + "px";
 }
+
 
 
 // Show video in the modal
