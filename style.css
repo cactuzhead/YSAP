@@ -97,10 +97,10 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     height: 100%;
 }
 .gallery{
-    display: grid;
-    grid-template-columns: auto 1fr auto;
+    display: flex;
     /* flex: 1; */
     align-items: center;
+    justify-content: center;
     gap: 12px;
     width: 100%;
 }
@@ -121,8 +121,8 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 
 .img-container {
     position: relative;
-    width: 100%;
-    /* display: inline-block; */
+    /* width: 100%; */
+    display: inline-block;
 }
 
 .media-img {
@@ -181,8 +181,17 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     padding: 8px;
     border-radius: 8px;
     cursor: pointer;
-    height: fit-content;
+    /* height: fit-content; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* align to image height */
+    height: auto;
+    min-height: 48px;
+    min-width: 48px;
 }
+
 .details {
     flex: 1.1;
     min-width: 320px;
