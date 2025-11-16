@@ -507,27 +507,13 @@ function showMedia(idx) {
     };
 
     modalImage.onload = () => {
-        resizeDrawCanvas();
+        prepareDrawCanvas();
+        redrawVisibleFromTemp();
         mediaWrap.classList.remove('no-image');        
     };
 }
 
-function resizeDrawCanvas() {
-    const img = document.getElementById("modalImage");
-    const canvas = document.getElementById("drawCanvas");
 
-    if (!img.complete || img.naturalWidth === 0) return;
-
-    const w = img.clientWidth;
-    const h = img.clientHeight;
-
-    canvas.width = w;
-    canvas.height = h;
-    canvas.style.width = w + "px";
-    canvas.style.height = h + "px";
-    canvas.style.left = img.offsetLeft + "px";
-    canvas.style.top = img.offsetTop + "px";
-}
 
 
 
@@ -645,7 +631,6 @@ searchInput.addEventListener('input', applyControls);
 filterEnv.addEventListener('change', applyControls);
 sortBy.addEventListener('change', applyControls);
 document.getElementById('mapTypeFilter').addEventListener('change', applyControls);
-window.addEventListener("resize", resizeDrawCanvas);
 
 // Dark/light theme toggle
 function setTheme(isDark) {
