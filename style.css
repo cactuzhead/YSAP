@@ -119,8 +119,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 
 .img-container {
     position: relative;
-    width: 100%;
-    /* display: inline-block; */
+    display: inline-block; /* shrink-wraps to image size */
 }
 
 .media-img {
