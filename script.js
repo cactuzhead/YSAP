@@ -51,31 +51,45 @@ if (!drawCanvas || !modalImage) {
 
     // Prepare canvases to match the image natural size (and scale for DPR)
     function prepareDrawCanvas() {
-        if (!modalImage.complete || modalImage.naturalWidth === 0) return;
+    if (!modalImage.complete || modalImage.naturalWidth === 0) return;
 
-        imgNaturalW = modalImage.naturalWidth;
-        imgNaturalH = modalImage.naturalHeight;
-        dpr = Math.max(window.devicePixelRatio || 1, 1);
+    imgNaturalW = modalImage.naturalWidth;
+    imgNaturalH = modalImage.naturalHeight;
+    dpr = Math.max(window.devicePixelRatio || 1, 1);
 
-        // Internal pixel size = natural image size * dpr (keeps export accurate + crisp on HiDPI)
-        const internalW = Math.round(imgNaturalW * dpr);
-        const internalH = Math.round(imgNaturalH * dpr);
+    // Internal pixel buffer (natural * DPR)
+    const internalW = Math.round(imgNaturalW * dpr);
+    const internalH = Math.round(imgNaturalH * dpr);
+    drawCanvas.width = internalW;
+    drawCanvas.height = internalH;
+    tempCanvas.width = internalW;
+    tempCanvas.height = internalH;
 
-        drawCanvas.width = internalW;
-        drawCanvas.height = internalH;
-        drawCanvas.style.width = modalImage.getBoundingClientRect().width + 'px';
-        drawCanvas.style.height = modalImage.getBoundingClientRect().height + 'px';
+    // On-screen CSS size **match the image itself**
+    const rect = modalImage.getBoundingClientRect();
+    drawCanvas.style.width = rect.width + 'px';
+    drawCanvas.style.height = rect.height + 'px';
+    drawCanvas.style.position = 'absolute';
+    drawCanvas.style.left = rect.left + 'px';
+    drawCanvas.style.top = rect.top + 'px';
 
-        // temp canvas same internal size
-        tempCanvas.width = internalW;
-        tempCanvas.height = internalH;
+    drawCtx.clearRect(0, 0, internalW, internalH);
+    tempCtx.clearRect(0, 0, internalW, internalH);
+    tempCtx.lineCap = 'round';
+    tempCtx.lineJoin = 'round';
+}
 
-        // Clear contexts and set linecap
-        drawCtx.clearRect(0, 0, internalW, internalH);
-        tempCtx.clearRect(0, 0, internalW, internalH);
-        tempCtx.lineCap = 'round';
-        tempCtx.lineJoin = 'round';
-    }
+function updateCanvasPosition() {
+    const rect = modalImage.getBoundingClientRect();
+    drawCanvas.style.width = rect.width + 'px';
+    drawCanvas.style.height = rect.height + 'px';
+    drawCanvas.style.left = rect.left + 'px';
+    drawCanvas.style.top = rect.top + 'px';
+}
+
+window.addEventListener('resize', updateCanvasPosition);
+window.addEventListener('scroll', updateCanvasPosition, true);
+
 
     // compute internal coordinate from client event
     function getPosFromEvent(e) {
