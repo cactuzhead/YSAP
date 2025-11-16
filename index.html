@@ -42,9 +42,9 @@
     <div class="modal-content" role="dialog" aria-modal="true">
         <button id="closeModal" class="close-btn" aria-label="Close">✕</button>
         <div class="modal-body">
-        <div class="gallery">
-            <button id="prevShot" class="nav-btn">‹</button>
+        <div class="gallery">            
             <div class="media-wrap">
+                <button id="prevShot" class="nav-btn">‹</button>
                 <div class="img-container">
                     <img id="modalImage" src="" class="media-img" alt="">
                     <iframe id="modalVideo" class="media-video" frameborder="0" allowfullscreen></iframe>
@@ -52,6 +52,7 @@
                     <!-- DRAWING CANVAS -->
                     <canvas id="drawCanvas" class="draw-canvas"></canvas>
                 </div>
+                <button id="nextShot" class="nav-btn">›</button>
 
                 <!-- DRAWING TOOLBAR BELOW IMAGE -->
                 <div id="drawTools" class="draw-tools">
@@ -69,11 +70,9 @@
 
                     <button id="drawClear">Clear</button>
                     <button id="drawCopy">Copy to Clipboard</button>
-                </div>
-
-                
+                </div>                
             </div>
-            <button id="nextShot" class="nav-btn">›</button>
+            
 
 </div>
         <aside class="details">
