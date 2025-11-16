@@ -118,15 +118,10 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     min-width: 65%;
 }
 
-.img-wrapper {
-    display: inline-block;
-    position: relative;
-}
-
 .img-container {
     position: relative;
     /* width: 100%; */
-    display: block;
+    display: inline-block;
 }
 
 .media-img {
