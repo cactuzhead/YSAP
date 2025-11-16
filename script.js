@@ -51,37 +51,38 @@ if (!drawCanvas || !modalImage) {
 
     // Prepare canvases to match the image natural size (and scale for DPR)
     function prepareDrawCanvas() {
-    if (!modalImage.complete || modalImage.naturalWidth === 0) return;
+        if (!modalImage.complete || modalImage.naturalWidth === 0) return;
 
-    const imgRect = modalImage.getBoundingClientRect();
-    imgNaturalW = modalImage.naturalWidth;
-    imgNaturalH = modalImage.naturalHeight;
-    dpr = Math.max(window.devicePixelRatio || 1, 1);
+        const container = modalImage.parentElement; // .media-wrap
+        imgNaturalW = modalImage.naturalWidth;
+        imgNaturalH = modalImage.naturalHeight;
+        dpr = Math.max(window.devicePixelRatio || 1, 1);
 
-    // Internal pixel size = natural image size * DPR (for crisp strokes)
-    const internalW = Math.round(imgNaturalW * dpr);
-    const internalH = Math.round(imgNaturalH * dpr);
+        // Internal pixel size (high-res)
+        const internalW = Math.round(imgNaturalW * dpr);
+        const internalH = Math.round(imgNaturalH * dpr);
 
-    drawCanvas.width = internalW;
-    drawCanvas.height = internalH;
+        drawCanvas.width = internalW;
+        drawCanvas.height = internalH;
+        tempCanvas.width = internalW;
+        tempCanvas.height = internalH;
 
-    // Position the canvas exactly over the image
-    drawCanvas.style.position = 'absolute';
-    drawCanvas.style.left = imgRect.left + 'px';
-    drawCanvas.style.top = imgRect.top + 'px';
-    drawCanvas.style.width = imgRect.width + 'px';
-    drawCanvas.style.height = imgRect.height + 'px';
+        // Make canvas fill container
+        drawCanvas.style.position = 'absolute';
+        drawCanvas.style.top = '0';
+        drawCanvas.style.left = '0';
+        drawCanvas.style.width = '100%';
+        drawCanvas.style.height = '100%';
 
-    // Temp canvas same internal size
-    tempCanvas.width = internalW;
-    tempCanvas.height = internalH;
+        // Ensure pointer-events active
+        drawCanvas.style.pointerEvents = 'auto';
 
-    // Clear contexts and set linecap
-    drawCtx.clearRect(0, 0, internalW, internalH);
-    tempCtx.clearRect(0, 0, internalW, internalH);
-    tempCtx.lineCap = 'round';
-    tempCtx.lineJoin = 'round';
-}
+        drawCtx.clearRect(0, 0, internalW, internalH);
+        tempCtx.clearRect(0, 0, internalW, internalH);
+        tempCtx.lineCap = 'round';
+        tempCtx.lineJoin = 'round';
+    }
+
 
 
     function updateCanvasOverlay() {
@@ -110,11 +111,14 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         const rect = drawCanvas.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        // Map to internal buffer coordinates
-        const xNatural = (clientX - rect.left) * (imgNaturalW / rect.width);
-        const yNatural = (clientY - rect.top) * (imgNaturalH / rect.height);
-        return { x: xNatural * dpr, y: yNatural * dpr };
+
+        // Map to internal pixels
+        const x = ((clientX - rect.left) / rect.width) * drawCanvas.width;
+        const y = ((clientY - rect.top) / rect.height) * drawCanvas.height;
+
+        return { x, y };
     }
+
 
     function redrawVisibleFromTemp() {
         drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
