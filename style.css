@@ -75,10 +75,17 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .chip{background:rgba(0,0,0,0.06);padding:6px 8px;border-radius:999px;font-size:12px}
 
 /* Modal */
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:60}
-.modal.show{display:flex}
-.modal-backdrop{position:absolute;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.4));backdrop-filter: blur(6px)}
-.modal-content{
+.modal {position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:60}
+.modal.show {display: block;}
+.modal-backdrop {
+    display: absolute;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.4));
+    backdrop-filter: blur(6px);
+}
+.modal-content {
     position: relative;
     max-width: none;
     width: 95%;
@@ -88,13 +95,20 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     overflow: hidden;
     background: var(--card);
     box-shadow: var(--shadow);
-    z-index: 61;
+    z-index: 1001;
 }
-.modal-body{
+.modal-body {
     display: flex;
+    flex-direction: column;
+    justify-content: center;
     gap: 18px;
     padding: 18px;
     height: 100%;
+}
+.modal-main {
+    display: flex;
+    gap: 16px;
+    max-width: 90vw;
 }
 .gallery{
     display: flex;
@@ -103,6 +117,12 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     justify-content: center;
     gap: 12px;    
 }
+.media-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
 .media-wrap {    
     height: 78vh;
     border-radius: 8px;
@@ -110,7 +130,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    /* justify-content: flex-start; */
     gap: 8px;
     position: relative;
     /* overflow: hidden; */
@@ -118,10 +138,22 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     min-width: 65%;
 }
 
+.img-wrapper {
+    display: inline-block;
+    position: relative;
+}
+
 .img-container {
     position: relative;
     /* width: 100%; */
-    display: inline-block;
+    display: block;
+}
+
+.img-container img,
+.img-container iframe {
+    max-width: 100%;
+    height: auto;
+    display: block;
 }
 
 .media-img {
@@ -184,7 +216,8 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     display: flex;
     align-items: center;
     justify-content: center;
-
+flex-shrink: 0;
+overflow-wrap: break-word;
     /* align to image height */
     height: auto;
     min-height: 48px;
@@ -281,7 +314,8 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .draw-tools {
     display: flex;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    /* justify-content: flex-start; */
+    justify-content: center;
     gap: 6px;
     margin-top: 8px;
     width: 100%;
