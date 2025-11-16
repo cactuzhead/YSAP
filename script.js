@@ -51,33 +51,43 @@ if (!drawCanvas || !modalImage) {
 
     // Prepare canvases to match the image natural size (and scale for DPR)
     function prepareDrawCanvas() {
-    if (!modalImage.complete || modalImage.naturalWidth === 0) return;
+        if (!modalImage.complete || modalImage.naturalWidth === 0) return;
 
-    imgNaturalW = modalImage.naturalWidth;
-    imgNaturalH = modalImage.naturalHeight;
-    dpr = Math.max(window.devicePixelRatio || 1, 1);
+        imgNaturalW = modalImage.naturalWidth;
+        imgNaturalH = modalImage.naturalHeight;
+        dpr = Math.max(window.devicePixelRatio || 1, 1);
 
-    // Internal pixel buffer (natural * DPR)
-    const internalW = Math.round(imgNaturalW * dpr);
-    const internalH = Math.round(imgNaturalH * dpr);
-    drawCanvas.width = internalW;
-    drawCanvas.height = internalH;
-    tempCanvas.width = internalW;
-    tempCanvas.height = internalH;
+        // Internal hi-res buffer
+        const internalW = Math.round(imgNaturalW * dpr);
+        const internalH = Math.round(imgNaturalH * dpr);
+        drawCanvas.width = internalW;
+        drawCanvas.height = internalH;
+        tempCanvas.width = internalW;
+        tempCanvas.height = internalH;
 
-    // On-screen CSS size **match the image itself**
-    const rect = modalImage.getBoundingClientRect();
-    drawCanvas.style.width = rect.width + 'px';
-    drawCanvas.style.height = rect.height + 'px';
-    drawCanvas.style.position = 'absolute';
-    drawCanvas.style.left = rect.left + 'px';
-    drawCanvas.style.top = rect.top + 'px';
+        // On-screen overlay CSS matches **actual image display**
+        const rect = modalImage.getBoundingClientRect();
+        drawCanvas.style.position = 'absolute';
+        drawCanvas.style.width = rect.width + 'px';
+        drawCanvas.style.height = rect.height + 'px';
+        drawCanvas.style.left = rect.left + 'px';
+        drawCanvas.style.top = rect.top + 'px';
 
-    drawCtx.clearRect(0, 0, internalW, internalH);
-    tempCtx.clearRect(0, 0, internalW, internalH);
-    tempCtx.lineCap = 'round';
-    tempCtx.lineJoin = 'round';
-}
+        // Clear contexts
+        drawCtx.clearRect(0, 0, internalW, internalH);
+        tempCtx.clearRect(0, 0, internalW, internalH);
+        tempCtx.lineCap = 'round';
+        tempCtx.lineJoin = 'round';
+    }
+
+    function updateCanvasOverlay() {
+        if (!modalImage.complete) return;
+        const rect = modalImage.getBoundingClientRect();
+        drawCanvas.style.width = rect.width + 'px';
+        drawCanvas.style.height = rect.height + 'px';
+        drawCanvas.style.left = rect.left + 'px';
+        drawCanvas.style.top = rect.top + 'px';
+    }
 
 function updateCanvasPosition() {
     const rect = modalImage.getBoundingClientRect();
@@ -87,37 +97,33 @@ function updateCanvasPosition() {
     drawCanvas.style.top = rect.top + 'px';
 }
 
+
 window.addEventListener('resize', updateCanvasPosition);
 window.addEventListener('scroll', updateCanvasPosition, true);
 
 
-    // compute internal coordinate from client event
     function getPosFromEvent(e) {
         const rect = drawCanvas.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        // Map to natural-image pixels, then to internal pixels multiplied by dpr
+        // Map to internal buffer coordinates
         const xNatural = (clientX - rect.left) * (imgNaturalW / rect.width);
         const yNatural = (clientY - rect.top) * (imgNaturalH / rect.height);
         return { x: xNatural * dpr, y: yNatural * dpr };
     }
 
-    // draw the temp canvas onto visible canvas (scale already internal->internal)
     function redrawVisibleFromTemp() {
         drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
         drawCtx.drawImage(tempCanvas, 0, 0);
     }
 
-    // Commit a shape to tempCtx (used on mouseup)
     function commitShapeToTemp(shapeDrawFn) {
-        // shapeDrawFn(ctx) should draw the shape into ctx using internal-pixel coords
         tempCtx.save();
         shapeDrawFn(tempCtx);
         tempCtx.restore();
         redrawVisibleFromTemp();
     }
 
-    // Mouse / touch handlers
     function onPointerDown(e) {
         if (modalVideo.style.display !== 'none') return;
         e.preventDefault();
@@ -128,7 +134,7 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         startX = prevX = p.x;
         startY = prevY = p.y;
 
-        // Copy current visible content into tempCanvas as committed baseline
+        // Copy current visible canvas to temp as baseline
         tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
         tempCtx.drawImage(drawCanvas, 0, 0);
     }
@@ -141,7 +147,6 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         const lw = Math.max(1, Number(drawWidth.value || 1)) * dpr;
         const color = drawColor.value || '#ff0000';
 
-        // For freehand, draw directly into tempCtx so strokes accumulate smoothly
         if (mode === 'free') {
             tempCtx.strokeStyle = color;
             tempCtx.lineWidth = lw;
@@ -153,14 +158,12 @@ window.addEventListener('scroll', updateCanvasPosition, true);
             prevX = p.x;
             prevY = p.y;
 
-            // show current committed temp onto visible
             redrawVisibleFromTemp();
             return;
         }
 
-        // For shape preview: draw temp (committed) to visible, then overlay preview
+        // Shape preview
         redrawVisibleFromTemp();
-
         drawCtx.save();
         drawCtx.strokeStyle = color;
         drawCtx.lineWidth = lw;
@@ -171,38 +174,33 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         const size = Math.sqrt(dx*dx + dy*dy);
 
         drawCtx.beginPath();
-        switch (mode) {
+        switch(mode) {
             case 'circle':
-                drawCtx.arc(startX, startY, size, 0, Math.PI * 2);
-                break;
+                drawCtx.arc(startX, startY, size, 0, Math.PI * 2); break;
             case 'square':
-                drawCtx.rect(startX - size, startY - size, size*2, size*2);
-                break;
+                drawCtx.rect(startX - size, startY - size, size*2, size*2); break;
             case 'triangle':
                 drawCtx.moveTo(startX, startY - size);
                 drawCtx.lineTo(startX - size, startY + size);
                 drawCtx.lineTo(startX + size, startY + size);
-                drawCtx.closePath();
-                break;
+                drawCtx.closePath(); break;
             case 'hex':
-                for (let i = 0; i < 6; i++) {
-                    const angle = Math.PI/3 * i;
-                    const px = startX + Math.cos(angle) * size;
-                    const py = startY + Math.sin(angle) * size;
-                    if (i === 0) drawCtx.moveTo(px, py); else drawCtx.lineTo(px, py);
+                for(let i=0;i<6;i++){
+                    const angle = Math.PI/3*i;
+                    const px = startX + Math.cos(angle)*size;
+                    const py = startY + Math.sin(angle)*size;
+                    if(i===0) drawCtx.moveTo(px,py); else drawCtx.lineTo(px,py);
                 }
-                drawCtx.closePath();
-                break;
+                drawCtx.closePath(); break;
             case 'star':
-                for (let i = 0; i < 10; i++) {
-                    const angle = Math.PI/5 * i;
-                    const radius = (i % 2 === 0) ? size : size * 0.45;
-                    const px = startX + Math.cos(angle) * radius;
-                    const py = startY + Math.sin(angle) * radius;
-                    if (i === 0) drawCtx.moveTo(px, py); else drawCtx.lineTo(px, py);
+                for(let i=0;i<10;i++){
+                    const angle = Math.PI/5*i;
+                    const radius = (i%2===0)?size:size*0.45;
+                    const px = startX + Math.cos(angle)*radius;
+                    const py = startY + Math.sin(angle)*radius;
+                    if(i===0) drawCtx.moveTo(px,py); else drawCtx.lineTo(px,py);
                 }
-                drawCtx.closePath();
-                break;
+                drawCtx.closePath(); break;
         }
         drawCtx.stroke();
         drawCtx.restore();
@@ -216,13 +214,9 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         const lw = Math.max(1, Number(drawWidth.value || 1)) * dpr;
         const color = drawColor.value || '#ff0000';
 
-        if (mode === 'free') {
-            // already committed incrementally to tempCtx while moving
-            redrawVisibleFromTemp();
-            return;
-        }
+        if (mode === 'free') { redrawVisibleFromTemp(); return; }
 
-        // commit the final shape to tempCtx
+        // Commit shape
         tempCtx.save();
         tempCtx.strokeStyle = color;
         tempCtx.lineWidth = lw;
@@ -233,44 +227,35 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         const dy = p.y - startY;
         const size = Math.sqrt(dx*dx + dy*dy);
 
-        switch (mode) {
-            case 'circle':
-                tempCtx.arc(startX, startY, size, 0, Math.PI * 2);
-                break;
-            case 'square':
-                tempCtx.rect(startX - size, startY - size, size*2, size*2);
-                break;
+        switch(mode){
+            case 'circle': tempCtx.arc(startX,startY,size,0,Math.PI*2); break;
+            case 'square': tempCtx.rect(startX-size,startY-size,size*2,size*2); break;
             case 'triangle':
-                tempCtx.moveTo(startX, startY - size);
-                tempCtx.lineTo(startX - size, startY + size);
-                tempCtx.lineTo(startX + size, startY + size);
-                tempCtx.closePath();
-                break;
+                tempCtx.moveTo(startX,startY-size);
+                tempCtx.lineTo(startX-size,startY+size);
+                tempCtx.lineTo(startX+size,startY+size);
+                tempCtx.closePath(); break;
             case 'hex':
-                for (let i = 0; i < 6; i++) {
-                    const angle = Math.PI/3 * i;
-                    const px = startX + Math.cos(angle) * size;
-                    const py = startY + Math.sin(angle) * size;
-                    if (i === 0) tempCtx.moveTo(px, py); else tempCtx.lineTo(px, py);
+                for(let i=0;i<6;i++){
+                    const angle=Math.PI/3*i;
+                    const px=startX+Math.cos(angle)*size;
+                    const py=startY+Math.sin(angle)*size;
+                    if(i===0) tempCtx.moveTo(px,py); else tempCtx.lineTo(px,py);
                 }
-                tempCtx.closePath();
-                break;
+                tempCtx.closePath(); break;
             case 'star':
-                for (let i = 0; i < 10; i++) {
-                    const angle = Math.PI/5 * i;
-                    const radius = (i % 2 === 0) ? size : size * 0.45;
-                    const px = startX + Math.cos(angle) * radius;
-                    const py = startY + Math.sin(angle) * radius;
-                    if (i === 0) tempCtx.moveTo(px, py); else tempCtx.lineTo(px, py);
+                for(let i=0;i<10;i++){
+                    const angle=Math.PI/5*i;
+                    const radius=(i%2===0)?size:size*0.45;
+                    const px=startX+Math.cos(angle)*radius;
+                    const py=startY+Math.sin(angle)*radius;
+                    if(i===0) tempCtx.moveTo(px,py); else tempCtx.lineTo(px,py);
                 }
-                tempCtx.closePath();
-                break;
+                tempCtx.closePath(); break;
         }
 
         tempCtx.stroke();
         tempCtx.restore();
-
-        // show final
         redrawVisibleFromTemp();
     }
 
@@ -334,13 +319,16 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         // if there is already drawing data in tempCanvas (e.g. cached), show it
         redrawVisibleFromTemp();
     });
-    window.addEventListener('resize', () => {
-        // keep on-screen CSS size aligned, but do NOT resize internal pixel buffers (we keep internal = natural*DPR)
-        if (modalImage.naturalWidth) {
-            drawCanvas.style.width = modalImage.getBoundingClientRect().width + 'px';
-            drawCanvas.style.height = modalImage.getBoundingClientRect().height + 'px';
-        }
-    });
+    // window.addEventListener('resize', () => {
+    //     // keep on-screen CSS size aligned, but do NOT resize internal pixel buffers (we keep internal = natural*DPR)
+    //     if (modalImage.naturalWidth) {
+    //         drawCanvas.style.width = modalImage.getBoundingClientRect().width + 'px';
+    //         drawCanvas.style.height = modalImage.getBoundingClientRect().height + 'px';
+    //     }
+    // });
+
+    window.addEventListener('resize', updateCanvasOverlay);
+    window.addEventListener('scroll', updateCanvasOverlay, true);
 }
 
 
