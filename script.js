@@ -26,7 +26,7 @@ let current = {
     video: null
 };
 
-// --- Drawing System ---
+// --- Drawing System (Improved High-Resolution Version) ---
 const drawCanvas = document.getElementById('drawCanvas');
 const drawCtx = drawCanvas.getContext('2d');
 const drawColor = document.getElementById('drawColor');
@@ -37,142 +37,150 @@ const drawCopy = document.getElementById('drawCopy');
 
 let drawing = false;
 let startX = 0, startY = 0;
-let tempCanvas = document.createElement('canvas');
-let tempCtx = tempCanvas.getContext('2d');
+let scaleX = 1, scaleY = 1; // maps screen → natural image
+let imgNaturalW = 0, imgNaturalH = 0;
 
-// Resize canvas whenever modal image loads
-function resizeDrawCanvas() {
+// Resize canvas to match the *natural* resolution of the image
+function prepareDrawCanvas() {
+    if (!modalImage.complete || modalImage.naturalWidth === 0) return;
+
+    imgNaturalW = modalImage.naturalWidth;
+    imgNaturalH = modalImage.naturalHeight;
+
+    // Canvas actual resolution = image resolution
+    drawCanvas.width = imgNaturalW;
+    drawCanvas.height = imgNaturalH;
+
+    // Canvas CSS matches the on-screen <img> size
     const rect = modalImage.getBoundingClientRect();
-    drawCanvas.width = tempCanvas.width = rect.width;
-    drawCanvas.height = tempCanvas.height = rect.height;
-    drawCanvas.style.width = rect.width + 'px';
-    drawCanvas.style.height = rect.height + 'px';
-    drawCanvas.style.pointerEvents = modalVideo.style.display === 'none' ? 'auto' : 'none';
+    drawCanvas.style.width = rect.width + "px";
+    drawCanvas.style.height = rect.height + "px";
+
+    // Mouse coordinate scaling
+    scaleX = imgNaturalW / rect.width;
+    scaleY = imgNaturalH / rect.height;
+
+    drawCtx.lineCap = "round";
 }
 
-modalImage.onload = resizeDrawCanvas;
-window.addEventListener('resize', resizeDrawCanvas);
+modalImage.onload = prepareDrawCanvas;
+window.addEventListener("resize", prepareDrawCanvas);
 
-
-// Freehand OR shape start
-drawCanvas.addEventListener('mousedown', (e) => {
-    drawing = true;
+// Convert mouse → natural pixel coordinates
+function getPos(e) {
     const r = drawCanvas.getBoundingClientRect();
-    startX = e.clientX - r.left;
-    startY = e.clientY - r.top;
+    return {
+        x: (e.clientX - r.left) * scaleX,
+        y: (e.clientY - r.top) * scaleY
+    };
+}
 
-    // Save temp
-    tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
-    tempCtx.drawImage(drawCanvas, 0, 0);
+drawCanvas.addEventListener("mousedown", e => {
+    if (modalVideo.style.display !== "none") return;
+
+    drawing = true;
+    const p = getPos(e);
+    startX = p.x;
+    startY = p.y;
+
+    drawCtx.beginPath();
 });
 
-drawCanvas.addEventListener('mouseup', () => drawing = false);
-drawCanvas.addEventListener('mouseleave', () => drawing = false);
+drawCanvas.addEventListener("mouseup", () => drawing = false);
+drawCanvas.addEventListener("mouseleave", () => drawing = false);
 
-// Main drawing logic
-drawCanvas.addEventListener('mousemove', (e) => {
+drawCanvas.addEventListener("mousemove", e => {
     if (!drawing) return;
 
-    const r = drawCanvas.getBoundingClientRect();
-    const x = e.clientX - r.left;
-    const y = e.clientY - r.top;
-
-    let mode = drawMode.value;
-
-    drawCtx.lineWidth = drawWidth.value;
+    const p = getPos(e);
     drawCtx.strokeStyle = drawColor.value;
+    drawCtx.lineWidth = parseInt(drawWidth.value);
+
+    const dx = p.x - startX;
+    const dy = p.y - startY;
+    const size = Math.sqrt(dx * dx + dy * dy);
 
     drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
     drawCtx.drawImage(tempCanvas, 0, 0);
 
-    const dx = x - startX;
-    const dy = y - startY;
-    const size = Math.sqrt(dx*dx + dy*dy);
+    drawCtx.beginPath();
 
-    if (mode === "free") {
-        drawCtx.beginPath();
-        drawCtx.moveTo(startX, startY);
-        drawCtx.lineTo(x, y);
-        drawCtx.stroke();
-        startX = x;
-        startY = y;
-        // Save to temp
-        tempCtx.drawImage(drawCanvas, 0, 0);
-    } else {
-        drawCtx.beginPath();
-        switch (mode) {
-            case "circle":
-                drawCtx.arc(startX, startY, size, 0, Math.PI * 2);
-                break;
+    switch (drawMode.value) {
+        case "free":
+            drawCtx.moveTo(startX, startY);
+            drawCtx.lineTo(p.x, p.y);
+            drawCtx.stroke();
+            startX = p.x;
+            startY = p.y;
+            tempCtx.drawImage(drawCanvas, 0, 0);
+            return;
 
-            case "square":
-                drawCtx.rect(startX - size, startY - size, size * 2, size * 2);
-                break;
+        case "circle":
+            drawCtx.arc(startX, startY, size, 0, Math.PI * 2);
+            break;
 
-            case "triangle":
-                drawCtx.moveTo(startX, startY - size);
-                drawCtx.lineTo(startX - size, startY + size);
-                drawCtx.lineTo(startX + size, startY + size);
-                drawCtx.closePath();
-                break;
+        case "square":
+            drawCtx.rect(startX - size, startY - size, size * 2, size * 2);
+            break;
 
-            case "hex":
-                for (let i = 0; i < 6; i++) {
-                    const angle = Math.PI / 3 * i;
-                    const px = startX + Math.cos(angle) * size;
-                    const py = startY + Math.sin(angle) * size;
-                    if (i === 0) drawCtx.moveTo(px, py);
-                    else drawCtx.lineTo(px, py);
-                }
-                drawCtx.closePath();
-                break;
+        case "triangle":
+            drawCtx.moveTo(startX, startY - size);
+            drawCtx.lineTo(startX - size, startY + size);
+            drawCtx.lineTo(startX + size, startY + size);
+            drawCtx.closePath();
+            break;
 
-            case "star":
-                for (let i = 0; i < 10; i++) {
-                    const angle = Math.PI / 5 * i;
-                    const radius = (i % 2 === 0) ? size : size * 0.4;
-                    const px = startX + Math.cos(angle) * radius;
-                    const py = startY + Math.sin(angle) * radius;
-                    if (i === 0) drawCtx.moveTo(px, py);
-                    else drawCtx.lineTo(px, py);
-                }
-                drawCtx.closePath();
-                break;
-        }
-        drawCtx.stroke();
+        case "hex":
+            for (let i = 0; i < 6; i++) {
+                const angle = Math.PI / 3 * i;
+                const px = startX + Math.cos(angle) * size;
+                const py = startY + Math.sin(angle) * size;
+                if (i === 0) drawCtx.moveTo(px, py);
+                else drawCtx.lineTo(px, py);
+            }
+            drawCtx.closePath();
+            break;
+
+        case "star":
+            for (let i = 0; i < 10; i++) {
+                const angle = Math.PI / 5 * i;
+                const radius = (i % 2 === 0) ? size : size * 0.4;
+                const px = startX + Math.cos(angle) * radius;
+                const py = startY + Math.sin(angle) * radius;
+                if (i === 0) drawCtx.moveTo(px, py);
+                else drawCtx.lineTo(px, py);
+            }
+            drawCtx.closePath();
+            break;
     }
+    drawCtx.stroke();
 });
 
-// Clear button
-drawClear.addEventListener('click', () => {
+// Clear
+drawClear.addEventListener("click", () => {
     drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-    tempCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
 });
 
-// Copy to clipboard
-drawCopy.addEventListener('click', async () => {
-    const exportCanvas = document.createElement('canvas');
-    const exportCtx = exportCanvas.getContext('2d');
+// Copy (full-resolution PNG!)
+drawCopy.addEventListener("click", async () => {
+    const exportCanvas = document.createElement("canvas");
+    exportCanvas.width = imgNaturalW;
+    exportCanvas.height = imgNaturalH;
 
-    exportCanvas.width = drawCanvas.width;
-    exportCanvas.height = drawCanvas.height;
+    const ctx = exportCanvas.getContext("2d");
 
-    const img = new Image();
-    img.src = modalImage.src;
-    await img.decode();
+    const baseImg = new Image();
+    baseImg.src = modalImage.src;
+    await baseImg.decode();
 
-    exportCtx.drawImage(img, 0, 0, exportCanvas.width, exportCanvas.height);
-    exportCtx.drawImage(drawCanvas, 0, 0);
+    ctx.drawImage(baseImg, 0, 0);
+    ctx.drawImage(drawCanvas, 0, 0);
 
-    exportCanvas.toBlob(async (blob) => {
-        try {
-            await navigator.clipboard.write([
-                new ClipboardItem({ "image/png": blob })
-            ]);
-            alert("Copied to clipboard!");
-        } catch (e) {
-            alert("Clipboard failed: " + e);
-        }
+    exportCanvas.toBlob(async blob => {
+        await navigator.clipboard.write([
+            new ClipboardItem({ "image/png": blob })
+        ]);
+        alert("Copied to clipboard in FULL resolution!");
     });
 });
 
