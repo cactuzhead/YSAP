@@ -36,6 +36,9 @@ const drawMode = document.getElementById('drawMode');
 const drawClear = document.getElementById('drawClear');
 const drawCopy = document.getElementById('drawCopy');
 
+drawWidth.addEventListener('input', () => {
+    drawWidthValue.textContent = drawWidth.value;
+});
 
 if (!drawCanvas || !modalImage) {
     console.warn('Drawing elements not found.');
