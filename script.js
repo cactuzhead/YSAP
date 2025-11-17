@@ -464,7 +464,7 @@ function openModal(map) {
         modalMain.classList.remove("fullscreen-image");
         mediaWrap.style.maxHeight = "78vh";
     }
-
+    modalMain.classList.toggle("fullscreen-image", isBiomeMap);
 
     current.index = maps.indexOf(map); // optional if you need the index
     current.media = map.screenshots || (map.thumbnail ? [map.thumbnail] : []);
