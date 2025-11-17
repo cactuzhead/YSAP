@@ -447,6 +447,8 @@ function renderGrid(list){
 function openModal(map) {
     // ===== BIOME OVERVIEW MAP FULLSCREEN MODE =====
     // const isBiomeMap = map.type === "Biome Map";
+    const mapType = map["Map Type"] || "";
+    const isBiomeMap = mapType.trim().toLowerCase() === "biome";
 
     const details = document.querySelector(".details");
     const gallery = document.querySelector(".gallery");
@@ -456,9 +458,7 @@ function openModal(map) {
     // const mediaWrap = document.querySelector(".media-wrap");
 
 
-    const mapType = map["Map Type"] || "";
-    const isBiomeMap = mapType.trim().toLowerCase() === "biome";
-    
+
 console.log("MAP TYPE =", mapType, "→ biome?", isBiomeMap);
 //     console.log("MAP TYPE =", mapType, " → biome?", isBiomeMap);
 //     console.log("MAP OBJECT KEYS:", Object.keys(map));
