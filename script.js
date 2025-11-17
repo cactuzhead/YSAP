@@ -453,19 +453,20 @@ function openModal(map) {
     const modalMain = document.querySelector(".modal-main");
     const mediaWrap = document.querySelector(".media-wrap");
 
+    modalMain.classList.toggle("fullscreen-image", isBiomeMap);
+
     if (isBiomeMap) {
         details.style.display = "none";
         gallery.style.flex = "1 1 100%";
-        modalMain.classList.add("fullscreen-image");
+        // modalMain.classList.add("fullscreen-image");
         mediaWrap.style.maxHeight = "85vh";
     } else {
         details.style.display = "block";
         gallery.style.flex = "2 1 600px";
-        modalMain.classList.remove("fullscreen-image");
+        // modalMain.classList.remove("fullscreen-image");
         mediaWrap.style.maxHeight = "78vh";
     }
-    modalMain.classList.toggle("fullscreen-image", isBiomeMap);
-
+    
     current.index = maps.indexOf(map); // optional if you need the index
     current.media = map.screenshots || (map.thumbnail ? [map.thumbnail] : []);
     current.video = map.video || null;
@@ -478,7 +479,7 @@ function openModal(map) {
 
     modalStats.innerHTML = '';
 
-    if (map.stats) {
+    if (!isBiomeMap && map.stats) {
     Object.entries(map.stats).forEach(([key, value]) => {
         let displayValue = value;
 
