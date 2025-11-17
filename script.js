@@ -461,7 +461,7 @@ function openModal(map) {
 
 
 
-console.log("MAP TYPE =", mapType, "→ biome?", isBiomeMap);
+// console.log("MAP TYPE =", mapType, "→ biome?", isBiomeMap);
 //     console.log("MAP TYPE =", mapType, " → biome?", isBiomeMap);
 //     console.log("MAP OBJECT KEYS:", Object.keys(map));
 // console.log("MAP OBJECT:", map);
