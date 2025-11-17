@@ -449,9 +449,9 @@ function openModal(map) {
     // const isBiomeMap = map.type === "Biome Map";
     // const mapType = map["Map Type"] || "";
     // const isBiomeMap = mapType.trim().toLowerCase() === "biome";
-    console.log("MAP OBJECT:", map); // check what's actually being passed
-    const isBiomeMap = (map["Map Type"] || "").trim().toLowerCase() === "biome";
-    console.log('MAP TYPE =', map["Map Type"], '→ biome?', isBiomeMap);
+    const isBiomeMap = map.stats && (map.stats["Map Type"] || "").trim().toLowerCase() === "biome";
+    console.log('MAP TYPE =', map.stats?.["Map Type"], '→ biome?', isBiomeMap);
+
 
 
     const modal = document.getElementById("modal");
