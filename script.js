@@ -36,9 +36,6 @@ const drawMode = document.getElementById('drawMode');
 const drawClear = document.getElementById('drawClear');
 const drawCopy = document.getElementById('drawCopy');
 
-drawWidth.addEventListener('input', () => {
-    drawWidthValue.textContent = drawWidth.value;
-});
 
 if (!drawCanvas || !modalImage) {
     console.warn('Drawing elements not found.');
@@ -448,6 +445,27 @@ function renderGrid(list){
 
 // Open modal for a specific map
 function openModal(map) {
+    // ===== BIOME OVERVIEW MAP FULLSCREEN MODE =====
+    const isBiomeMap = map.type === "Biome Map";
+
+    const details = document.querySelector(".details");
+    const gallery = document.querySelector(".gallery");
+    const modalMain = document.querySelector(".modal-main");
+    const mediaWrap = document.querySelector(".media-wrap");
+
+    if (isBiomeMap) {
+        details.style.display = "none";
+        gallery.style.flex = "1 1 100%";
+        modalMain.classList.add("fullscreen-image");
+        mediaWrap.style.height = "85vh";
+    } else {
+        details.style.display = "block";
+        gallery.style.flex = "2 1 600px";
+        modalMain.classList.remove("fullscreen-image");
+        mediaWrap.style.height = "78vh";
+    }
+
+
     current.index = maps.indexOf(map); // optional if you need the index
     current.media = map.screenshots || (map.thumbnail ? [map.thumbnail] : []);
     current.video = map.video || null;

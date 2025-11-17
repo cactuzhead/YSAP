@@ -111,6 +111,14 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     gap: 16px;
     max-width: 90vw;
 }
+.modal-main.fullscreen-image {
+    gap: 0 !important;
+}
+
+.modal-main.fullscreen-image .gallery {
+    flex: 1 1 100% !important;
+}
+
 .gallery{
     display: flex;
     flex: 2 1 600px;
