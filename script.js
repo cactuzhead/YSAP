@@ -447,8 +447,10 @@ function renderGrid(list){
 function openModal(map) {
     // ===== BIOME OVERVIEW MAP FULLSCREEN MODE =====
     // const isBiomeMap = map.type === "Biome Map";
-    const mapType = map["Map Type"] || "";
-    const isBiomeMap = mapType.trim().toLowerCase() === "biome";
+    // const mapType = map["Map Type"] || "";
+    // const isBiomeMap = mapType.trim().toLowerCase() === "biome";
+    const isBiomeMap = (map["Map Type"] || "").trim().toLowerCase() === "biome";
+
 
     const details = document.querySelector(".details");
     const gallery = document.querySelector(".gallery");
