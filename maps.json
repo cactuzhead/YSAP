@@ -1,5 +1,5 @@
     [
-        {
+    {
         "name": "Grasslands",
         "author": "Cactuzhead",
         "base": "Grasslands",
@@ -9,6 +9,38 @@
         "stats": {
             "Release Date": "2024-07-28",
             "Biome": "Grass",
+            "Parking Spots": 0,
+            "Round Time": 0,
+            "Fuel Time": 0,
+            "Map Type": "Biome Map"
+        }
+    },
+    {
+        "name": "Antarcticar",
+        "author": "Cactuzhead",
+        "base": "Antarcticar",
+        "extra_screenshots": null,
+        "video": null,
+        "description": "Cactuzhead's map overview of the antarcticar biome to help you navigate the overworld.",
+        "stats": {
+            "Release Date": "2024-07-28",
+            "Biome": "Ice",
+            "Parking Spots": 0,
+            "Round Time": 0,
+            "Fuel Time": 0,
+            "Map Type": "Biome Map"
+        }
+    },
+    {
+        "name": "Carchipelago",
+        "author": "Cactuzhead",
+        "base": "Carchipelago",
+        "extra_screenshots": null,
+        "video": null,
+        "description": "Cactuzhead's map overview of the carchipelago biome to help you navigate the overworld.",
+        "stats": {
+            "Release Date": "2024-07-28",
+            "Biome": "Lava",
             "Parking Spots": 0,
             "Round Time": 0,
             "Fuel Time": 0,
