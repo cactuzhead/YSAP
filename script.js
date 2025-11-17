@@ -457,12 +457,12 @@ function openModal(map) {
         details.style.display = "none";
         gallery.style.flex = "1 1 100%";
         modalMain.classList.add("fullscreen-image");
-        mediaWrap.style.height = "85vh";
+        mediaWrap.style.maxHeight = "85vh";
     } else {
         details.style.display = "block";
         gallery.style.flex = "2 1 600px";
         modalMain.classList.remove("fullscreen-image");
-        mediaWrap.style.height = "78vh";
+        mediaWrap.style.maxHeight = "78vh";
     }
 
 
