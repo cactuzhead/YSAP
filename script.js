@@ -451,6 +451,7 @@ function openModal(map) {
     const details = document.querySelector(".details");
     const gallery = document.querySelector(".gallery");
     const modalMain = document.querySelector(".modal-main");
+    const mediaWrap = document.querySelector(".media-wrap");
     const modalContent = document.querySelector(".modal-content");
     // const mediaWrap = document.querySelector(".media-wrap");
 
