@@ -450,22 +450,25 @@ function openModal(map) {
 
     const details = document.querySelector(".details");
     const gallery = document.querySelector(".gallery");
-    const modalMain = document.querySelector(".modal-main");
+    // const modalMain = document.querySelector(".modal-main");
+    const modalContent = document.querySelector(".modal-content");
     const mediaWrap = document.querySelector(".media-wrap");
 
-    modalMain.parentElement.classList.toggle("fullscreen-image", isBiomeMap);
+    // modalMain.parentElement.classList.toggle("fullscreen-image", isBiomeMap);
+    modalContent.classList.toggle("fullscreen-image", isBiomeMap);
+    details.style.display = isBiomeMap ? "none" : "block";
 
-    if (isBiomeMap) {
-        details.style.display = "none";
-        // gallery.style.flex = "1 1 100%";
-        // modalMain.classList.add("fullscreen-image");
-        // mediaWrap.style.maxHeight = "85vh";
-    } else {
-        details.style.display = "block";
-        // gallery.style.flex = "2 1 600px";
-        // modalMain.classList.remove("fullscreen-image");
-        // mediaWrap.style.maxHeight = "78vh";
-    }
+    // if (isBiomeMap) {
+    //     details.style.display = "none";
+    //     // gallery.style.flex = "1 1 100%";
+    //     // modalMain.classList.add("fullscreen-image");
+    //     // mediaWrap.style.maxHeight = "85vh";
+    // } else {
+    //     details.style.display = "block";
+    //     // gallery.style.flex = "2 1 600px";
+    //     // modalMain.classList.remove("fullscreen-image");
+    //     // mediaWrap.style.maxHeight = "78vh";
+    // }
     
     current.index = maps.indexOf(map); // optional if you need the index
     current.media = map.screenshots || (map.thumbnail ? [map.thumbnail] : []);
