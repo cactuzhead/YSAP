@@ -450,29 +450,20 @@ function openModal(map) {
     // const mapType = map["Map Type"] || "";
     // const isBiomeMap = mapType.trim().toLowerCase() === "biome";
     const isBiomeMap = (map["Map Type"] || "").trim().toLowerCase() === "biome";
+    console.log('MAP TYPE =', map["Map Type"], '→ biome?', isBiomeMap);
 
 
-    const details = document.querySelector(".details");
-    const gallery = document.querySelector(".gallery");
-    const modalMain = document.querySelector(".modal-main");
-    const mediaWrap = document.querySelector(".media-wrap");
-    const modalContent = document.querySelector(".modal-content");
-    // const mediaWrap = document.querySelector(".media-wrap");
-
-
-
-// console.log("MAP TYPE =", mapType, "→ biome?", isBiomeMap);
-//     console.log("MAP TYPE =", mapType, " → biome?", isBiomeMap);
-//     console.log("MAP OBJECT KEYS:", Object.keys(map));
-// console.log("MAP OBJECT:", map);
-
-    // modalContent.classList.toggle("fullscreen-image", isBiomeMap);
-    // details.style.display = isBiomeMap ? "none" : "block";
+    const modal = document.getElementById("modal");
+    const modalMain = modal.querySelector(".modal-main");
+    const gallery = modal.querySelector(".gallery");
+    const mediaWrap = modal.querySelector(".media-wrap");
+    const details = modal.querySelector(".details");
 
     details.style.display = isBiomeMap ? "none" : "block";
-gallery.style.flex = isBiomeMap ? "1 1 100%" : "2 1 600px";
-modalMain.classList.toggle("fullscreen-image", isBiomeMap);
-mediaWrap.style.maxHeight = isBiomeMap ? "85vh" : "78vh";
+    gallery.style.flex = isBiomeMap ? "1 1 100%" : "2 1 600px";
+    mediaWrap.style.maxHeight = isBiomeMap ? "85vh" : "78vh";
+
+    modalMain.classList.toggle("fullscreen-image", isBiomeMap);
 
 
     
