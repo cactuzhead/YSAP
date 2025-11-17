@@ -292,7 +292,17 @@ overflow-wrap: break-word;
 .stat-row{display:flex;justify-content:space-between;padding:8px;border-radius:8px;background:var(--glass)}
 .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .thumb-btn{width:64px;height:46px;object-fit:cover;border-radius:6px;cursor:pointer}
-.close-btn{position:absolute;right:12px;top:12px;background:transparent;border:none;font-size:20px;color:var(--muted);cursor:pointer}
+.close-btn {
+    position:absolute;
+    right:12px;
+    top:12px;
+    background:transparent;
+    border:none;
+    font-size:20px;
+    color:var(--muted);
+    cursor:pointer;
+    z-index: 1010;
+}
 
 @media (max-width:900px){
     .modal-body{flex-direction:column}
