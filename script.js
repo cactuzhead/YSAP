@@ -453,7 +453,7 @@ function openModal(map) {
     const modalMain = document.querySelector(".modal-main");
     const mediaWrap = document.querySelector(".media-wrap");
 
-    modalMain.classList.toggle("fullscreen-image", isBiomeMap);
+    modalMain.parentElement.classList.toggle("fullscreen-image", isBiomeMap);
 
     if (isBiomeMap) {
         details.style.display = "none";
