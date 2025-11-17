@@ -459,6 +459,8 @@ function openModal(map) {
     const isBiomeMap = mapType.toLowerCase().includes("biome");
 
     console.log("MAP TYPE =", mapType, " → biome?", isBiomeMap);
+    console.log("MAP OBJECT KEYS:", Object.keys(map));
+console.log("MAP OBJECT:", map);
 
     // modalMain.parentElement.classList.toggle("fullscreen-image", isBiomeMap);
     modalContent.classList.toggle("fullscreen-image", isBiomeMap);
