@@ -446,13 +446,19 @@ function renderGrid(list){
 // Open modal for a specific map
 function openModal(map) {
     // ===== BIOME OVERVIEW MAP FULLSCREEN MODE =====
-    const isBiomeMap = map.type === "Biome Map";
+    // const isBiomeMap = map.type === "Biome Map";
 
     const details = document.querySelector(".details");
-    const gallery = document.querySelector(".gallery");
+    // const gallery = document.querySelector(".gallery");
     // const modalMain = document.querySelector(".modal-main");
     const modalContent = document.querySelector(".modal-content");
-    const mediaWrap = document.querySelector(".media-wrap");
+    // const mediaWrap = document.querySelector(".media-wrap");
+
+
+    const type = (map.type || "").toLowerCase();
+    const isBiomeMap = type.includes("biome");
+
+    console.log("MAP TYPE =", map.type, " → biome?", isBiomeMap);
 
     // modalMain.parentElement.classList.toggle("fullscreen-image", isBiomeMap);
     modalContent.classList.toggle("fullscreen-image", isBiomeMap);
