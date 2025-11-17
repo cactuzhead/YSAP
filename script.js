@@ -457,11 +457,12 @@ function openModal(map) {
 
 
     const mapType = map["Map Type"] || "";
-    const isBiomeMap = mapType.toLowerCase() === "biome";
-
-    console.log("MAP TYPE =", mapType, " → biome?", isBiomeMap);
-    console.log("MAP OBJECT KEYS:", Object.keys(map));
-console.log("MAP OBJECT:", map);
+    const isBiomeMap = mapType.trim().toLowerCase() === "biome";
+    
+console.log("MAP TYPE =", mapType, "→ biome?", isBiomeMap);
+//     console.log("MAP TYPE =", mapType, " → biome?", isBiomeMap);
+//     console.log("MAP OBJECT KEYS:", Object.keys(map));
+// console.log("MAP OBJECT:", map);
 
     // modalContent.classList.toggle("fullscreen-image", isBiomeMap);
     // details.style.display = isBiomeMap ? "none" : "block";
