@@ -455,10 +455,10 @@ function openModal(map) {
     // const mediaWrap = document.querySelector(".media-wrap");
 
 
-    const type = (map.type || "").toLowerCase();
-    const isBiomeMap = type.includes("biome");
+    const mapType = map.type || map["Map Type"] || "";
+    const isBiomeMap = mapType.toLowerCase().includes("biome");
 
-    console.log("MAP TYPE =", map.type, " → biome?", isBiomeMap);
+    console.log("MAP TYPE =", mapType, " → biome?", isBiomeMap);
 
     // modalMain.parentElement.classList.toggle("fullscreen-image", isBiomeMap);
     modalContent.classList.toggle("fullscreen-image", isBiomeMap);
