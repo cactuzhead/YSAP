@@ -449,7 +449,7 @@ function openModal(map) {
     // const isBiomeMap = map.type === "Biome Map";
 
     const details = document.querySelector(".details");
-    // const gallery = document.querySelector(".gallery");
+    const gallery = document.querySelector(".gallery");
     const modalMain = document.querySelector(".modal-main");
     const modalContent = document.querySelector(".modal-content");
     // const mediaWrap = document.querySelector(".media-wrap");
