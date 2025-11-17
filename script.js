@@ -450,33 +450,27 @@ function openModal(map) {
 
     const details = document.querySelector(".details");
     // const gallery = document.querySelector(".gallery");
-    // const modalMain = document.querySelector(".modal-main");
+    const modalMain = document.querySelector(".modal-main");
     const modalContent = document.querySelector(".modal-content");
     // const mediaWrap = document.querySelector(".media-wrap");
 
 
-    const mapType = map.type || map["Map Type"] || "";
-    const isBiomeMap = mapType.toLowerCase().includes("biome");
+    const mapType = map["Map Type"] || "";
+    const isBiomeMap = mapType.toLowerCase() === "biome";
 
-    console.log("MAP TYPE =", mapType, " → biome?", isBiomeMap);
-    console.log("MAP OBJECT KEYS:", Object.keys(map));
-console.log("MAP OBJECT:", map);
+//     console.log("MAP TYPE =", mapType, " → biome?", isBiomeMap);
+//     console.log("MAP OBJECT KEYS:", Object.keys(map));
+// console.log("MAP OBJECT:", map);
 
-    // modalMain.parentElement.classList.toggle("fullscreen-image", isBiomeMap);
-    modalContent.classList.toggle("fullscreen-image", isBiomeMap);
+    // modalContent.classList.toggle("fullscreen-image", isBiomeMap);
+    // details.style.display = isBiomeMap ? "none" : "block";
+
     details.style.display = isBiomeMap ? "none" : "block";
+gallery.style.flex = isBiomeMap ? "1 1 100%" : "2 1 600px";
+modalMain.classList.toggle("fullscreen-image", isBiomeMap);
+mediaWrap.style.maxHeight = isBiomeMap ? "85vh" : "78vh";
 
-    // if (isBiomeMap) {
-    //     details.style.display = "none";
-    //     // gallery.style.flex = "1 1 100%";
-    //     // modalMain.classList.add("fullscreen-image");
-    //     // mediaWrap.style.maxHeight = "85vh";
-    // } else {
-    //     details.style.display = "block";
-    //     // gallery.style.flex = "2 1 600px";
-    //     // modalMain.classList.remove("fullscreen-image");
-    //     // mediaWrap.style.maxHeight = "78vh";
-    // }
+
     
     current.index = maps.indexOf(map); // optional if you need the index
     current.media = map.screenshots || (map.thumbnail ? [map.thumbnail] : []);
