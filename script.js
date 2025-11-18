@@ -90,17 +90,23 @@ if (!drawCanvas || !modalImage) {
 
 
     function doUndo() {
-        if (redoStack.length === 0) return;
-        const redoState = redoStack.pop();        
-        undoStack.push(tempCanvas.toDataURL()); // Push current state to undo before switching
-        restoreTempState(redoState);
-        }
+        if (undoStack.length < 2) return;   // Must have at least 2 states to undo
+
+        const currentState = undoStack.pop();
+        redoStack.push(currentState);
+
+        // Restore previous
+        const previousState = undoStack[undoStack.length - 1];
+        restoreTempState(previousState);
+    }
 
     function doRedo() {
-        if (redoStack.length === 0) return; // nothing to redo
-        const next = redoStack.pop();
-        undoStack.push(tempCanvas.toDataURL()); // only push current state if redo exists
-        restoreTempState(next);
+        if (redoStack.length === 0) return;
+
+        const redoState = redoStack.pop();
+        undoStack.push(redoState);
+
+        restoreTempState(redoState);
     }
 
 
@@ -676,6 +682,13 @@ function showMedia(idx) {
 
     modalImage.onload = () => {
         prepareDrawCanvas();
+
+        // Save the initial state as the image itself
+        tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+        tempCtx.drawImage(modalImage, 0, 0, tempCanvas.width, tempCanvas.height);
+        undoStack = [tempCanvas.toDataURL()];
+        redoStack = [];
+
         redrawVisibleFromTemp();
         mediaWrap.classList.remove('no-image');        
     };
@@ -818,9 +831,9 @@ fetch('maps.json')
             map.screenshots = [`${IMAGE_PATH}/${map.base}/${map.base}_full.jpg`];
 
             if (map.extra_screenshots && Array.isArray(map.extra_screenshots)) {
-            map.extra_screenshots.forEach(suffix => {
-                map.screenshots.push(`${IMAGE_PATH}/${map.base}/${map.base}_${suffix}.jpg`);
-            });
+                map.extra_screenshots.forEach(suffix => {
+                    map.screenshots.push(`${IMAGE_PATH}/${map.base}/${map.base}_${suffix}.jpg`);
+                });
             }
         }
         });
