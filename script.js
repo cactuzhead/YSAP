@@ -669,6 +669,14 @@ function showMedia(idx) {
     modalImage.src = src;
     modalImage.alt = `${modalTitle.textContent} screenshot ${idx + 1}`;
 
+    // RESET DRAWING STATE FOR NEW IMAGE
+    undoStack = [];
+    redoStack = [];
+    hasDrawnSomething = false;
+
+    tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+
     // Handle missing or broken image
     modalImage.onerror = () => {
         modalImage.style.display = 'none';
