@@ -45,15 +45,9 @@ const tempCtx = tempCanvas.getContext('2d');
 
 
 if (!drawCanvas || !modalImage) {
+    // skip all drawing setup if either the canvas or modal image is missing
     console.warn('Drawing elements not found.');
 } else {
-    // Offscreen temp canvas that stores committed strokes (internal resolution)
-    // const tempCanvas = document.createElement('canvas');
-    // const tempCtx = tempCanvas.getContext('2d');
-
-    // const MAX_HISTORY = 5;
-    // let undoStack = [];
-    // let redoStack = [];
 
     tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
     redrawVisibleFromTemp();
@@ -61,6 +55,8 @@ if (!drawCanvas || !modalImage) {
     undoStack = [];
     redoStack = [];
     hasDrawnSomething = false;
+
+    undoStack.push(tempCanvas.toDataURL()); // initial blank state
 
 
     // Save canvas state
