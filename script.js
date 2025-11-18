@@ -36,16 +36,23 @@ const drawMode = document.getElementById('drawMode');
 const drawClear = document.getElementById('drawClear');
 const drawCopy = document.getElementById('drawCopy');
 
+const tempCanvas = document.createElement('canvas');
+const tempCtx = tempCanvas.getContext('2d');
+const MAX_HISTORY = 5;
+
+let undoStack = [];
+let redoStack = [];
+
 if (!drawCanvas || !modalImage) {
     console.warn('Drawing elements not found.');
 } else {
     // Offscreen temp canvas that stores committed strokes (internal resolution)
-    const tempCanvas = document.createElement('canvas');
-    const tempCtx = tempCanvas.getContext('2d');
+    // const tempCanvas = document.createElement('canvas');
+    // const tempCtx = tempCanvas.getContext('2d');
 
-    const MAX_HISTORY = 5;
-    let undoStack = [];
-    let redoStack = [];
+    // const MAX_HISTORY = 5;
+    // let undoStack = [];
+    // let redoStack = [];
 
     tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
     redrawVisibleFromTemp();
