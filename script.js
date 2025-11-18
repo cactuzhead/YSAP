@@ -106,15 +106,14 @@ if (!drawCanvas || !modalImage) {
     });
 
     // Rest History + Canvas when modal closes
-    document.getElementById("mapModal").addEventListener("hidden.bs.modal", () => {
+    document.getElementById("closeModal").addEventListener("click", () => {
         undoStack = [];
         redoStack = [];
 
-        // Clear drawing overlays
         tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
         drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
     });
-
+    
     let drawing = false;
     let startX = 0, startY = 0;
     let prevX = 0, prevY = 0;
