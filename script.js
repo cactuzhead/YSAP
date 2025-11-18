@@ -216,12 +216,12 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         drawCtx.drawImage(tempCanvas, 0, 0);
     }
 
-    // function commitShapeToTemp(shapeDrawFn) {
-    //     tempCtx.save();
-    //     shapeDrawFn(tempCtx);
-    //     tempCtx.restore();
-    //     redrawVisibleFromTemp();
-    // }
+    function pushInitialState() {
+        // Always push a blank state first
+        const dataURL = tempCanvas.toDataURL();
+        undoStack.push(dataURL);
+        redoStack = [];
+    }
 
     function onPointerDown(e) {
         if (modalVideo.style.display !== 'none') return;
@@ -647,6 +647,8 @@ function resetDrawingForNewImage() {
     }
 
     redrawVisibleFromTemp();
+    // Push initial blank state to undo stack
+    pushInitialState();
 }
 
 // Show a specific screenshot in the modal
