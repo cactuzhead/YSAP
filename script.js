@@ -647,8 +647,6 @@ function resetDrawingForNewImage() {
     }
 
     redrawVisibleFromTemp();
-    // Push initial blank state to undo stack
-    pushInitialState();
 }
 
 // Show a specific screenshot in the modal
