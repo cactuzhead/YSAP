@@ -26,6 +26,8 @@ let current = {
     video: null
 };
 
+let hasDrawnSomething = false;
+
 const drawCanvas = document.getElementById('drawCanvas');
 const drawCtx = drawCanvas.getContext('2d');
 const drawColor = document.getElementById('drawColor');
@@ -44,9 +46,16 @@ if (!drawCanvas || !modalImage) {
     const MAX_HISTORY = 5;
     let undoStack = [];
     let redoStack = [];
+    tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+    redrawVisibleFromTemp();
+    // push blank
+    undoStack.push(tempCanvas.toDataURL());
+    hasDrawnSomething = false;
 
     // Save canvas state
     function saveState() {
+        if (!hasDrawnSomething) return;
+
         // Limit history
         if (undoStack.length >= MAX_HISTORY) {
             undoStack.shift(); // remove oldest
@@ -54,6 +63,8 @@ if (!drawCanvas || !modalImage) {
 
         undoStack.push(tempCanvas.toDataURL());
         redoStack = []; // new draw clears redo
+
+        hasDrawnSomething = false;
     }
 
     // Restore a saved tempCanvas state
@@ -68,52 +79,87 @@ if (!drawCanvas || !modalImage) {
     }
 
     // UNDO
-    document.getElementById("drawUndo").addEventListener("click", () => {
-    if (undoStack.length === 0) return;
+    // document.getElementById("drawUndo").addEventListener("click", () => {
+    // if (undoStack.length === 0) return;
 
+    //     redoStack.push(tempCanvas.toDataURL());
+    //     const last = undoStack.pop();
+
+    //     restoreTempState(last);
+    // });
+
+    // // REDO
+    // document.getElementById("drawRedo").addEventListener("click", () => {
+    // if (redoStack.length === 0) return;
+
+    //     undoStack.push(tempCanvas.toDataURL());
+    //     const next = redoStack.pop();
+
+    //     restoreTempState(next);
+    // });
+
+    // // Keyboard Shortcuts
+    // document.addEventListener("keydown", (e) => {
+    //     // CTRL+Z to Undo
+    //     if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === "z") {
+    //         e.preventDefault();
+    //         document.getElementById("drawUndo").click();
+    //     }
+
+    //     // CTRL+SHIFT+Z or CTRL+Y to Redo
+    //     if (
+    //         (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "z") ||
+    //         (e.ctrlKey && e.key.toLowerCase() === "y")
+    //     ) {
+    //         e.preventDefault();
+    //         document.getElementById("drawRedo").click();
+    //     }
+    // });
+
+    function doUndo() {
+    if (undoStack.length === 0) return;
         redoStack.push(tempCanvas.toDataURL());
         const last = undoStack.pop();
-
         restoreTempState(last);
-    });
+    }
 
-    // REDO
-    document.getElementById("drawRedo").addEventListener("click", () => {
-    if (redoStack.length === 0) return;
-
+    function doRedo() {
+        if (redoStack.length === 0) return;
         undoStack.push(tempCanvas.toDataURL());
         const next = redoStack.pop();
-
         restoreTempState(next);
-    });
+    }
 
-    // Keyboard Shortcuts
+    // wire to buttons (only if they exist)
+    const undoBtn = document.getElementById("drawUndo");
+    const redoBtn = document.getElementById("drawRedo");
+    if (undoBtn) undoBtn.addEventListener("click", doUndo);
+    if (redoBtn) redoBtn.addEventListener("click", doRedo);
+
+    // keyboard shortcuts use the functions directly
     document.addEventListener("keydown", (e) => {
-        // CTRL+Z to Undo
-        if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === "z") {
+        if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === "z") {
             e.preventDefault();
-            document.getElementById("drawUndo").click();
+            doUndo();
         }
-
-        // CTRL+SHIFT+Z or CTRL+Y to Redo
-        if (
-            (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "z") ||
-            (e.ctrlKey && e.key.toLowerCase() === "y")
-        ) {
+        if ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase() === "y" || (e.shiftKey && e.key.toLowerCase() === "z"))) {
             e.preventDefault();
-            document.getElementById("drawRedo").click();
+            doRedo();
         }
     });
+
 
     // Rest History + Canvas when modal closes
     document.getElementById("closeModal").addEventListener("click", () => {
         undoStack = [];
         redoStack = [];
+        hasDrawnSomething = false;
 
         tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
         drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
     });
-    
+
+
     let drawing = false;
     let startX = 0, startY = 0;
     let prevX = 0, prevY = 0;
@@ -208,8 +254,6 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         e.preventDefault();
         if (!modalImage.complete) return;
 
-        saveState();
-
         drawing = true;
         const p = getPosFromEvent(e);
         startX = prevX = p.x;
@@ -231,6 +275,8 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         const color = drawColor.value || '#ff0000';
 
         if (mode === 'free') {
+            hasDrawnSomething = true;
+
             tempCtx.strokeStyle = color;
             tempCtx.lineWidth = lw;
             tempCtx.lineCap = 'round';
@@ -244,6 +290,8 @@ window.addEventListener('scroll', updateCanvasPosition, true);
             redrawVisibleFromTemp();
             return;
         }
+
+        hasDrawnSomething = true;
 
         // Shape preview
         redrawVisibleFromTemp();
@@ -297,7 +345,11 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         const lw = Math.max(1, Number(drawWidth.value || 1)) * dpr;
         const color = drawColor.value || '#ff0000';
 
-        if (mode === 'free') { redrawVisibleFromTemp(); return; }
+        if (mode === 'free') {
+            redrawVisibleFromTemp();
+            saveState();
+            return;
+        }
 
         // Commit shape
         tempCtx.save();
@@ -340,6 +392,8 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         tempCtx.stroke();
         tempCtx.restore();
         redrawVisibleFromTemp();
+
+        hasDrawnSomething = true;
         saveState();
     }
 
