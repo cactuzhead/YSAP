@@ -636,6 +636,16 @@ function clearCanvas() {
 // ======= RESET WHEN SWITCHING IMAGES =======
 function resetDrawingForNewImage() {
     clearCanvas();
+
+    // Copy modal image into tempCanvas as the starting point
+    if (modalImage.complete && modalImage.naturalWidth > 0) {
+        tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+        tempCtx.drawImage(modalImage, 0, 0, tempCanvas.width, tempCanvas.height);
+
+        // Save this as the initial state
+        undoStack.push(tempCanvas.toDataURL());
+    }
+    
     redrawVisibleFromTemp();
 }
 
