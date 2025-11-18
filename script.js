@@ -26,7 +26,6 @@ let current = {
     video: null
 };
 
-let hasDrawnSomething = false;
 
 const drawCanvas = document.getElementById('drawCanvas');
 const drawCtx = drawCanvas.getContext('2d');
@@ -36,12 +35,14 @@ const drawMode = document.getElementById('drawMode');
 const drawClear = document.getElementById('drawClear');
 const drawCopy = document.getElementById('drawCopy');
 
-const tempCanvas = document.createElement('canvas');
-const tempCtx = tempCanvas.getContext('2d');
 const MAX_HISTORY = 5;
-
 let undoStack = [];
 let redoStack = [];
+let hasDrawnSomething = false;
+
+const tempCanvas = document.createElement('canvas');
+const tempCtx = tempCanvas.getContext('2d');
+
 
 if (!drawCanvas || !modalImage) {
     console.warn('Drawing elements not found.');
@@ -67,7 +68,7 @@ if (!drawCanvas || !modalImage) {
         if (!hasDrawnSomething) return;
 
         const dataURL = tempCanvas.toDataURL();
-        if (dataURL === '') return;
+        if (!dataURL) return;
 
         // Limit history
         if (undoStack.length >= MAX_HISTORY) {
@@ -93,7 +94,7 @@ if (!drawCanvas || !modalImage) {
 
 
     function doUndo() {
-    if (undoStack.length === 0) return; // nothing to undo
+        if (undoStack.length === 0) return; // nothing to undo
         const last = undoStack.pop();
         redoStack.push(tempCanvas.toDataURL()); // only push current state if undo exists
         restoreTempState(last);
@@ -627,6 +628,20 @@ function openModal(map) {
     modal.setAttribute('aria-hidden', 'false');
 }
 
+// Clear both canvases
+function clearCanvas() {
+    tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+    undoStack = [];
+    redoStack = [];
+    hasDrawnSomething = false;
+}
+
+// ======= RESET WHEN SWITCHING IMAGES =======
+function resetDrawingForNewImage() {
+    clearCanvas();
+    redrawVisibleFromTemp();
+}
 
 // Show a specific screenshot in the modal
 function showMedia(idx) {
@@ -644,12 +659,7 @@ function showMedia(idx) {
     modalImage.alt = `${modalTitle.textContent} screenshot ${idx + 1}`;
 
     // RESET DRAWING STATE FOR NEW IMAGE
-    undoStack = [];
-    redoStack = [];
-    hasDrawnSomething = false;
-
-    tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
-    drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+    resetDrawingForNewImage();
 
     // Handle missing or broken image
     modalImage.onerror = () => {
