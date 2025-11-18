@@ -694,24 +694,28 @@ function showMedia(idx) {
     };
 }
 
+window.addEventListener("DOMContentLoaded", () => {
+    // Render Lucide icons
+    lucide.createIcons();
 
-lucide.createIcons();  // render icons
+    const shapeBtns = document.querySelectorAll("#shapeTools .shape-btn");
+    const drawModeSelect = document.getElementById("drawMode");
 
-const shapeBtns = document.querySelectorAll("#shapeTools .shape-btn");
-const drawModeSelect = document.getElementById("drawMode");
+    shapeBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+            const mode = btn.dataset.mode;
 
-shapeBtns.forEach(btn => {
-    btn.addEventListener("click", () => {
-        const mode = btn.dataset.mode;
+            // visual highlight
+            shapeBtns.forEach(b => b.classList.remove("selected"));
+            btn.classList.add("selected");
 
-        // Update visual selected button
-        shapeBtns.forEach(b => b.classList.remove("selected"));
-        btn.classList.add("selected");
-
-        // Update real drawMode value
-        drawModeSelect.value = mode;
+            // update hidden <select>
+            drawModeSelect.value = mode;
+        });
     });
 });
+
+
 
 
 
