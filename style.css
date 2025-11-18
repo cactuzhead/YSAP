@@ -238,6 +238,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     object-fit: contain;
     border: none;
     border-radius: 8px;
+    display: none;
 }
 
 .media-wrap img {

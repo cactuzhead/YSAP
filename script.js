@@ -26,9 +26,6 @@ let current = {
     video: null
 };
 
-let undoStack = [];
-let redoStack = [];
-
 const drawCanvas = document.getElementById('drawCanvas');
 const drawCtx = drawCanvas.getContext('2d');
 const drawColor = document.getElementById('drawColor');
@@ -43,6 +40,25 @@ if (!drawCanvas || !modalImage) {
     // Offscreen temp canvas that stores committed strokes (internal resolution)
     const tempCanvas = document.createElement('canvas');
     const tempCtx = tempCanvas.getContext('2d');
+
+    let undoStack = [];
+    let redoStack = [];
+
+    function saveState() {
+        // Save actual drawing data
+        undoStack.push(tempCanvas.toDataURL());
+        redoStack = [];
+    }
+
+    function restoreTempState(dataURL) {
+        const img = new Image();
+        img.onload = () => {
+            tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+            tempCtx.drawImage(img, 0, 0);
+            redrawVisibleFromTemp(); // refresh on-screen canvas
+        };
+        img.src = dataURL;
+    }
 
     // UNDO
     document.getElementById("drawUndo").addEventListener("click", () => {
@@ -166,8 +182,10 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         startY = prevY = p.y;
 
         // Copy current visible canvas to temp as baseline
-        tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
-        tempCtx.drawImage(drawCanvas, 0, 0);
+        // tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+        // tempCtx.drawImage(drawCanvas, 0, 0);
+
+        redrawVisibleFromTemp();
     }
 
     function onPointerMove(e) {
@@ -703,22 +721,6 @@ function formatDate(str) {
 //     };
 //     img.src = dataURL;
 // }
-
-function saveState() {
-    // Save actual drawing data
-    undoStack.push(tempCanvas.toDataURL());
-    redoStack = [];
-}
-
-function restoreTempState(dataURL) {
-    const img = new Image();
-    img.onload = () => {
-        tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
-        tempCtx.drawImage(img, 0, 0);
-        redrawVisibleFromTemp(); // refresh on-screen canvas
-    };
-    img.src = dataURL;
-}
 
 
 themeToggle.addEventListener('change', () => setTheme(themeToggle.checked));
