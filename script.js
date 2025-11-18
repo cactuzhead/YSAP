@@ -37,34 +37,32 @@ const drawMode = document.getElementById('drawMode');
 const drawClear = document.getElementById('drawClear');
 const drawCopy = document.getElementById('drawCopy');
 
-// UNDO
-document.getElementById("drawUndo").addEventListener("click", () => {
-    if (undoStack.length === 0) return;
-
-    const last = undoStack.pop();
-    redoStack.push(tempCanvas.toDataURL());
-
-    restoreTempState(last);
-});
-
-// REDO
-document.getElementById("drawRedo").addEventListener("click", () => {
-    if (redoStack.length === 0) return;
-
-    const next = redoStack.pop();
-    undoStack.push(tempCanvas.toDataURL());
-
-    restoreTempState(next);
-});
-
-
-
 if (!drawCanvas || !modalImage) {
     console.warn('Drawing elements not found.');
 } else {
     // Offscreen temp canvas that stores committed strokes (internal resolution)
     const tempCanvas = document.createElement('canvas');
     const tempCtx = tempCanvas.getContext('2d');
+
+    // UNDO
+    document.getElementById("drawUndo").addEventListener("click", () => {
+        if (undoStack.length === 0) return;
+
+        const last = undoStack.pop();
+        redoStack.push(tempCanvas.toDataURL());
+
+        restoreTempState(last);
+    });
+
+    // REDO
+    document.getElementById("drawRedo").addEventListener("click", () => {
+        if (redoStack.length === 0) return;
+
+        const next = redoStack.pop();
+        undoStack.push(tempCanvas.toDataURL());
+
+        restoreTempState(next);
+    });
 
     let drawing = false;
     let startX = 0, startY = 0;
@@ -688,23 +686,40 @@ function formatDate(str) {
     return `${day} ${month} ${year}`;
 }
 
+// function saveState() {
+//     const canvas = document.getElementById("drawCanvas");
+//     undoStack.push(canvas.toDataURL());
+//     redoStack = []; // clear redo history on new action
+// }
+
+// function restoreState(dataURL) {
+//     const canvas = document.getElementById("drawCanvas");
+//     const ctx = canvas.getContext("2d");
+    
+//     const img = new Image();
+//     img.onload = () => {
+//         ctx.clearRect(0, 0, canvas.width, canvas.height);
+//         ctx.drawImage(img, 0, 0);
+//     };
+//     img.src = dataURL;
+// }
+
 function saveState() {
-    const canvas = document.getElementById("drawCanvas");
-    undoStack.push(canvas.toDataURL());
-    redoStack = []; // clear redo history on new action
+    // Save actual drawing data
+    undoStack.push(tempCanvas.toDataURL());
+    redoStack = [];
 }
 
-function restoreState(dataURL) {
-    const canvas = document.getElementById("drawCanvas");
-    const ctx = canvas.getContext("2d");
-    
+function restoreTempState(dataURL) {
     const img = new Image();
     img.onload = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0);
+        tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+        tempCtx.drawImage(img, 0, 0);
+        redrawVisibleFromTemp(); // refresh on-screen canvas
     };
     img.src = dataURL;
 }
+
 
 themeToggle.addEventListener('change', () => setTheme(themeToggle.checked));
 
