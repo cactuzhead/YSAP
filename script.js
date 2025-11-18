@@ -695,6 +695,23 @@ function showMedia(idx) {
 }
 
 
+lucide.createIcons();  // render icons
+
+const shapeBtns = document.querySelectorAll("#shapeTools .shape-btn");
+const drawModeSelect = document.getElementById("drawMode");
+
+shapeBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const mode = btn.dataset.mode;
+
+        // Update visual selected button
+        shapeBtns.forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+
+        // Update real drawMode value
+        drawModeSelect.value = mode;
+    });
+});
 
 
 

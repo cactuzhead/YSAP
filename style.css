@@ -408,6 +408,39 @@ overflow-wrap: break-word;
     padding: 4px;
 }
 
+.shape-tools {
+    display: flex;
+    gap: 6px;
+    margin: 6px 0;
+}
+
+.shape-btn {
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    border: 1px solid var(--border, #aaa);
+    background: var(--bg, #eee);
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+.shape-btn:hover {
+    background: var(--hover, #ddd);
+}
+
+.shape-btn.selected {
+    background: var(--accent-bg, #4287f5);
+    border-color: var(--accent-border, #1c5ed6);
+}
+
+.shape-btn.selected svg {
+    stroke: white;
+}
+
 
 
 @media (max-width: 900px) {
