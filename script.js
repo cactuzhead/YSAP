@@ -61,7 +61,7 @@ if (!drawCanvas || !modalImage) {
 
     // Save canvas state
     function saveState() {
-        // if (!hasDrawnSomething) return;
+        if (!hasDrawnSomething) return;
 
         const dataURL = tempCanvas.toDataURL();
         if (!dataURL) return;
@@ -74,7 +74,7 @@ if (!drawCanvas || !modalImage) {
         undoStack.push(dataURL);
         redoStack = []; // new draw clears redo
 
-        // hasDrawnSomething = false;
+        hasDrawnSomething = false;
     }
 
     // Restore a saved tempCanvas state
@@ -229,6 +229,7 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         if (!modalImage.complete) return;
 
         drawing = true;
+        hasDrawnSomething = false;
         const p = getPosFromEvent(e);
         startX = prevX = p.x;
         startY = prevY = p.y;
@@ -366,7 +367,7 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         tempCtx.restore();
         redrawVisibleFromTemp();
 
-        // hasDrawnSomething = true;
+        hasDrawnSomething = true;
         saveState();
     }
 
