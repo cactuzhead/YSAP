@@ -26,15 +26,37 @@ let current = {
     video: null
 };
 
-// --- Drawing System (working, hi-res, touch) ---
+let undoStack = [];
+let redoStack = [];
+
 const drawCanvas = document.getElementById('drawCanvas');
 const drawCtx = drawCanvas.getContext('2d');
-
 const drawColor = document.getElementById('drawColor');
 const drawWidth = document.getElementById('drawWidth');
 const drawMode = document.getElementById('drawMode');
 const drawClear = document.getElementById('drawClear');
 const drawCopy = document.getElementById('drawCopy');
+
+// UNDO
+document.getElementById("drawUndo").addEventListener("click", () => {
+    if (undoStack.length === 0) return;
+
+    const last = undoStack.pop();
+    redoStack.push(tempCanvas.toDataURL());
+
+    restoreTempState(last);
+});
+
+// REDO
+document.getElementById("drawRedo").addEventListener("click", () => {
+    if (redoStack.length === 0) return;
+
+    const next = redoStack.pop();
+    undoStack.push(tempCanvas.toDataURL());
+
+    restoreTempState(next);
+});
+
 
 
 if (!drawCanvas || !modalImage) {
@@ -77,8 +99,6 @@ if (!drawCanvas || !modalImage) {
         drawCanvas.style.width = imgRect.width + 'px';
         drawCanvas.style.height = imgRect.height + 'px';
     }
-
-
 
 
     function updateCanvasOverlay() {
@@ -128,17 +148,19 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         drawCtx.drawImage(tempCanvas, 0, 0);
     }
 
-    function commitShapeToTemp(shapeDrawFn) {
-        tempCtx.save();
-        shapeDrawFn(tempCtx);
-        tempCtx.restore();
-        redrawVisibleFromTemp();
-    }
+    // function commitShapeToTemp(shapeDrawFn) {
+    //     tempCtx.save();
+    //     shapeDrawFn(tempCtx);
+    //     tempCtx.restore();
+    //     redrawVisibleFromTemp();
+    // }
 
     function onPointerDown(e) {
         if (modalVideo.style.display !== 'none') return;
         e.preventDefault();
         if (!modalImage.complete) return;
+
+        saveState();
 
         drawing = true;
         const p = getPosFromEvent(e);
@@ -204,7 +226,7 @@ window.addEventListener('scroll', updateCanvasPosition, true);
                 }
                 drawCtx.closePath(); break;
             case 'star':
-                for(let i=0;i<10;i++){
+                for(let i=0; i<10; i++){
                     const angle = Math.PI/5*i;
                     const radius = (i%2===0)?size:size*0.45;
                     const px = startX + Math.cos(angle)*radius;
@@ -268,6 +290,7 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         tempCtx.stroke();
         tempCtx.restore();
         redrawVisibleFromTemp();
+        saveState();
     }
 
     // Attach pointer events (mouse + touch)
@@ -448,7 +471,6 @@ function openModal(map) {
     // ===== BIOME OVERVIEW MAP FULLSCREEN MODE =====
     const isBiomeMap = map.stats && (map.stats["Map Type"] || "").trim().toLowerCase() === "biome";
 
-    // const modal = document.getElementById("modal");
     const modalMain = modal.querySelector(".modal-main");
     const gallery = modal.querySelector(".gallery");
     const mediaWrap = modal.querySelector(".media-wrap");
@@ -466,7 +488,7 @@ function openModal(map) {
 
 
     
-    current.index = maps.indexOf(map); // optional if you need the index
+    current.index = maps.indexOf(map);
     current.media = map.screenshots || (map.thumbnail ? [map.thumbnail] : []);
     current.video = map.video || null;
 
@@ -484,7 +506,7 @@ function openModal(map) {
 
         // Format Date
         if (key.toLowerCase() === 'date' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
-            displayValue = formatDate(value); // assumes you have a formatDate() function
+            displayValue = formatDate(value);
         }
 
         // Format time values
@@ -635,34 +657,9 @@ function applyControls() {
         });
     }
 
-    // Update the map count label
-    // document.getElementById('mapCount').textContent =
-    //     `${list.length} map${list.length !== 1 ? 's' : ''}`;
     const countLabel = document.getElementById('mapCount');
     countLabel.textContent =
         `${list.length} / ${maps.length} map${maps.length !== 1 ? 's' : ''}`;
-
-//     const countLabel = document.getElementById('mapCount');
-
-// // Fade out
-// countLabel.style.opacity = 0;
-
-// setTimeout(() => {
-//     // Update label text
-//     countLabel.textContent = `${list.length} map${list.length !== 1 ? 's' : ''}`;
-
-//     // Remove old classes
-//     countLabel.classList.remove('high', 'medium', 'low');
-
-//     // Add new color class based on quantity
-//     if (list.length > 20) countLabel.classList.add('high');
-//     else if (list.length > 5) countLabel.classList.add('medium');
-//     else countLabel.classList.add('low');
-
-//     // Fade in
-//     countLabel.style.opacity = 1;
-
-// }, 150); // matches the fade-out timing
 
     renderGrid(list);
 }
@@ -689,6 +686,24 @@ function formatDate(str) {
     const month = monthNames[date.getMonth()];
     const year = date.getFullYear();
     return `${day} ${month} ${year}`;
+}
+
+function saveState() {
+    const canvas = document.getElementById("drawCanvas");
+    undoStack.push(canvas.toDataURL());
+    redoStack = []; // clear redo history on new action
+}
+
+function restoreState(dataURL) {
+    const canvas = document.getElementById("drawCanvas");
+    const ctx = canvas.getContext("2d");
+    
+    const img = new Image();
+    img.onload = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0);
+    };
+    img.src = dataURL;
 }
 
 themeToggle.addEventListener('change', () => setTheme(themeToggle.checked));
