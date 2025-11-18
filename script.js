@@ -90,11 +90,11 @@ if (!drawCanvas || !modalImage) {
 
 
     function doUndo() {
-        if (undoStack.length === 0) return; // nothing to undo
-        const last = undoStack.pop();
-        redoStack.push(tempCanvas.toDataURL()); // only push current state if undo exists
-        restoreTempState(last);
-    }
+        if (redoStack.length === 0) return;
+        const redoState = redoStack.pop();        
+        undoStack.push(tempCanvas.toDataURL()); // Push current state to undo before switching
+        restoreTempState(redoState);
+        }
 
     function doRedo() {
         if (redoStack.length === 0) return; // nothing to redo
