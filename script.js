@@ -46,11 +46,14 @@ if (!drawCanvas || !modalImage) {
     const MAX_HISTORY = 5;
     let undoStack = [];
     let redoStack = [];
+
     tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
     redrawVisibleFromTemp();
-    // push blank
-    undoStack.push(tempCanvas.toDataURL());
+    
+    undoStack = [];
+    redoStack = [];
     hasDrawnSomething = false;
+
 
     // Save canvas state
     function saveState() {
