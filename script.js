@@ -66,12 +66,15 @@ if (!drawCanvas || !modalImage) {
     function saveState() {
         if (!hasDrawnSomething) return;
 
+        const dataURL = tempCanvas.toDataURL();
+        if (dataURL === '') return;
+
         // Limit history
         if (undoStack.length >= MAX_HISTORY) {
             undoStack.shift(); // remove oldest
         }
 
-        undoStack.push(tempCanvas.toDataURL());
+        undoStack.push(dataURL);
         redoStack = []; // new draw clears redo
 
         hasDrawnSomething = false;
@@ -88,57 +91,21 @@ if (!drawCanvas || !modalImage) {
         img.src = dataURL;
     }
 
-    // UNDO
-    // document.getElementById("drawUndo").addEventListener("click", () => {
-    // if (undoStack.length === 0) return;
-
-    //     redoStack.push(tempCanvas.toDataURL());
-    //     const last = undoStack.pop();
-
-    //     restoreTempState(last);
-    // });
-
-    // // REDO
-    // document.getElementById("drawRedo").addEventListener("click", () => {
-    // if (redoStack.length === 0) return;
-
-    //     undoStack.push(tempCanvas.toDataURL());
-    //     const next = redoStack.pop();
-
-    //     restoreTempState(next);
-    // });
-
-    // // Keyboard Shortcuts
-    // document.addEventListener("keydown", (e) => {
-    //     // CTRL+Z to Undo
-    //     if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === "z") {
-    //         e.preventDefault();
-    //         document.getElementById("drawUndo").click();
-    //     }
-
-    //     // CTRL+SHIFT+Z or CTRL+Y to Redo
-    //     if (
-    //         (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "z") ||
-    //         (e.ctrlKey && e.key.toLowerCase() === "y")
-    //     ) {
-    //         e.preventDefault();
-    //         document.getElementById("drawRedo").click();
-    //     }
-    // });
 
     function doUndo() {
-    if (undoStack.length === 0) return;
-        redoStack.push(tempCanvas.toDataURL());
+    if (undoStack.length === 0) return; // nothing to undo
         const last = undoStack.pop();
+        redoStack.push(tempCanvas.toDataURL()); // only push current state if undo exists
         restoreTempState(last);
     }
 
     function doRedo() {
-        if (redoStack.length === 0) return;
-        undoStack.push(tempCanvas.toDataURL());
+        if (redoStack.length === 0) return; // nothing to redo
         const next = redoStack.pop();
+        undoStack.push(tempCanvas.toDataURL()); // only push current state if redo exists
         restoreTempState(next);
     }
+
 
     // wire to buttons (only if they exist)
     const undoBtn = document.getElementById("drawUndo");
@@ -808,24 +775,6 @@ function formatDate(str) {
     const year = date.getFullYear();
     return `${day} ${month} ${year}`;
 }
-
-// function saveState() {
-//     const canvas = document.getElementById("drawCanvas");
-//     undoStack.push(canvas.toDataURL());
-//     redoStack = []; // clear redo history on new action
-// }
-
-// function restoreState(dataURL) {
-//     const canvas = document.getElementById("drawCanvas");
-//     const ctx = canvas.getContext("2d");
-    
-//     const img = new Image();
-//     img.onload = () => {
-//         ctx.clearRect(0, 0, canvas.width, canvas.height);
-//         ctx.drawImage(img, 0, 0);
-//     };
-//     img.src = dataURL;
-// }
 
 
 themeToggle.addEventListener('change', () => setTheme(themeToggle.checked));
