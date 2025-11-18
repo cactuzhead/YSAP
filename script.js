@@ -41,43 +41,78 @@ if (!drawCanvas || !modalImage) {
     const tempCanvas = document.createElement('canvas');
     const tempCtx = tempCanvas.getContext('2d');
 
+    const MAX_HISTORY = 5;
     let undoStack = [];
     let redoStack = [];
 
+    // Save canvas state
     function saveState() {
-        // Save actual drawing data
+        // Limit history
+        if (undoStack.length >= MAX_HISTORY) {
+            undoStack.shift(); // remove oldest
+        }
+
         undoStack.push(tempCanvas.toDataURL());
-        redoStack = [];
+        redoStack = []; // new draw clears redo
     }
 
+    // Restore a saved tempCanvas state
     function restoreTempState(dataURL) {
         const img = new Image();
         img.onload = () => {
             tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
             tempCtx.drawImage(img, 0, 0);
-            redrawVisibleFromTemp(); // refresh on-screen canvas
+            redrawVisibleFromTemp();
         };
         img.src = dataURL;
     }
 
     // UNDO
     document.getElementById("drawUndo").addEventListener("click", () => {
-        if (undoStack.length === 0) return;
+    if (undoStack.length === 0) return;
 
-        const last = undoStack.pop();
         redoStack.push(tempCanvas.toDataURL());
+        const last = undoStack.pop();
 
         restoreTempState(last);
     });
 
     // REDO
     document.getElementById("drawRedo").addEventListener("click", () => {
-        if (redoStack.length === 0) return;
+    if (redoStack.length === 0) return;
 
-        const next = redoStack.pop();
         undoStack.push(tempCanvas.toDataURL());
+        const next = redoStack.pop();
 
         restoreTempState(next);
+    });
+
+    // Keyboard Shortcuts
+    document.addEventListener("keydown", (e) => {
+        // CTRL+Z to Undo
+        if (e.ctrlKey && !e.shiftKey && e.key.toLowerCase() === "z") {
+            e.preventDefault();
+            document.getElementById("drawUndo").click();
+        }
+
+        // CTRL+SHIFT+Z or CTRL+Y to Redo
+        if (
+            (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "z") ||
+            (e.ctrlKey && e.key.toLowerCase() === "y")
+        ) {
+            e.preventDefault();
+            document.getElementById("drawRedo").click();
+        }
+    });
+
+    // Rest History + Canvas when modal closes
+    document.getElementById("mapModal").addEventListener("hidden.bs.modal", () => {
+        undoStack = [];
+        redoStack = [];
+
+        // Clear drawing overlays
+        tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+        drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
     });
 
     let drawing = false;
