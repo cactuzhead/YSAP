@@ -49,7 +49,7 @@ if (!drawCanvas || !modalImage) {
 
     tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
     redrawVisibleFromTemp();
-    
+
     undoStack = [];
     redoStack = [];
     hasDrawnSomething = false;
@@ -277,8 +277,7 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         const lw = Math.max(1, Number(drawWidth.value || 1)) * dpr;
         const color = drawColor.value || '#ff0000';
 
-        if (mode === 'free') {
-            hasDrawnSomething = true;
+        if (mode === 'free') {            
 
             tempCtx.strokeStyle = color;
             tempCtx.lineWidth = lw;
@@ -290,11 +289,11 @@ window.addEventListener('scroll', updateCanvasPosition, true);
             prevX = p.x;
             prevY = p.y;
 
+            hasDrawnSomething = true;
             redrawVisibleFromTemp();
             return;
         }
-
-        hasDrawnSomething = true;
+      
 
         // Shape preview
         redrawVisibleFromTemp();
