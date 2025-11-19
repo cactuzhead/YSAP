@@ -863,6 +863,8 @@ function showMedia(idx) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("copyBtn")
+        .addEventListener("click", copyAnnotatedImageToClipboard);
     // render icons
     if (window.lucide) {
         lucide.createIcons();
