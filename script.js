@@ -333,26 +333,63 @@ window.addEventListener('scroll', updateCanvasPosition, true);
 
 
 async function copyAnnotatedImageToClipboard() {
-    if (!modalImage.src) return alert('No image to copy.');
+    if (!modalImage.src) return alert("No image to copy.");
 
     const exportCanvas = document.createElement("canvas");
     exportCanvas.width = imgNaturalW;
     exportCanvas.height = imgNaturalH;
     const ctx = exportCanvas.getContext("2d");
 
+    // Draw base image
     ctx.drawImage(modalImage, 0, 0, imgNaturalW, imgNaturalH);
-    ctx.drawImage(tempCanvas, 0, 0); // full-res annotations
 
-    exportCanvas.toBlob(async (blob) => {
-        try {
-            await navigator.clipboard.write([
-                new ClipboardItem({ "image/png": blob })
-            ]);
-            alert("Copied full-resolution image with annotations");
-        } catch (err) {
-            console.error("Clipboard copy failed", err);
-        }
+    // Draw annotations
+    ctx.drawImage(tempCanvas, 0, 0);
+
+    try {
+        // Try clipboard API
+        const blob = await new Promise(resolve =>
+            exportCanvas.toBlob(resolve, "image/png")
+        );
+
+        await navigator.clipboard.write([
+            new ClipboardItem({ "image/png": blob })
+        ]);
+
+        // Show your own feedback, not alert (better UX)
+        showCopyMessage("Copied full-resolution image!");
+    } catch (err) {
+        console.warn("Clipboard API failed, opening image in new tab", err);
+        exportCanvas.toBlob((blob) => {
+            const url = URL.createObjectURL(blob);
+            window.open(url, "_blank");
+            showCopyMessage("Clipboard failed — opened image in new tab.");
+        }, "image/png");
+    }
+}
+
+function showCopyMessage(msg) {
+    const el = document.createElement("div");
+    el.textContent = msg;
+    Object.assign(el.style, {
+        position: "fixed",
+        bottom: "20px",
+        left: "50%",
+        transform: "translateX(-50%)",
+        background: "#333",
+        color: "#fff",
+        padding: "10px 20px",
+        borderRadius: "5px",
+        zIndex: 9999,
+        opacity: 0,
+        transition: "opacity 0.3s"
     });
+    document.body.appendChild(el);
+    requestAnimationFrame(() => el.style.opacity = 1);
+    setTimeout(() => {
+        el.style.opacity = 0;
+        setTimeout(() => el.remove(), 300);
+    }, 2000);
 }
 
 function prepareTempCanvas() {
