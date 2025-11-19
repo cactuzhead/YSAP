@@ -462,6 +462,37 @@ overflow-wrap: break-word;
     stroke: white;
 }
 
+#brushSizes {
+    display: grid;
+    grid-template-columns: repeat(3, 36px);
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.size-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color, #666);
+    background: var(--panel-bg, #2d2d2d);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+}
+
+.size-btn.selected {
+    outline: 2px solid var(--accent-color, #4da3ff);
+    background: var(--button-selected, #3b3b3b);
+}
+
+.size-btn .dot {
+    display: block;
+    background: currentColor;
+    border-radius: 50%;
+    pointer-events: none;
+}
 
 
 @media (max-width: 900px) {

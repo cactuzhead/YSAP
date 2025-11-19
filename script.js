@@ -30,13 +30,32 @@ let current = {
 const drawCanvas = document.getElementById('drawCanvas');
 const drawCtx = drawCanvas.getContext('2d');
 const drawColor = document.getElementById('drawColor');
-const drawWidth = document.getElementById('drawWidth');
 const drawMode = document.getElementById('drawMode');
 const drawClear = document.getElementById('drawClear');
 const drawCopy = document.getElementById('drawCopy');
 
 const presetButtons = document.querySelectorAll(".color-btn");
 const colorPicker = document.getElementById("drawColor");
+
+let brushSize = 3; // default
+
+const sizeButtons = document.querySelectorAll(".size-btn");
+
+sizeButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const size = Number(btn.dataset.size);
+
+        brushSize = size;
+
+        // highlight selected
+        sizeButtons.forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+    });
+});
+
+// Select default button visually
+document.querySelector('.size-btn[data-size="3"]').classList.add("selected");
+
 
 presetButtons.forEach(btn => {
     const color = btn.dataset.color;
@@ -276,7 +295,7 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         e.preventDefault();
         const p = getPosFromEvent(e);
         const mode = drawMode.value;
-        const lw = Math.max(1, Number(drawWidth.value || 1)) * dpr;
+        const lw = brushSize * dpr;
         const color = drawColor.value || '#ff0000';
 
         if (mode === 'free') {            
@@ -346,8 +365,8 @@ window.addEventListener('scroll', updateCanvasPosition, true);
         drawing = false;
         const p = getPosFromEvent(e);
         const mode = drawMode.value;
-        const lw = Math.max(1, Number(drawWidth.value || 1)) * dpr;
-        const color = drawColor.value || '#ff0000';
+        const lw = brushSize * dpr;
+        const color = drawColor.value || '#f94144';
 
         if (mode === 'free') {
             redrawVisibleFromTemp();
