@@ -408,6 +408,27 @@ overflow-wrap: break-word;
     padding: 4px;
 }
 
+#colorPresets {
+    display: grid;
+    grid-template-columns: repeat(3, 32px); /* 3 colors per row */
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.color-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #444;
+    cursor: pointer;
+    padding: 0;
+}
+
+.color-btn.selected {
+    border-color: #ccc; /* highlight selected */
+    box-shadow: 0 0 4px #fff;
+}
+
 #shapeTools {
     display: grid;
     grid-template-columns: repeat(3, 36px); /* 3 buttons per row */

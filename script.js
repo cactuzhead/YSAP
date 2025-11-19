@@ -35,6 +35,30 @@ const drawMode = document.getElementById('drawMode');
 const drawClear = document.getElementById('drawClear');
 const drawCopy = document.getElementById('drawCopy');
 
+const presetButtons = document.querySelectorAll(".color-btn");
+const colorPicker = document.getElementById("drawColor");
+
+presetButtons.forEach(btn => {
+    const color = btn.dataset.color;
+    btn.style.background = color;
+
+    btn.addEventListener("click", () => {
+        // Highlight selected preset
+        presetButtons.forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+
+        // Update drawing color
+        colorPicker.value = color;
+    });
+});
+
+// If user chooses a color manually, unselect preset buttons
+colorPicker.addEventListener("input", () => {
+    presetButtons.forEach(b => b.classList.remove("selected"));
+});
+
+
+
 const MAX_HISTORY = 5;
 let undoStack = [];
 let redoStack = [];
