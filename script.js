@@ -43,6 +43,10 @@ const modalMain = document.querySelector('.modal-main');
 const detailsCol = modalMain.querySelector('.details');
 const icon = expandBtn.querySelector('i');
 
+modalImage.addEventListener("load", () => {
+    resizeCanvas();
+});
+
 expandBtn.addEventListener('click', () => {
     // Toggle class
     modalMain.classList.toggle('expanded');
@@ -266,24 +270,33 @@ if (!drawCanvas || !modalImage) {
     let annotationsCtx = annotations.getContext('2d');
 
     function resizeCanvas() {
-        // Save current drawings
-        annotations.width = drawCanvas.width;
-        annotations.height = drawCanvas.height;
-        annotationsCtx.drawImage(drawCanvas, 0, 0);
+        const oldWidth = drawCanvas.width;
+        const oldHeight = drawCanvas.height;
 
-        // Resize canvas to match image
+        // Create offscreen canvas to store OLD drawing
+        const temp = document.createElement("canvas");
+        temp.width = oldWidth;
+        temp.height = oldHeight;
+        const tctx = temp.getContext("2d");
+
+        // Copy old annotation bitmap
+        tctx.drawImage(drawCanvas, 0, 0);
+
+        // Now resize canvas to match NEW image size
         drawCanvas.width = modalImage.clientWidth;
         drawCanvas.height = modalImage.clientHeight;
 
-        // Restore previous drawings scaled to new size
-        ctx.drawImage(annotations, 0, 0, drawCanvas.width, drawCanvas.height);
+        // Scale the old bitmap into the new size
+        ctx.drawImage(temp, 0, 0, oldWidth, oldHeight, 0, 0, drawCanvas.width, drawCanvas.height);
     }
+
 
     // Resize on image load
     modalImage.addEventListener('load', resizeCanvas);
 
     // Resize when expand/collapse toggled
     expandBtn.addEventListener('click', () => {
+        document.querySelector(".modal-content").classList.toggle("expanded");
         // Wait for CSS transition if you animate image width
         setTimeout(resizeCanvas, 310); // match your CSS transition duration
     });
