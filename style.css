@@ -464,9 +464,9 @@ overflow-wrap: break-word;
 
 #brushSizes {
     display: grid;
-    grid-template-columns: repeat(3, 36px);
-    gap: 8px;
-    margin-top: 6px;
+    grid-template-columns: repeat(3, 32px);
+    gap: 6px;
+    margin-bottom: 10px;
 }
 
 .size-btn {
@@ -483,8 +483,10 @@ overflow-wrap: break-word;
 }
 
 .size-btn.selected {
-    outline: 2px solid var(--accent-color, #4da3ff);
-    background: var(--button-selected, #3b3b3b);
+    /* outline: 2px solid var(--accent-color, #4da3ff);
+    background: var(--button-selected, #3b3b3b); */
+    background: var(--accent-bg, #4287f5);
+    border-color: var(--accent-border, #1c5ed6);
 }
 
 .size-btn .dot {
