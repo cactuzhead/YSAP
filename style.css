@@ -428,6 +428,16 @@ overflow-wrap: break-word;
     color: #fff;
 }
 
+/* When expanded, hide the details column and make gallery take full width */
+.modal-main.expanded .details {
+    display: none;
+}
+
+.modal-main.expanded .gallery {
+    flex: 1 1 100%;
+}
+
+
 
 #colorPresets {
     display: grid;

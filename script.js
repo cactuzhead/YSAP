@@ -37,25 +37,19 @@ const drawCopy = document.getElementById('drawCopy');
 const presetButtons = document.querySelectorAll(".color-btn");
 const colorPicker = document.getElementById("drawColor");
 
-const expandToggle = document.getElementById("expandToggle");
-const modalMain = document.querySelector(".modal-main");
+const expandBtn = document.getElementById('expandToggle');
+const modalMain = document.querySelector('.modal-main');
 
-let expandMode = false;
+expandBtn.addEventListener('click', () => {
+    modalMain.classList.toggle('expanded');
 
-expandToggle.addEventListener("click", () => {
-    expandMode = !expandMode;
-
-    if (expandMode) {
-        modalMain.classList.add("expand-active");
-        expandToggle.classList.add("active");
-        expandToggle.textContent = "Collapse"; // optional
+    // Optional: change button text/icon
+    if (modalMain.classList.contains('expanded')) {
+        expandBtn.textContent = 'Collapse';
     } else {
-        modalMain.classList.remove("expand-active");
-        expandToggle.classList.remove("active");
-        expandToggle.textContent = "Expand"; // optional
+        expandBtn.textContent = 'Expand';
     }
 });
-
 
 
 let brushSize = 7; // default brush size
