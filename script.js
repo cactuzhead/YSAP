@@ -37,26 +37,25 @@ const drawCopy = document.getElementById('drawCopy');
 const presetButtons = document.querySelectorAll(".color-btn");
 const colorPicker = document.getElementById("drawColor");
 
-const annotateToggle = document.getElementById("annotateToggle");
+const expandToggle = document.getElementById("expandToggle");
 const modalMain = document.querySelector(".modal-main");
-const drawTools = document.getElementById("drawTools");
-const details = document.querySelector(".details");
 
-let annotateMode = false;
+let expandMode = false;
 
-annotateToggle.addEventListener("click", () => {
-    annotateMode = !annotateMode;
+expandToggle.addEventListener("click", () => {
+    expandMode = !expandMode;
 
-    if (annotateMode) {
-        // TURN ON annotation mode
-        modalMain.classList.add("annotate-active");
-        annotateToggle.classList.add("active");
+    if (expandMode) {
+        modalMain.classList.add("expand-active");
+        expandToggle.classList.add("active");
+        expandToggle.textContent = "Collapse"; // optional
     } else {
-        // TURN OFF annotation mode
-        modalMain.classList.remove("annotate-active");
-        annotateToggle.classList.remove("active");
+        modalMain.classList.remove("expand-active");
+        expandToggle.classList.remove("active");
+        expandToggle.textContent = "Expand"; // optional
     }
 });
+
 
 
 let brushSize = 7; // default brush size
@@ -729,11 +728,6 @@ function showMedia(idx) {
     modalVideo.style.display = 'none';
     modal.dataset.idx = idx;
 
-    // turn off annotate mode automatically
-    annotateMode = false;
-    modalMain.classList.remove("annotate-active");
-    annotateToggle.classList.remove("active");
-    
     // Remove no-image state initially
     mediaWrap.classList.remove('no-image');
 
