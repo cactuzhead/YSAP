@@ -333,36 +333,36 @@ window.addEventListener('scroll', updateCanvasPosition, true);
 
 
 async function copyAnnotatedImageToClipboard() {
-    drawCopy.addEventListener("click", async () => {
-        if (!modalImage.src) return alert("No image to copy.");
+    if (!modalImage.src) return alert("No image to copy.");
 
-        const canvas = document.createElement("canvas");
-        canvas.width = modalImage.naturalWidth;
-        canvas.height = modalImage.naturalHeight;
-        const ctx = canvas.getContext("2d");
+    const canvas = document.createElement("canvas");
+    canvas.width = modalImage.naturalWidth;
+    canvas.height = modalImage.naturalHeight;
+    const ctx = canvas.getContext("2d");
 
-        // Draw base image and annotations
-        ctx.drawImage(modalImage, 0, 0, canvas.width, canvas.height);
-        ctx.drawImage(tempCanvas, 0, 0, canvas.width, canvas.height);
+    // Draw base image
+    ctx.drawImage(modalImage, 0, 0, canvas.width, canvas.height);
 
-        // Convert to blob and copy
-        canvas.toBlob(async (blob) => {
-            if (!blob) return alert("Failed to generate image.");
+    // Draw annotations scaled to the full size
+    ctx.drawImage(
+        tempCanvas,
+        0, 0, tempCanvas.width, tempCanvas.height, 
+        0, 0, canvas.width, canvas.height
+    );
 
-            try {
-                await navigator.clipboard.write([
-                    new ClipboardItem({ "image/png": blob })
-                ]);
-                showCopyMessage("Copied image to clipboard!");
-            } catch (err) {
-                console.error(err);
-                // Fallback: open in new tab
-                const url = URL.createObjectURL(blob);
-                window.open(url, "_blank");
-                showCopyMessage("Clipboard failed — opened image in new tab.");
-            }
-        }, "image/png");
-    });
+    canvas.toBlob(async (blob) => {
+        if (!blob) return alert("Failed to generate image.");
+        try {
+            await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+            alert("Copied full-resolution image to clipboard!");
+        } catch (err) {
+            console.error(err);
+            // Fallback: open in new tab
+            const url = URL.createObjectURL(blob);
+            window.open(url, "_blank");
+            alert("Clipboard copy failed — opened exported image in new tab.");
+        }
+    }, "image/png");
 
 }
 
