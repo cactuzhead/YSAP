@@ -333,39 +333,37 @@ window.addEventListener('scroll', updateCanvasPosition, true);
 
 
 async function copyAnnotatedImageToClipboard() {
-    if (!modalImage.src) return alert("No image to copy.");
+    drawCopy.addEventListener("click", async () => {
+        if (!modalImage.src) return alert("No image to copy.");
 
-    const exportCanvas = document.createElement("canvas");
-    exportCanvas.width = imgNaturalW;
-    exportCanvas.height = imgNaturalH;
-    const ctx = exportCanvas.getContext("2d");
+        const canvas = document.createElement("canvas");
+        canvas.width = modalImage.naturalWidth;
+        canvas.height = modalImage.naturalHeight;
+        const ctx = canvas.getContext("2d");
 
-    // Draw base image
-    ctx.drawImage(modalImage, 0, 0, imgNaturalW, imgNaturalH);
+        // Draw base image and annotations
+        ctx.drawImage(modalImage, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(tempCanvas, 0, 0, canvas.width, canvas.height);
 
-    // Draw annotations
-    ctx.drawImage(tempCanvas, 0, 0);
+        // Convert to blob and copy
+        canvas.toBlob(async (blob) => {
+            if (!blob) return alert("Failed to generate image.");
 
-    try {
-        // Try clipboard API
-        const blob = await new Promise(resolve =>
-            exportCanvas.toBlob(resolve, "image/png")
-        );
-
-        await navigator.clipboard.write([
-            new ClipboardItem({ "image/png": blob })
-        ]);
-
-        // Show your own feedback, not alert (better UX)
-        showCopyMessage("Copied full-resolution image!");
-    } catch (err) {
-        console.warn("Clipboard API failed, opening image in new tab", err);
-        exportCanvas.toBlob((blob) => {
-            const url = URL.createObjectURL(blob);
-            window.open(url, "_blank");
-            showCopyMessage("Clipboard failed — opened image in new tab.");
+            try {
+                await navigator.clipboard.write([
+                    new ClipboardItem({ "image/png": blob })
+                ]);
+                showCopyMessage("Copied image to clipboard!");
+            } catch (err) {
+                console.error(err);
+                // Fallback: open in new tab
+                const url = URL.createObjectURL(blob);
+                window.open(url, "_blank");
+                showCopyMessage("Clipboard failed — opened image in new tab.");
+            }
         }, "image/png");
-    }
+    });
+
 }
 
 function showCopyMessage(msg) {
