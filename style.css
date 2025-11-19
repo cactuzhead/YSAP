@@ -437,6 +437,15 @@ overflow-wrap: break-word;
     flex: 1 1 100%;
 }
 
+.modal-main .gallery {
+  flex: 0 1 70%; /* normal width */
+  transition: flex 0.3s ease;
+}
+
+.modal-main .details {
+  transition: opacity 0.3s ease;
+}
+
 
 
 #colorPresets {
