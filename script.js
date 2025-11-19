@@ -261,31 +261,34 @@ if (!drawCanvas || !modalImage) {
         drawCanvas.style.height = imgRect.height + 'px';
     }
 
-    function resizeCanvas() {
-        // Store current drawing
-        const temp = document.createElement('canvas');
-        temp.width = drawCanvas.width;
-        temp.height = drawCanvas.height;
-        temp.getContext('2d').drawImage(drawCanvas, 0, 0);
+    // Store current annotations as an offscreen canvas
+    let annotations = document.createElement('canvas');
+    let annotationsCtx = annotations.getContext('2d');
 
-        // Set canvas pixel dimensions to match image display size
+    function resizeCanvas() {
+        // Save current drawings
+        annotations.width = drawCanvas.width;
+        annotations.height = drawCanvas.height;
+        annotationsCtx.drawImage(drawCanvas, 0, 0);
+
+        // Resize canvas to match image
         drawCanvas.width = modalImage.clientWidth;
         drawCanvas.height = modalImage.clientHeight;
 
-        // Restore previous drawing scaled to new size
-        drawContext.drawImage(temp, 0, 0, drawCanvas.width, drawCanvas.height);
+        // Restore previous drawings scaled to new size
+        ctx.drawImage(annotations, 0, 0, drawCanvas.width, drawCanvas.height);
     }
 
-    // When the image loads, set canvas size
+    // Resize on image load
     modalImage.addEventListener('load', resizeCanvas);
 
-    // When expand button toggles, resize canvas after CSS transition
-    const expandBtn = document.getElementById('expandToggle');
+    // Resize when expand/collapse toggled
     expandBtn.addEventListener('click', () => {
-        setTimeout(resizeCanvas, 310); // match CSS transition duration
+        // Wait for CSS transition if you animate image width
+        setTimeout(resizeCanvas, 310); // match your CSS transition duration
     });
 
-    // Update canvas if window resizes
+    // Resize on window resize to stay responsive
     window.addEventListener('resize', resizeCanvas);
 
 
