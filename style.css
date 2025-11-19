@@ -375,7 +375,8 @@ overflow-wrap: break-word;
 }
 
 
-#modalImage, #drawCanvas {
+#modalImage,
+#drawCanvas {
   display: block;
   width: 100%;
   height: auto;

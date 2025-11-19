@@ -262,25 +262,28 @@ if (!drawCanvas || !modalImage) {
     }
 
 function resizeCanvas() {
-  // save existing drawing if needed
-  const ctx = drawCanvas.getContext('2d');
-  const saved = ctx.getImageData(0, 0, drawCanvas.width, drawCanvas.height);
+    const ctx = drawCanvas.getContext('2d');
 
-  // resize canvas to match container
-  drawCanvas.width = imgContainer.clientWidth;
-  drawCanvas.height = imgContainer.clientHeight;
+    // Create a temporary image of the existing drawing
+    const temp = document.createElement('canvas');
+    temp.width = drawCanvas.width;
+    temp.height = drawCanvas.height;
+    temp.getContext('2d').drawImage(drawCanvas, 0, 0);
 
-  // restore previous drawing
-  ctx.putImageData(saved, 0, 0);
+    // Resize canvas to match the displayed image
+    drawCanvas.width = modalImage.clientWidth;
+    drawCanvas.height = modalImage.clientHeight;
+
+    // Redraw the previous drawing scaled to new size
+    ctx.drawImage(temp, 0, 0, drawCanvas.width, drawCanvas.height);
 }
 
-// Call whenever the modal image or container changes size
-window.addEventListener('resize', resizeCanvas);
+// Call this after the image loads or when toggling expand
 modalImage.addEventListener('load', resizeCanvas);
-
 expandBtn.addEventListener('click', () => {
-  setTimeout(resizeCanvas, 300); // wait for CSS flex animation
+  setTimeout(resizeCanvas, 310); // give CSS transition a moment
 });
+window.addEventListener('resize', resizeCanvas);
 
 
 function updateCanvasPosition() {
