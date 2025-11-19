@@ -464,7 +464,7 @@ overflow-wrap: break-word;
 
 #brushSizes {
     display: grid;
-    grid-template-columns: repeat(3, 32px);
+    grid-template-columns: repeat(3, 36px);
     gap: 6px;
     margin-bottom: 10px;
 }

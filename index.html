@@ -56,7 +56,16 @@
 					</div>
 
 					<!-- Toolbar -->
-					<div id="drawTools" class="draw-tools">				
+					<div id="drawTools" class="draw-tools">	
+						
+					<div id="brushSizes">
+						<button class="size-btn" data-size="1"><span class="dot" style="width: 3px; height: 3px;"></span></button>
+						<button class="size-btn" data-size="3"><span class="dot" style="width: 7px; height: 7px;"></span></button>
+						<button class="size-btn" data-size="5"><span class="dot" style="width: 11px; height: 11px;"></span></button>
+						<button class="size-btn" data-size="7"><span class="dot" style="width: 15px; height: 15px;"></span></button>
+						<button class="size-btn" data-size="9"><span class="dot" style="width: 19px; height: 19px;"></span></button>
+						<button class="size-btn" data-size="12"><span class="dot" style="width: 24px; height: 24px;"></span></button>
+					</div>
 
 					<div id="colorPresets">
 						<button class="color-btn" data-color="#f94144"></button> <!-- Red -->
@@ -66,17 +75,7 @@
 						<button class="color-btn" data-color="#5591f5"></button> <!-- Blue -->					
 						<button class="color-btn" data-color="#b429f9"></button> <!-- Purple -->
 					</div>
-					<input type="color" id="drawColor" value="#000000">
-
-					<!-- <label>Width <input type="range" id="drawWidth" min="1" max="20" value="4"></label> -->
-					<div id="brushSizes">
-						<button class="size-btn" data-size="1"><span class="dot" style="width: 3px; height: 3px;"></span></button>
-						<button class="size-btn" data-size="3"><span class="dot" style="width: 7px; height: 7px;"></span></button>
-						<button class="size-btn" data-size="5"><span class="dot" style="width: 11px; height: 11px;"></span></button>
-						<button class="size-btn" data-size="7"><span class="dot" style="width: 15px; height: 15px;"></span></button>
-						<button class="size-btn" data-size="9"><span class="dot" style="width: 19px; height: 19px;"></span></button>
-						<button class="size-btn" data-size="12"><span class="dot" style="width: 24px; height: 24px;"></span></button>
-					</div>
+					<input type="color" id="drawColor" value="#000000">					
 					
 					<div id="shapeTools">
 						<button data-mode="free" class="shape-btn selected">
