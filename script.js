@@ -43,13 +43,17 @@ const modalMain = document.querySelector('.modal-main');
 expandBtn.addEventListener('click', () => {
     modalMain.classList.toggle('expanded');
 
-    // Optional: change button text/icon
+    // Optional: swap icon if you want
+    const icon = expandBtn.querySelector('i');
     if (modalMain.classList.contains('expanded')) {
-        expandBtn.textContent = 'Collapse';
+        icon.setAttribute('data-lucide', 'shrink');
     } else {
-        expandBtn.textContent = 'Expand';
+        icon.setAttribute('data-lucide', 'expand');
     }
+
+    lucide.createIcons();
 });
+
 
 
 let brushSize = 7; // default brush size
