@@ -262,9 +262,16 @@ if (!drawCanvas || !modalImage) {
     }
 
 function resizeCanvas() {
-  // Match canvas size to the image container
+  // save existing drawing if needed
+  const ctx = drawCanvas.getContext('2d');
+  const saved = ctx.getImageData(0, 0, drawCanvas.width, drawCanvas.height);
+
+  // resize canvas to match container
   drawCanvas.width = imgContainer.clientWidth;
   drawCanvas.height = imgContainer.clientHeight;
+
+  // restore previous drawing
+  ctx.putImageData(saved, 0, 0);
 }
 
 // Call whenever the modal image or container changes size
