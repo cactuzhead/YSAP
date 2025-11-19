@@ -262,30 +262,30 @@ if (!drawCanvas || !modalImage) {
     }
 
     function resizeCanvas() {
-    // Save existing drawing
-    const ctx = drawCanvas.getContext('2d');
-    const temp = document.createElement('canvas');
-    temp.width = drawCanvas.width;
-    temp.height = drawCanvas.height;
-    temp.getContext('2d').drawImage(drawCanvas, 0, 0);
+        // Store current drawing
+        const temp = document.createElement('canvas');
+        temp.width = drawCanvas.width;
+        temp.height = drawCanvas.height;
+        temp.getContext('2d').drawImage(drawCanvas, 0, 0);
 
-    // Set canvas width/height to image's current size
-    drawCanvas.width = modalImage.clientWidth;
-    drawCanvas.height = modalImage.clientHeight;
+        // Set canvas pixel dimensions to match image display size
+        drawCanvas.width = modalImage.clientWidth;
+        drawCanvas.height = modalImage.clientHeight;
 
-    // Restore previous drawing scaled to new size
-    ctx.drawImage(temp, 0, 0, drawCanvas.width, drawCanvas.height);
+        // Restore previous drawing scaled to new size
+        drawContext.drawImage(temp, 0, 0, drawCanvas.width, drawCanvas.height);
     }
 
-    // Call resize after image loads
+    // When the image loads, set canvas size
     modalImage.addEventListener('load', resizeCanvas);
 
-    // Call resize after expand/collapse
+    // When expand button toggles, resize canvas after CSS transition
+    const expandBtn = document.getElementById('expandToggle');
     expandBtn.addEventListener('click', () => {
-    setTimeout(resizeCanvas, 310); // allow CSS transition to finish
+        setTimeout(resizeCanvas, 310); // match CSS transition duration
     });
 
-    // update canvas on window resize
+    // Update canvas if window resizes
     window.addEventListener('resize', resizeCanvas);
 
 
