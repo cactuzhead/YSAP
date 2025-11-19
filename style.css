@@ -484,8 +484,7 @@ overflow-wrap: break-word;
 }
 
 .size-btn.selected {
-    /* outline: 2px solid var(--accent-color, #4da3ff);
-    background: var(--button-selected, #3b3b3b); */
+    color: #ffffff;
     background: var(--accent-bg, #4287f5);
     border-color: var(--accent-border, #1c5ed6);
 }
