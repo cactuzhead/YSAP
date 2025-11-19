@@ -44,7 +44,7 @@ const detailsCol = modalMain.querySelector('.details');
 const icon = expandBtn.querySelector('i');
 
 modalImage.addEventListener("load", () => {
-    resizeCanvas();
+    // resizeCanvas();
 });
 
 expandBtn.addEventListener('click', () => {
@@ -243,50 +243,37 @@ if (!drawCanvas || !modalImage) {
 
     // Prepare canvases to match the image natural size (and scale for DPR)
     function prepareDrawCanvas() {
-        if (!modalImage.complete || modalImage.naturalWidth === 0) return;
+        const w = modalImage.naturalWidth * devicePixelRatio;
+        const h = modalImage.naturalHeight * devicePixelRatio;
 
-        imgNaturalW = modalImage.naturalWidth;
-        imgNaturalH = modalImage.naturalHeight;
-        dpr = Math.max(window.devicePixelRatio || 1, 1);
-
-        // desired internal pixel size for high-res export / drawing
-        const internalW = Math.round(imgNaturalW * dpr);
-        const internalH = Math.round(imgNaturalH * dpr);
-
-        // If temp/draw canvas already at a different internal size, resample to preserve strokes
-        if (tempCanvas.width !== 0 && (tempCanvas.width !== internalW || tempCanvas.height !== internalH)) {
-            // resample existing tempCanvas into new internal size so annotations aren't lost
-            resampleTempCanvasTo(internalW, internalH);
-        } else {
-            // first-time setup (or size already correct)
-            tempCanvas.width = internalW;
-            tempCanvas.height = internalH;
-        }
-
-        // set the drawCanvas internal buffer to the same internal size (do NOT change this on expand/collapse)
-        drawCanvas.width = internalW;
-        drawCanvas.height = internalH;
+        // ONLY HERE internal resolution is set
+        tempCanvas.width = w;
+        tempCanvas.height = h;
+        drawCanvas.width = w;
+        drawCanvas.height = h;
 
         syncCanvasToImage();
     }
 
+    modalImage.addEventListener("load", prepareDrawCanvas);
+window.addEventListener("resize", syncCanvasToImage);
+
     function syncCanvasToImage() {
-        if (!modalImage || !modalImage.complete) return;
+        if (!modalImage.complete) return;
 
-        // Find the visible image rectangle relative to its container (media-wrap)
+        // match canvas CSS to image CSS
         const imgRect = modalImage.getBoundingClientRect();
-        const containerRect = modalImage.parentElement.getBoundingClientRect();
+        const parentRect = modalImage.parentElement.getBoundingClientRect();
 
-        // Set CSS size/position so the canvas overlays exactly on-screen.
-        // Do NOT change drawCanvas.width/height here.
-        drawCanvas.style.position = 'absolute';
-        drawCanvas.style.left = (imgRect.left - containerRect.left) + 'px';
-        drawCanvas.style.top = (imgRect.top - containerRect.top) + 'px';
-        drawCanvas.style.width = imgRect.width + 'px';
-        drawCanvas.style.height = imgRect.height + 'px';
+        drawCanvas.style.position = "absolute";
+        drawCanvas.style.left = (imgRect.left - parentRect.left) + "px";
+        drawCanvas.style.top = (imgRect.top - parentRect.top) + "px";
+        drawCanvas.style.width = imgRect.width + "px";
+        drawCanvas.style.height = imgRect.height + "px";
 
+        // redraw visible canvas (scaled)
         redrawVisibleFromTemp();
-    }
+        }
 
     function updateCanvasOverlay() {
         syncCanvasToImage();
@@ -296,40 +283,40 @@ if (!drawCanvas || !modalImage) {
     let annotations = document.createElement('canvas');
     let annotationsCtx = annotations.getContext('2d');
 
-    function resizeCanvas() {
-        const oldWidth = drawCanvas.width;
-        const oldHeight = drawCanvas.height;
+    // function resizeCanvas() {
+    //     const oldWidth = drawCanvas.width;
+    //     const oldHeight = drawCanvas.height;
 
-        // Create offscreen canvas to store OLD drawing
-        const temp = document.createElement("canvas");
-        temp.width = oldWidth;
-        temp.height = oldHeight;
-        const tctx = temp.getContext("2d");
+    //     // Create offscreen canvas to store OLD drawing
+    //     const temp = document.createElement("canvas");
+    //     temp.width = oldWidth;
+    //     temp.height = oldHeight;
+    //     const tctx = temp.getContext("2d");
 
-        // Copy old annotation bitmap
-        tctx.drawImage(drawCanvas, 0, 0);
+    //     // Copy old annotation bitmap
+    //     tctx.drawImage(drawCanvas, 0, 0);
 
-        // Now resize canvas to match NEW image size
-        drawCanvas.width = modalImage.clientWidth;
-        drawCanvas.height = modalImage.clientHeight;
+    //     // Now resize canvas to match NEW image size
+    //     drawCanvas.width = modalImage.clientWidth;
+    //     drawCanvas.height = modalImage.clientHeight;
 
-        // Scale the old bitmap into the new size
-        ctx.drawImage(temp, 0, 0, oldWidth, oldHeight, 0, 0, drawCanvas.width, drawCanvas.height);
-    }
+    //     // Scale the old bitmap into the new size
+    //     ctx.drawImage(temp, 0, 0, oldWidth, oldHeight, 0, 0, drawCanvas.width, drawCanvas.height);
+    // }
 
 
     // Resize on image load
-    modalImage.addEventListener('load', resizeCanvas);
+    // modalImage.addEventListener('load', resizeCanvas);
 
     // Resize when expand/collapse toggled
     expandBtn.addEventListener('click', () => {
         document.querySelector(".modal-content").classList.toggle("expanded");
         // Wait for CSS transition if you animate image width
-        setTimeout(resizeCanvas, 310); // match your CSS transition duration
+        // setTimeout(resizeCanvas, 310); // match your CSS transition duration
     });
 
     // Resize on window resize to stay responsive
-    window.addEventListener('resize', resizeCanvas);
+    // window.addEventListener('resize', resizeCanvas);
 
 
 function updateCanvasPosition() {
@@ -575,24 +562,18 @@ window.addEventListener('scroll', updateCanvasPosition, true);
 });
 
 const expandToggleBtn = document.getElementById('expandToggle');
-if (expandToggleBtn) {
-    expandToggleBtn.addEventListener('click', () => {
-        // toggle your modalMain fullscreen class or a similar class you use
-        const modalMain = modal.querySelector('.modal-main');
-        modalMain.classList.toggle('fullscreen-image');
+    if (expandToggleBtn) {
+        expandToggleBtn.addEventListener('click', () => {
+            const modalMain = document.querySelector(".modal-main");
+        modalMain.classList.toggle("fullscreen-image");
 
-        // toggle the details panel visibility so image can expand
-        const details = modal.querySelector('.details');
-        if (details) {
-            const hide = modalMain.classList.contains('fullscreen-image');
-            details.style.display = hide ? 'none' : '';
-        }
+        const details = document.querySelector(".details");
+        details.style.display = modalMain.classList.contains("fullscreen-image")
+            ? "none"
+            : "";
 
-        // After layout changes, force the canvas to match the new CSS image size
-        // Use requestAnimationFrame to wait until layout has settled
-        requestAnimationFrame(() => {
-            syncCanvasToImage();
-        });
+        // resize VISUAL canvas only
+        requestAnimationFrame(syncCanvasToImage);
     });
 }
     // ensure canvas prepared when modal image loads and when modal opens/resize
