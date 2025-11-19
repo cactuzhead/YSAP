@@ -408,7 +408,7 @@ overflow-wrap: break-word;
     padding: 4px;
 }
 
-.shape-tools {
+#shape-tools {
     display: flex;
     gap: 6px;
     margin: 6px 0;

@@ -695,8 +695,12 @@ function showMedia(idx) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    // Render Lucide icons
-    lucide.createIcons();
+    // render icons
+    if (window.lucide) {
+        lucide.createIcons();
+    } else {
+        console.warn("Lucide failed to load.");
+    }
 
     const shapeBtns = document.querySelectorAll("#shapeTools .shape-btn");
     const drawModeSelect = document.getElementById("drawMode");
@@ -705,11 +709,11 @@ window.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", () => {
             const mode = btn.dataset.mode;
 
-            // visual highlight
+            // Highlight selected button
             shapeBtns.forEach(b => b.classList.remove("selected"));
             btn.classList.add("selected");
 
-            // update hidden <select>
+            // Update hidden <select> so your drawing code still works
             drawModeSelect.value = mode;
         });
     });
