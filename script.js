@@ -310,9 +310,13 @@ window.addEventListener("resize", syncCanvasToImage);
 
     // Resize when expand/collapse toggled
     expandBtn.addEventListener('click', () => {
-        document.querySelector(".modal-content").classList.toggle("expanded");
+        // document.querySelector(".modal-content").classList.toggle("expanded");
         // Wait for CSS transition if you animate image width
         // setTimeout(resizeCanvas, 310); // match your CSS transition duration
+        modal.classList.toggle("expanded");
+        setTimeout(() => {
+            syncCanvasToImage();
+        }, 310);
     });
 
     // Resize on window resize to stay responsive
@@ -326,6 +330,32 @@ function updateCanvasPosition() {
 
 window.addEventListener('resize', updateCanvasPosition);
 window.addEventListener('scroll', updateCanvasPosition, true);
+
+
+async function copyAnnotatedImageToClipboard() {
+    const exportCanvas = document.createElement("canvas");
+    exportCanvas.width = modalImage.naturalWidth;
+    exportCanvas.height = modalImage.naturalHeight;
+
+    const ctx = exportCanvas.getContext("2d");
+
+    // draw the base image
+    ctx.drawImage(modalImage, 0, 0, exportCanvas.width, exportCanvas.height);
+
+    // draw annotations from tempCanvas only
+    ctx.drawImage(tempCanvas, 0, 0);
+
+    exportCanvas.toBlob(async (blob) => {
+        try {
+            await navigator.clipboard.write([
+                new ClipboardItem({ "image/png": blob })
+            ]);
+            console.log("Copied with annotations!");
+        } catch (err) {
+            console.error("Copy failed", err);
+        }
+    });
+}
 
 
     function getPosFromEvent(e) {

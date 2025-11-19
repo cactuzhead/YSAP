@@ -151,6 +151,7 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     gap: 18px;
     padding: 18px;
     height: 100%;
+    transition: all 0.3s ease;
 }
 .modal-main {
     display: flex;
