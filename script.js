@@ -549,46 +549,48 @@ async function copyAnnotatedImageToClipboard() {
 
     // Copy to clipboard: produce FULL-RES PNG matching image natural size
     drawCopy.addEventListener('click', async () => {
-    if (!modalImage.src) return alert('No image to copy.');
+        if (!modalImage.src) return alert('No image to copy.');
 
-    // Export canvas exactly at the image's natural resolution
-    const exportCanvas = document.createElement('canvas');
-    exportCanvas.width = imgNaturalW;
-    exportCanvas.height = imgNaturalH;
-    const exportCtx = exportCanvas.getContext('2d');
+        copyAnnotatedImageToClipboard();
 
-    // Draw the base image at its natural resolution
-    const baseImg = new Image();
-    baseImg.crossOrigin = 'anonymous';
-    baseImg.src = modalImage.src;
+        // // Export canvas exactly at the image's natural resolution
+        // const exportCanvas = document.createElement('canvas');
+        // exportCanvas.width = imgNaturalW;
+        // exportCanvas.height = imgNaturalH;
+        // const exportCtx = exportCanvas.getContext('2d');
 
-    try {
-        await baseImg.decode();
-    } catch (err) {
-        console.warn('Image decode failed for export', err);
-    }
+        // // Draw the base image at its natural resolution
+        // const baseImg = new Image();
+        // baseImg.crossOrigin = 'anonymous';
+        // baseImg.src = modalImage.src;
 
-    exportCtx.drawImage(baseImg, 0, 0, imgNaturalW, imgNaturalH);
+        // try {
+        //     await baseImg.decode();
+        // } catch (err) {
+        //     console.warn('Image decode failed for export', err);
+        // }
 
-    // Draw tempCanvas into exportCanvas **scaled down correctly**
-    // Internal canvas is natural * dpr, so we scale down by dividing by dpr
-    exportCtx.drawImage(
-        tempCanvas,
-        0, 0, tempCanvas.width, tempCanvas.height, // source
-        0, 0, imgNaturalW, imgNaturalH              // destination
-    );
+        // exportCtx.drawImage(baseImg, 0, 0, imgNaturalW, imgNaturalH);
 
-    exportCanvas.toBlob(async (blob) => {
-        try {
-            await navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ]);
-            alert('Copied full-resolution image to clipboard.');
-        } catch (err) {
-            // fallback: open image in new tab
-            const url = URL.createObjectURL(blob);
-            window.open(url, '_blank');
-            alert('Clipboard failed — opened exported image in new tab.');
-        }
-    }, 'image/png');
+        // // Draw tempCanvas into exportCanvas **scaled down correctly**
+        // // Internal canvas is natural * dpr, so we scale down by dividing by dpr
+        // exportCtx.drawImage(
+        //     tempCanvas,
+        //     0, 0, tempCanvas.width, tempCanvas.height, // source
+        //     0, 0, imgNaturalW, imgNaturalH              // destination
+        // );
+
+        // exportCanvas.toBlob(async (blob) => {
+        //     try {
+        //         await navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ]);
+        //         alert('Copied full-resolution image to clipboard.');
+        //     } catch (err) {
+        //         // fallback: open image in new tab
+        //         const url = URL.createObjectURL(blob);
+        //         window.open(url, '_blank');
+        //         alert('Clipboard failed — opened exported image in new tab.');
+        //     }
+        // }, 'image/png');
 });
 
 const expandToggleBtn = document.getElementById('expandToggle');
@@ -849,6 +851,8 @@ function showMedia(idx) {
     };
 
     modalImage.onload = () => {
+        imgNaturalW = modalImage.naturalWidth;
+        imgNaturalH = modalImage.naturalHeight;
         prepareDrawCanvas();
 
         // Save the initial state as the image itself
@@ -863,8 +867,6 @@ function showMedia(idx) {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("copyBtn")
-        .addEventListener("click", copyAnnotatedImageToClipboard);
     // render icons
     if (window.lucide) {
         lucide.createIcons();
