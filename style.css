@@ -470,16 +470,17 @@ overflow-wrap: break-word;
 }
 
 .size-btn {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     border-radius: 6px;
-    border: 1px solid var(--border-color, #666);
-    background: var(--panel-bg, #2d2d2d);
+    border: 1px solid var(--border, #aaa);
+    background: var(--bg, #eee);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     padding: 0;
+    transition: background 0.15s, border-color 0.15s;
 }
 
 .size-btn.selected {
