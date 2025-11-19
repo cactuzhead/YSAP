@@ -410,7 +410,7 @@ overflow-wrap: break-word;
 
 #shapeTools {
     display: grid;
-    grid-template-columns: repeat(3, 40px); /* 3 buttons per row */
+    grid-template-columns: repeat(3, 36px); /* 3 buttons per row */
     gap: 6px;
 }
 
