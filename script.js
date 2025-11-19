@@ -333,39 +333,46 @@ window.addEventListener('scroll', updateCanvasPosition, true);
 
 
 async function copyAnnotatedImageToClipboard() {
-    const exportCanvas = document.createElement("canvas");
+    if (!modalImage.src) return alert('No image to copy.');
+
+    const exportCanvas = document.createElement('canvas');
     exportCanvas.width = modalImage.naturalWidth;
     exportCanvas.height = modalImage.naturalHeight;
+    const ctx = exportCanvas.getContext('2d');
 
-    const ctx = exportCanvas.getContext("2d");
-
-    // draw the base image
+    // Draw base image
     ctx.drawImage(modalImage, 0, 0, exportCanvas.width, exportCanvas.height);
 
-    // draw annotations from tempCanvas only
+    // Draw full-resolution annotations
     ctx.drawImage(tempCanvas, 0, 0);
 
     exportCanvas.toBlob(async (blob) => {
         try {
-            await navigator.clipboard.write([
-                new ClipboardItem({ "image/png": blob })
-            ]);
-            console.log("Copied with annotations!");
+            await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+            alert("Copied full-resolution image with annotations!");
         } catch (err) {
-            console.error("Copy failed", err);
+            console.error("Clipboard copy failed:", err);
         }
     });
 }
 
+function prepareTempCanvas() {
+    imgNaturalW = modalImage.naturalWidth;
+    imgNaturalH = modalImage.naturalHeight;
+
+    tempCanvas.width = imgNaturalW;
+    tempCanvas.height = imgNaturalH;
+    tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+}
 
     function getPosFromEvent(e) {
         const rect = drawCanvas.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
 
-        // Map to internal pixels
-        const x = ((clientX - rect.left) / rect.width) * drawCanvas.width;
-        const y = ((clientY - rect.top) / rect.height) * drawCanvas.height;
+        // Map to tempCanvas coordinates (full resolution)
+        const x = ((clientX - rect.left) / rect.width) * tempCanvas.width;
+        const y = ((clientY - rect.top) / rect.height) * tempCanvas.height;
 
         return { x, y };
     }
@@ -373,7 +380,11 @@ async function copyAnnotatedImageToClipboard() {
 
     function redrawVisibleFromTemp() {
         drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-        drawCtx.drawImage(tempCanvas, 0, 0);
+        drawCtx.drawImage(
+            tempCanvas,
+            0, 0, tempCanvas.width, tempCanvas.height, // source
+            0, 0, drawCanvas.width, drawCanvas.height  // destination scaled to display
+        );
     }
 
     function pushInitialState() {
