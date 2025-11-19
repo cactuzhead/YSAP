@@ -37,7 +37,7 @@ const drawCopy = document.getElementById('drawCopy');
 const presetButtons = document.querySelectorAll(".color-btn");
 const colorPicker = document.getElementById("drawColor");
 
-let brushSize = 3; // default
+let brushSize = 7; // default brush size
 
 const sizeButtons = document.querySelectorAll(".size-btn");
 
