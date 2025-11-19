@@ -37,6 +37,28 @@ const drawCopy = document.getElementById('drawCopy');
 const presetButtons = document.querySelectorAll(".color-btn");
 const colorPicker = document.getElementById("drawColor");
 
+const annotateToggle = document.getElementById("annotateToggle");
+const modalMain = document.querySelector(".modal-main");
+const drawTools = document.getElementById("drawTools");
+const details = document.querySelector(".details");
+
+let annotateMode = false;
+
+annotateToggle.addEventListener("click", () => {
+    annotateMode = !annotateMode;
+
+    if (annotateMode) {
+        // TURN ON annotation mode
+        modalMain.classList.add("annotate-active");
+        annotateToggle.classList.add("active");
+    } else {
+        // TURN OFF annotation mode
+        modalMain.classList.remove("annotate-active");
+        annotateToggle.classList.remove("active");
+    }
+});
+
+
 let brushSize = 7; // default brush size
 
 const sizeButtons = document.querySelectorAll(".size-btn");
@@ -707,6 +729,11 @@ function showMedia(idx) {
     modalVideo.style.display = 'none';
     modal.dataset.idx = idx;
 
+    // turn off annotate mode automatically
+    annotateMode = false;
+    modalMain.classList.remove("annotate-active");
+    annotateToggle.classList.remove("active");
+    
     // Remove no-image state initially
     mediaWrap.classList.remove('no-image');
 
