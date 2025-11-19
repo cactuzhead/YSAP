@@ -33,6 +33,7 @@ const drawColor = document.getElementById('drawColor');
 const drawMode = document.getElementById('drawMode');
 const drawClear = document.getElementById('drawClear');
 const drawCopy = document.getElementById('drawCopy');
+const imgContainer = document.querySelector('.img-container');
 
 const presetButtons = document.querySelectorAll(".color-btn");
 const colorPicker = document.getElementById("drawColor");
@@ -259,6 +260,20 @@ if (!drawCanvas || !modalImage) {
         drawCanvas.style.width = imgRect.width + 'px';
         drawCanvas.style.height = imgRect.height + 'px';
     }
+
+function resizeCanvas() {
+  // Match canvas size to the image container
+  drawCanvas.width = imgContainer.clientWidth;
+  drawCanvas.height = imgContainer.clientHeight;
+}
+
+// Call whenever the modal image or container changes size
+window.addEventListener('resize', resizeCanvas);
+modalImage.addEventListener('load', resizeCanvas);
+
+expandBtn.addEventListener('click', () => {
+  setTimeout(resizeCanvas, 300); // wait for CSS flex animation
+});
 
 
 function updateCanvasPosition() {

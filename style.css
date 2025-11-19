@@ -204,7 +204,8 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
 .img-container {
     position: relative;
     /* width: 100%; */
-    display: block;
+    /* display: block; */
+    display: inline-block;
 }
 
 .img-container img,
@@ -372,6 +373,21 @@ overflow-wrap: break-word;
     box-shadow: 0 2px 4px rgba(0,0,0,0.4);
     z-index: 15;
 }
+
+
+#modalImage, #drawCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+#drawCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
 
 .draw-canvas {
     position: absolute;
