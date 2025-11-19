@@ -54,7 +54,8 @@ sizeButtons.forEach(btn => {
 });
 
 // Select default button visually
-document.querySelector('.size-btn[data-size="3"]').classList.add("selected");
+sizeButtons.forEach(b => b.classList.remove("selected"));
+document.querySelector('.size-btn[data-size="7"]').classList.add("selected");
 
 
 presetButtons.forEach(btn => {
