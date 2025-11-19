@@ -39,20 +39,27 @@ const colorPicker = document.getElementById("drawColor");
 
 const expandBtn = document.getElementById('expandToggle');
 const modalMain = document.querySelector('.modal-main');
+const detailsCol = modalMain.querySelector('.details');
+const icon = expandBtn.querySelector('i');
 
 expandBtn.addEventListener('click', () => {
+    // Toggle class
     modalMain.classList.toggle('expanded');
 
-    // Optional: swap icon if you want
-    const icon = expandBtn.querySelector('i');
+    // Hide or show stats
     if (modalMain.classList.contains('expanded')) {
+        detailsCol.style.display = 'none';
+        modalMain.querySelector('.gallery').style.flex = '1 1 100%';
         icon.setAttribute('data-lucide', 'shrink');
     } else {
+        detailsCol.style.display = '';
+        modalMain.querySelector('.gallery').style.flex = '';
         icon.setAttribute('data-lucide', 'expand');
     }
 
     lucide.createIcons();
 });
+
 
 
 
