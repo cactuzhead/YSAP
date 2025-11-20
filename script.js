@@ -66,8 +66,6 @@ expandBtn.addEventListener('click', () => {
 });
 
 
-
-
 let brushSize = 7; // default brush size
 
 const sizeButtons = document.querySelectorAll(".size-btn");
@@ -256,7 +254,7 @@ if (!drawCanvas || !modalImage) {
     }
 
     modalImage.addEventListener("load", prepareDrawCanvas);
-window.addEventListener("resize", syncCanvasToImage);
+    window.addEventListener("resize", syncCanvasToImage);
 
     function syncCanvasToImage() {
         if (!modalImage.complete) return;
@@ -283,44 +281,12 @@ window.addEventListener("resize", syncCanvasToImage);
     let annotations = document.createElement('canvas');
     let annotationsCtx = annotations.getContext('2d');
 
-    // function resizeCanvas() {
-    //     const oldWidth = drawCanvas.width;
-    //     const oldHeight = drawCanvas.height;
-
-    //     // Create offscreen canvas to store OLD drawing
-    //     const temp = document.createElement("canvas");
-    //     temp.width = oldWidth;
-    //     temp.height = oldHeight;
-    //     const tctx = temp.getContext("2d");
-
-    //     // Copy old annotation bitmap
-    //     tctx.drawImage(drawCanvas, 0, 0);
-
-    //     // Now resize canvas to match NEW image size
-    //     drawCanvas.width = modalImage.clientWidth;
-    //     drawCanvas.height = modalImage.clientHeight;
-
-    //     // Scale the old bitmap into the new size
-    //     ctx.drawImage(temp, 0, 0, oldWidth, oldHeight, 0, 0, drawCanvas.width, drawCanvas.height);
-    // }
-
-
-    // Resize on image load
-    // modalImage.addEventListener('load', resizeCanvas);
-
-    // Resize when expand/collapse toggled
     expandBtn.addEventListener('click', () => {
-        // document.querySelector(".modal-content").classList.toggle("expanded");
-        // Wait for CSS transition if you animate image width
-        // setTimeout(resizeCanvas, 310); // match your CSS transition duration
         modal.classList.toggle("expanded");
         setTimeout(() => {
             syncCanvasToImage();
         }, 310);
     });
-
-    // Resize on window resize to stay responsive
-    // window.addEventListener('resize', resizeCanvas);
 
 
 function updateCanvasPosition() {
@@ -354,13 +320,13 @@ async function copyAnnotatedImageToClipboard() {
         if (!blob) return alert("Failed to generate image.");
         try {
             await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
-            alert("Copied full-resolution image to clipboard!");
+            alert("Copied annotated image to clipboard");
         } catch (err) {
             console.error(err);
             // Fallback: open in new tab
             const url = URL.createObjectURL(blob);
             window.open(url, "_blank");
-            alert("Clipboard copy failed — opened exported image in new tab.");
+            alert("Clipboard copy failed - opened exported image in new tab.");
         }
     }, "image/png");
 
@@ -440,10 +406,6 @@ function prepareTempCanvas() {
         const p = getPosFromEvent(e);
         startX = prevX = p.x;
         startY = prevY = p.y;
-
-        // Copy current visible canvas to temp as baseline
-        // tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
-        // tempCtx.drawImage(drawCanvas, 0, 0);
 
         redrawVisibleFromTemp();
     }
@@ -598,46 +560,7 @@ function prepareTempCanvas() {
     drawCopy.addEventListener('click', async () => {
         if (!modalImage.src) return alert('No image to copy.');
 
-        copyAnnotatedImageToClipboard();
-
-        // // Export canvas exactly at the image's natural resolution
-        // const exportCanvas = document.createElement('canvas');
-        // exportCanvas.width = imgNaturalW;
-        // exportCanvas.height = imgNaturalH;
-        // const exportCtx = exportCanvas.getContext('2d');
-
-        // // Draw the base image at its natural resolution
-        // const baseImg = new Image();
-        // baseImg.crossOrigin = 'anonymous';
-        // baseImg.src = modalImage.src;
-
-        // try {
-        //     await baseImg.decode();
-        // } catch (err) {
-        //     console.warn('Image decode failed for export', err);
-        // }
-
-        // exportCtx.drawImage(baseImg, 0, 0, imgNaturalW, imgNaturalH);
-
-        // // Draw tempCanvas into exportCanvas **scaled down correctly**
-        // // Internal canvas is natural * dpr, so we scale down by dividing by dpr
-        // exportCtx.drawImage(
-        //     tempCanvas,
-        //     0, 0, tempCanvas.width, tempCanvas.height, // source
-        //     0, 0, imgNaturalW, imgNaturalH              // destination
-        // );
-
-        // exportCanvas.toBlob(async (blob) => {
-        //     try {
-        //         await navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ]);
-        //         alert('Copied full-resolution image to clipboard.');
-        //     } catch (err) {
-        //         // fallback: open image in new tab
-        //         const url = URL.createObjectURL(blob);
-        //         window.open(url, '_blank');
-        //         alert('Clipboard failed — opened exported image in new tab.');
-        //     }
-        // }, 'image/png');
+        copyAnnotatedImageToClipboard();       
 });
 
 const expandToggleBtn = document.getElementById('expandToggle');
@@ -660,23 +583,11 @@ const expandToggleBtn = document.getElementById('expandToggle');
         prepareDrawCanvas();
         // if there is already drawing data in tempCanvas (e.g. cached), show it
         requestAnimationFrame(syncCanvasToImage);
-    });
-    // window.addEventListener('resize', () => {
-    //     // keep on-screen CSS size aligned, but do NOT resize internal pixel buffers (we keep internal = natural*DPR)
-    //     if (modalImage.naturalWidth) {
-    //         drawCanvas.style.width = modalImage.getBoundingClientRect().width + 'px';
-    //         drawCanvas.style.height = modalImage.getBoundingClientRect().height + 'px';
-    //     }
-    // });
+    });   
 
     window.addEventListener('resize', updateCanvasOverlay);
     window.addEventListener('scroll', updateCanvasOverlay, true);
 }
-
-
-
-
-
 
 
 // Convert seconds to "minutes:seconds" format
