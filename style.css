@@ -492,7 +492,9 @@ overflow-wrap: break-word;
     gap: 6px;
 }
 
-.shape-btn {
+.expand-btn,
+.shape-btn,
+.size-btn {
     width: 34px;
     height: 34px;
     display: flex;
@@ -526,7 +528,7 @@ overflow-wrap: break-word;
     margin-bottom: 10px;
 }
 
-.size-btn {
+/* .size-btn {
     width: 34px;
     height: 34px;
     border-radius: 6px;
@@ -538,7 +540,7 @@ overflow-wrap: break-word;
     cursor: pointer;
     padding: 0;
     transition: background 0.15s, border-color 0.15s;
-}
+} */
 
 .size-btn.selected {
     color: #ffffff;
