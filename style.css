@@ -494,46 +494,48 @@ overflow-wrap: break-word;
 
 .tooltip {
     position: relative;
-    cursor: pointer;
-}
-
-.tooltip::after,
-.tooltip::before {
-    position: absolute;
-    left: 50%;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity .18s ease, transform .18s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .tooltip::after {
     content: attr(data-tooltip);
-    bottom: 135%;
-    transform: translateX(-50%) translateY(5px);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(20, 20, 20, 0.95);
+    color: #fff;
     padding: 6px 10px;
-    background: rgba(25, 25, 25, 0.9);
-    color: white;
     border-radius: 6px;
-    font-size: 13px;
     white-space: nowrap;
-    z-index: 999999 !important; /* ← keeps it above canvas */
+    font-size: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    z-index: 999999;
 }
 
 .tooltip::before {
     content: "";
-    bottom: 130%;
-    transform: translateX(-50%) translateY(5px);
+    position: absolute;
+    bottom: calc(100% + 2px);
+    left: 50%;
+    transform: translateX(-50%);
     border-width: 6px;
     border-style: solid;
-    border-color: rgba(25, 25, 25, 0.9) transparent transparent transparent;
-    z-index: 999999 !important;
+    border-color: rgba(20, 20, 20, 0.95) transparent transparent transparent;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 999999;
 }
 
 .tooltip:hover::after,
 .tooltip:hover::before {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
 }
+
 
 
 .square-btn,
