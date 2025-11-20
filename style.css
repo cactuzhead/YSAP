@@ -502,6 +502,12 @@ overflow-wrap: break-word;
     gap: 6px;
 }
 
+#expandToggle {
+    display: grid;
+    grid-template-columns: repeat(1, 36px); /* 1 buttons per row */
+    gap: 6px;
+}
+
 #Tools {
     display: grid;
     grid-template-columns: repeat(2, 36px); /* 2 buttons per row */
