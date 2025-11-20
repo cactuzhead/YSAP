@@ -534,7 +534,7 @@ overflow-wrap: break-word;
     bottom: calc(100% + 2px);
     left: 50%;
     bottom: 100%; 
-    transform: translate(-50%, 0);
+    transform: translate(-50%, 4px);
     border-width: 6px;
     border-style: solid;
     border-color: rgba(20, 20, 20, 0.95) transparent transparent transparent;
