@@ -504,7 +504,6 @@ overflow-wrap: break-word;
 
 #expandToggle {
     display: grid;
-    grid-template-columns: repeat(1, 36px); /* 1 buttons per row */
     gap: 6px;
 }
 
