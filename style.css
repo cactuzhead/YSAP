@@ -512,10 +512,10 @@ overflow-wrap: break-word;
 .tooltip::after {
     content: attr(data-tooltip);
     position: absolute;
-    display: block;
     bottom: calc(100% + 8px);
     left: 50%;
-    transform: translateX(-50%);
+    bottom: 100%;
+    transform: translate(-50%, -8px);
     background: rgba(20, 20, 20, 0.95);
     color: #fff;
     padding: 6px 10px;
@@ -525,22 +525,22 @@ overflow-wrap: break-word;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.15s ease;
-    z-index: 1000000;
+    z-index: 999998;
 }
 
 .tooltip::before {
     content: "";
     position: absolute;
-    display: block;
     bottom: calc(100% + 2px);
     left: 50%;
-    transform: translateX(-50%);
+    bottom: 100%; 
+    transform: translate(-50%, 0);
     border-width: 6px;
     border-style: solid;
     border-color: rgba(20, 20, 20, 0.95) transparent transparent transparent;
     opacity: 0;
     transition: opacity 0.15s ease;
-    z-index: 1000001;
+    z-index: 999999;
 }
 
 .tooltip:hover::after,
