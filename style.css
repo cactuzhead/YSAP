@@ -415,6 +415,9 @@ overflow-wrap: break-word;
     border-radius: 12px;
     /* border: 2px solid #cccccc; */
     /* box-shadow: 0 6px 18px rgba(2,6,23,0.15); */
+    position: relative;
+    overflow: visible !important;
+    z-index: 5000;
 }
 
 .draw-tools label,
@@ -423,6 +426,13 @@ overflow-wrap: break-word;
 .draw-tools button {
     flex: 1 1 auto;
     padding: 4px;
+}
+
+.draw-tools button,
+.draw-tools .tooltip {
+    position: relative;
+    overflow: visible !important;
+    z-index: 5001;
 }
 
 /* When expand mode active, hide stats column */
