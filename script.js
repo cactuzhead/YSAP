@@ -68,6 +68,7 @@ expandBtn.addEventListener('click', () => {
 
 let brushSize = 9; // default brush size
 let erasing = false;
+const drawEraserBtn = document.getElementById("drawEraser");
 
 const sizeButtons = document.querySelectorAll(".size-btn");
 
@@ -457,20 +458,37 @@ function prepareTempCanvas() {
         //     redrawVisibleFromTemp();
         //     return;
         // }
-        if (mode === 'free') {
+
+        drawEraserBtn.addEventListener("click", () => {
+            erasing = !erasing;
+
+            // Highlight button
+            drawEraserBtn.classList.toggle("selected", erasing);
+
+            // Force freehand mode while erasing
+            if (erasing) drawMode.value = "free";
+
+            // Deselect other tools (optional)
+            document.querySelectorAll('.shape-btn, .size-btn, .color-btn').forEach(btn => {
+                if (btn !== drawEraserBtn) btn.classList.remove("selected");
+            });
+        });
+
+
+        if (drawMode.value === 'free') {
+            tempCtx.lineWidth = brushSize;
+            tempCtx.lineCap = 'round';
 
             if (erasing) {
-                // ERASE using destination-out
-                tempCtx.globalCompositeOperation = "destination-out";
-                tempCtx.strokeStyle = "rgba(0,0,0,1)";
+                // Eraser mode
+                tempCtx.globalCompositeOperation = 'destination-out';
+                tempCtx.strokeStyle = 'rgba(0,0,0,1)'; // color doesn't matter
             } else {
                 // Normal drawing
-                tempCtx.globalCompositeOperation = "source-over";
-                tempCtx.strokeStyle = color;
+                tempCtx.globalCompositeOperation = 'source-over';
+                tempCtx.strokeStyle = drawColor.value || '#f94144';
             }
 
-            tempCtx.lineWidth = lw;
-            tempCtx.lineCap = 'round';
             tempCtx.beginPath();
             tempCtx.moveTo(prevX, prevY);
             tempCtx.lineTo(p.x, p.y);
@@ -483,6 +501,7 @@ function prepareTempCanvas() {
             redrawVisibleFromTemp();
             return;
         }
+
 
       
 
