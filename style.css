@@ -512,6 +512,7 @@ overflow-wrap: break-word;
     transform: translate(-50%, -50%);
     display: none;
     z-index: 99999999;
+    background-color: rgba(255, 255, 255, 0.608);
 }
 
 #expandToggle,
