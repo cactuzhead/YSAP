@@ -109,7 +109,7 @@ colorPicker.addEventListener("input", () => {
 });
 
 
-const eraserBtn = document.getElementById("eraserBtn");
+const eraserBtn = document.getElementById("drawEraser");
 eraserBtn.addEventListener("click", () => {
     erasing = !erasing;
 
