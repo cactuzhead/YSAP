@@ -66,7 +66,7 @@ expandBtn.addEventListener('click', () => {
 });
 
 
-let brushSize = 7; // default brush size
+let brushSize = 9; // default brush size
 
 const sizeButtons = document.querySelectorAll(".size-btn");
 
@@ -84,7 +84,7 @@ sizeButtons.forEach(btn => {
 
 // Select default button visually
 sizeButtons.forEach(b => b.classList.remove("selected"));
-document.querySelector('.size-btn[data-size="7"]').classList.add("selected");
+document.querySelector('.size-btn[data-size="9"]').classList.add("selected");
 
 
 presetButtons.forEach(btn => {
