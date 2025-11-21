@@ -48,23 +48,23 @@ modalImage.addEventListener("load", () => {
     // resizeCanvas();
 });
 
-expandBtn.addEventListener('click', () => {
-    // Toggle class
-    modalMain.classList.toggle('expanded');
+// expandBtn.addEventListener('click', () => {
+//     // Toggle class
+//     modalMain.classList.toggle('expanded');
 
-    // Hide or show stats
-    if (modalMain.classList.contains('expanded')) {
-        detailsCol.style.display = 'none';
-        modalMain.querySelector('.gallery').style.flex = '1 1 100%';
-        icon.setAttribute('data-lucide', 'shrink');
-    } else {
-        detailsCol.style.display = '';
-        modalMain.querySelector('.gallery').style.flex = '';
-        icon.setAttribute('data-lucide', 'expand');
-    }
+//     // Hide or show stats
+//     if (modalMain.classList.contains('expanded')) {
+//         detailsCol.style.display = 'none';
+//         modalMain.querySelector('.gallery').style.flex = '1 1 100%';
+//         icon.setAttribute('data-lucide', 'shrink');
+//     } else {
+//         detailsCol.style.display = '';
+//         modalMain.querySelector('.gallery').style.flex = '';
+//         icon.setAttribute('data-lucide', 'expand');
+//     }
 
-    lucide.createIcons();
-});
+//     lucide.createIcons();
+// });
 
 
 let brushSize = 9; // default brush size
@@ -306,12 +306,12 @@ if (!drawCanvas || !modalImage) {
     let annotations = document.createElement('canvas');
     let annotationsCtx = annotations.getContext('2d');
 
-    expandBtn.addEventListener('click', () => {
-        modal.classList.toggle("expanded");
-        setTimeout(() => {
-            syncCanvasToImage();
-        }, 310);
-    });
+    // expandBtn.addEventListener('click', () => {
+    //     modal.classList.toggle("expanded");
+    //     setTimeout(() => {
+    //         syncCanvasToImage();
+    //     }, 310);
+    // });
 
 
 function updateCanvasPosition() {
@@ -633,21 +633,21 @@ function prepareTempCanvas() {
         copyAnnotatedImageToClipboard();       
 });
 
-const expandToggleBtn = document.getElementById('expandToggle');
-    if (expandToggleBtn) {
-        expandToggleBtn.addEventListener('click', () => {
-            const modalMain = document.querySelector(".modal-main");
-        modalMain.classList.toggle("fullscreen-image");
+// const expandToggleBtn = document.getElementById('expandToggle');
+//     if (expandToggleBtn) {
+//         expandToggleBtn.addEventListener('click', () => {
+//             const modalMain = document.querySelector(".modal-main");
+//         modalMain.classList.toggle("fullscreen-image");
 
-        const details = document.querySelector(".details");
-        details.style.display = modalMain.classList.contains("fullscreen-image")
-            ? "none"
-            : "";
+//         const details = document.querySelector(".details");
+//         details.style.display = modalMain.classList.contains("fullscreen-image")
+//             ? "none"
+//             : "";
 
-        // resize VISUAL canvas only
-        requestAnimationFrame(syncCanvasToImage);
-    });
-}
+//         // resize VISUAL canvas only
+//         requestAnimationFrame(syncCanvasToImage);
+//     });
+// }
     // ensure canvas prepared when modal image loads and when modal opens/resize
     modalImage.addEventListener('load', () => {
         prepareDrawCanvas();
@@ -659,6 +659,29 @@ const expandToggleBtn = document.getElementById('expandToggle');
     window.addEventListener('scroll', updateCanvasOverlay, true);
 }
 
+expandBtn.addEventListener('click', () => {
+
+    const modalMain = document.querySelector(".modal-main");
+    modalMain.classList.toggle("expanded");
+
+    const isExpanded = modalMain.classList.contains("expanded");
+
+    // hide/show details panel
+    const details = modalMain.querySelector('.details');
+    details.style.display = isExpanded ? "none" : "";
+
+    // gallery grows to full width
+    const gallery = modalMain.querySelector('.gallery');
+    gallery.style.flex = isExpanded ? "1 1 100%" : "";
+
+    // update icon
+    const icon = expandBtn.querySelector("i");
+    icon.setAttribute("data-lucide", isExpanded ? "shrink" : "expand");
+    lucide.createIcons();
+
+    // sync overlay after animation
+    setTimeout(syncCanvasToImage, 300);
+});
 
 // Convert seconds to "minutes:seconds" format
 function secToMinSec(seconds) {
