@@ -443,44 +443,32 @@ function prepareTempCanvas() {
         const lw = brushSize;
         const color = drawColor.value || '#f94144';
 
-        if (erasing) {
-            // draw with destination-out to erase
-            tempCtx.globalCompositeOperation = 'destination-out';
-            tempCtx.lineWidth = brushSize;
-            tempCtx.lineCap = 'round';
-            tempCtx.beginPath();
-            tempCtx.moveTo(prevX, prevY);
-            tempCtx.lineTo(p.x, p.y);
-            tempCtx.stroke();
-            tempCtx.globalCompositeOperation = 'source-over';
-
-            prevX = p.x;
-            prevY = p.y;
-
-            hasDrawnSomething = true;
-            redrawVisibleFromTemp();
-
-            // update eraser cursor
-            updateEraserCursor(e.clientX, e.clientY);
-            return;
-        }
-
-        if (mode === 'free') {            
-
-            tempCtx.strokeStyle = color;
+        if (mode === 'free') {   
+            tempCtx.save();
             tempCtx.lineWidth = lw;
             tempCtx.lineCap = 'round';
+
+            if (erasing) {
+                tempCtx.globalCompositeOperation = 'destination-out';
+                tempCtx.strokeStyle = 'rgba(0,0,0,1)';
+            } else {
+                tempCtx.globalCompositeOperation = 'source-over';
+                tempCtx.strokeStyle = color;
+            }
+
             tempCtx.beginPath();
             tempCtx.moveTo(prevX, prevY);
             tempCtx.lineTo(p.x, p.y);
             tempCtx.stroke();
+            tempCtx.restore();
+
             prevX = p.x;
             prevY = p.y;
-
             hasDrawnSomething = true;
             redrawVisibleFromTemp();
             return;
         }
+
       
 
         // Shape preview
