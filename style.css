@@ -503,8 +503,8 @@ overflow-wrap: break-word;
 }
 
 #expandToggle {
-    display: grid;
-    gap: 6px;
+    /* display: grid;
+    gap: 6px; */
 }
 
 #Tools {
