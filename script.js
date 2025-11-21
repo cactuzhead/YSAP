@@ -69,7 +69,7 @@ expandBtn.addEventListener('click', () => {
 
 let brushSize = 9; // default brush size
 let erasing = false;
-const drawEraserBtn = document.getElementById("drawEraser");
+// const drawEraser = document.getElementById("drawEraser");
 
 const sizeButtons = document.querySelectorAll(".size-btn");
 
@@ -535,18 +535,18 @@ function prepareTempCanvas() {
         drawCtx.restore();
     }
 
-    drawEraserBtn.addEventListener("click", () => {
+    drawEraser.addEventListener("click", () => {
         erasing = !erasing;
 
         // Highlight button
-        drawEraserBtn.classList.toggle("selected", erasing);
+        drawEraser.classList.toggle("selected", erasing);
 
         // Force freehand mode while erasing
         if (erasing) drawMode.value = "free";
 
         // Deselect other tools (optional)
         document.querySelectorAll('.shape-btn, .size-btn, .color-btn').forEach(btn => {
-            if (btn !== drawEraserBtn) btn.classList.remove("selected");
+            if (btn !== drawEraser) btn.classList.remove("selected");
         });
     });
 
