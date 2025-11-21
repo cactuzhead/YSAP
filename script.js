@@ -150,6 +150,20 @@ drawEraser.addEventListener("click", () => {
 });
 
 
+function drawEraserCursor(x, y) {
+    if (!erasing) return; // only show when erasing
+
+    redrawVisibleFromTemp(); // clear previous
+
+    drawCtx.save();
+    drawCtx.strokeStyle = 'rgba(0,0,0,0.8)';
+    drawCtx.lineWidth = 1;
+    drawCtx.setLineDash([4, 2]);
+    drawCtx.beginPath();
+    drawCtx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
+    drawCtx.stroke();
+    drawCtx.restore();
+}
 
 
 
