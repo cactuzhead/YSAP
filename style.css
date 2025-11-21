@@ -503,8 +503,16 @@ overflow-wrap: break-word;
 }
 
 #expandToggle {
-    /* display: grid;
-    gap: 6px; */
+    width: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+
+    height: 34px !important;
+    min-height: 34px !important;
+    max-height: 34px !important;
+
+    overflow: hidden;
+    padding: 0 !important;
 }
 
 #Tools {
