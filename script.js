@@ -113,19 +113,19 @@ colorPicker.addEventListener("input", () => {
 const drawEraser = document.getElementById("drawEraser");
 
 drawEraser.addEventListener("click", () => {
-    // Toggle eraser mode
     erasing = !erasing;
 
-    // Clear selected states on other tools
-    document.querySelectorAll('.shape-btn, .square-btn').forEach(btn => {
-        if (btn !== drawEraser) btn.classList.remove("selected");
-    });
+    // Highlight button
+    drawEraser.classList.toggle("selected", erasing);
 
     if (erasing) {
-        drawEraser.classList.add("selected");
-        drawMode.value = "free"; // force freehand mode
-    } else {
-        drawEraser.classList.remove("selected");
+        // Force freehand mode when erasing
+        drawMode.value = "free";
+
+        // Deselect other tools
+        document.querySelectorAll('.shape-btn, .size-btn, .color-btn').forEach(btn => {
+            if (btn !== drawEraser) btn.classList.remove("selected");
+        });
     }
 });
 
@@ -535,20 +535,20 @@ function prepareTempCanvas() {
         drawCtx.restore();
     }
 
-    drawEraser.addEventListener("click", () => {
-        erasing = !erasing;
+    // drawEraser.addEventListener("click", () => {
+    //     erasing = !erasing;
 
-        // Highlight button
-        drawEraser.classList.toggle("selected", erasing);
+    //     // Highlight button
+    //     drawEraser.classList.toggle("selected", erasing);
 
-        // Force freehand mode while erasing
-        if (erasing) drawMode.value = "free";
+    //     // Force freehand mode while erasing
+    //     if (erasing) drawMode.value = "free";
 
-        // Deselect other tools (optional)
-        document.querySelectorAll('.shape-btn, .size-btn, .color-btn').forEach(btn => {
-            if (btn !== drawEraser) btn.classList.remove("selected");
-        });
-    });
+    //     // Deselect other tools (optional)
+    //     document.querySelectorAll('.shape-btn, .size-btn, .color-btn').forEach(btn => {
+    //         if (btn !== drawEraser) btn.classList.remove("selected");
+    //     });
+    // });
 
     function onPointerUp(e) {
         if (!drawing) return;
