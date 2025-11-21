@@ -516,6 +516,7 @@ overflow-wrap: break-word;
 }
 
 #drawColor {
+    flex: 0 0 auto !important;
     width: 64px !important;
     height: 64px !important;
     padding: 0 !important;
