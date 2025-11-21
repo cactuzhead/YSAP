@@ -67,8 +67,8 @@ expandBtn.addEventListener('click', () => {
 
 
 let brushSize = 9; // default brush size
-let erasing = false;
-const drawEraserBtn = document.getElementById("drawEraser");
+let erasing = false; // whether the eraser tool is active
+const eraserCursor = document.getElementById("eraserCursor");
 
 const sizeButtons = document.querySelectorAll(".size-btn");
 
@@ -109,25 +109,13 @@ colorPicker.addEventListener("input", () => {
 });
 
 
-const drawEraser = document.getElementById("drawEraser");
+const eraserBtn = document.getElementById("eraserBtn");
+eraserBtn.addEventListener("click", () => {
+    erasing = !erasing;
 
-drawEraser.addEventListener("click", () => {
-    // Toggle eraser mode
-    erasing = !emphasisonillegal;
-
-    // Clear selected states on other tools
-    document.querySelectorAll('.shape-btn, .square-btn').forEach(btn => {
-        if (btn !== drawEraser) btn.classList.remove("selected");
-    });
-
-    if (erasing) {
-        drawEraser.classList.add("selected");
-        drawMode.value = "free"; // force freehand mode
-    } else {
-        drawEraser.classList.remove("selected");
-    }
+    // visually highlight
+    eraserBtn.classList.toggle("selected", erasing);
 });
-
 
 
 
@@ -172,6 +160,17 @@ if (!drawCanvas || !modalImage) {
         redoStack = []; // new draw clears redo
 
         hasDrawnSomething = false;
+    }
+
+    function updateEraserCursor(x, y) {
+        eraserCursor.style.left = x + "px";
+        eraserCursor.style.top = y + "px";
+        eraserCursor.style.width = brushSize + "px";
+        eraserCursor.style.height = brushSize + "px";
+    }
+
+    function showEraserCursor(show) {
+        eraserCursor.style.display = show ? "block" : "none";
     }
 
     // Restore a saved tempCanvas state
@@ -431,98 +430,50 @@ function prepareTempCanvas() {
         startX = prevX = p.x;
         startY = prevY = p.y;
 
-        redrawVisibleFromTemp();
-
         if (erasing) showEraserCursor(true);
+
+        redrawVisibleFromTemp();
     }
 
     function onPointerMove(e) {
-        if (!drawing && !erasing) return;
+        if (!drawing) return;
         e.preventDefault();
         const p = getPosFromEvent(e);
         const mode = drawMode.value;
         const lw = brushSize;
         const color = drawColor.value || '#f94144';
 
-        if (erasing) updateEraserCursor(e.clientX, e.clientY);
-
-        // if (mode === 'free') {            
-
-        //     tempCtx.strokeStyle = color;
-        //     tempCtx.lineWidth = lw;
-        //     tempCtx.lineCap = 'round';
-        //     tempCtx.beginPath();
-        //     tempCtx.moveTo(prevX, prevY);
-        //     tempCtx.lineTo(p.x, p.y);
-        //     tempCtx.stroke();
-        //     prevX = p.x;
-        //     prevY = p.y;
-
-        //     hasDrawnSomething = true;
-        //     redrawVisibleFromTemp();
-        //     return;
-        // }
-        if (drawing || erasing) {
-            const lw = brushSize;
-
-            tempCtx.lineWidth = lw;
+        if (erasing) {
+            // draw with destination-out to erase
+            tempCtx.globalCompositeOperation = 'destination-out';
+            tempCtx.lineWidth = brushSize;
             tempCtx.lineCap = 'round';
-
-            if (erasing) {
-                tempCtx.globalCompositeOperation = 'destination-out';
-                tempCtx.strokeStyle = 'rgba(0,0,0,1)';
-            } else {
-                tempCtx.globalCompositeOperation = 'source-over';
-                tempCtx.strokeStyle = drawColor.value || '#f94144';
-            }
-
             tempCtx.beginPath();
             tempCtx.moveTo(prevX, prevY);
             tempCtx.lineTo(p.x, p.y);
             tempCtx.stroke();
+            tempCtx.globalCompositeOperation = 'source-over';
 
             prevX = p.x;
             prevY = p.y;
 
             hasDrawnSomething = true;
             redrawVisibleFromTemp();
+
+            // update eraser cursor
+            updateEraserCursor(e.clientX, e.clientY);
+            return;
         }
 
-        drawEraserBtn.addEventListener("click", () => {
-            erasing = !erasing;
+        if (mode === 'free') {            
 
-            // Highlight button
-            drawEraserBtn.classList.toggle("selected", erasing);
-
-            // Force freehand mode while erasing
-            if (erasing) drawMode.value = "free";
-
-            // Deselect other tools (optional)
-            document.querySelectorAll('.shape-btn, .size-btn, .color-btn').forEach(btn => {
-                if (btn !== drawEraserBtn) btn.classList.remove("selected");
-            });
-        });
-
-
-        if (drawMode.value === 'free') {
-            tempCtx.lineWidth = brushSize;
+            tempCtx.strokeStyle = color;
+            tempCtx.lineWidth = lw;
             tempCtx.lineCap = 'round';
-
-            if (erasing) {
-                // Eraser mode
-                tempCtx.globalCompositeOperation = 'destination-out';
-                tempCtx.strokeStyle = 'rgba(0,0,0,1)'; // color doesn't matter
-            } else {
-                // Normal drawing
-                tempCtx.globalCompositeOperation = 'source-over';
-                tempCtx.strokeStyle = drawColor.value || '#f94144';
-            }
-
             tempCtx.beginPath();
             tempCtx.moveTo(prevX, prevY);
             tempCtx.lineTo(p.x, p.y);
             tempCtx.stroke();
-
             prevX = p.x;
             prevY = p.y;
 
@@ -530,20 +481,6 @@ function prepareTempCanvas() {
             redrawVisibleFromTemp();
             return;
         }
-
-        const eraserCursor = document.getElementById("eraserCursor");
-
-        function updateEraserCursor(x, y) {
-            eraserCursor.style.left = x + "px";
-            eraserCursor.style.top = y + "px";
-            eraserCursor.style.width = brushSize + "px";
-            eraserCursor.style.height = brushSize + "px";
-        }
-
-        function showEraserCursor(show) {
-            eraserCursor.style.display = show ? "block" : "none";
-        }
-
       
 
         // Shape preview
@@ -598,9 +535,13 @@ function prepareTempCanvas() {
         const lw = brushSize;/* * dpr;*/
         const color = drawColor.value || '#f94144';
 
-        if (erasing) showEraserCursor(false);
-        hasDrawnSomething = true;
-        saveState();
+        if (erasing) {
+            showEraserCursor(false);
+            drawing = false;
+            hasDrawnSomething = true;
+            saveState();
+            return;
+        }
 
         if (mode === 'free') {
             redrawVisibleFromTemp();
@@ -959,9 +900,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
             // Update hidden <select> so your drawing code still works
             drawModeSelect.value = mode;
-
-            erasing = false;
-            drawEraser.classList.remove("selected");
         });
     });
 });
