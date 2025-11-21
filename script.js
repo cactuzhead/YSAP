@@ -485,7 +485,7 @@ function prepareTempCanvas() {
         drawing = false;
         const p = getPosFromEvent(e);
         const mode = drawMode.value;
-        const lw = brushSize * dpr;
+        const lw = brushSize;/* * dpr;*/
         const color = drawColor.value || '#f94144';
 
         if (mode === 'free') {
