@@ -67,7 +67,8 @@ expandBtn.addEventListener('click', () => {
 
 
 let brushSize = 9; // default brush size
-let erasing = false; // whether the eraser tool is active
+let erasing = false;
+let currentMode = 'free';
 const eraserCursor = document.getElementById("eraserCursor");
 
 const sizeButtons = document.querySelectorAll(".size-btn");
@@ -109,12 +110,17 @@ colorPicker.addEventListener("input", () => {
 });
 
 
-const eraserBtn = document.getElementById("drawEraser");
-eraserBtn.addEventListener("click", () => {
+const drawEraser = document.getElementById("drawEraser");
+drawEraser.addEventListener("click", () => {
     erasing = !erasing;
 
     // visually highlight
-    eraserBtn.classList.toggle("selected", erasing);
+    drawEraser.classList.toggle("selected", erasing);
+
+    if (erasing) {
+        currentMode = 'free';
+        drawMode.value = 'free';
+    }
 });
 
 
@@ -420,7 +426,7 @@ function prepareTempCanvas() {
     }
 
     function onPointerDown(e) {
-        if (modalVideo.style.display !== 'none') return;
+    if (modalVideo.style.display !== 'none') return;
         e.preventDefault();
         if (!modalImage.complete) return;
 
@@ -430,10 +436,26 @@ function prepareTempCanvas() {
         startX = prevX = p.x;
         startY = prevY = p.y;
 
+        if (currentMode === 'free') {
+            if (erasing) {
+                drawCtx.globalCompositeOperation = 'destination-out';
+                drawCtx.lineWidth = brushSize * 2;
+                drawCtx.strokeStyle = 'rgba(0,0,0,1)';
+            } else {
+                drawCtx.globalCompositeOperation = 'source-over';
+                drawCtx.lineWidth = brushSize;
+                drawCtx.strokeStyle = color;
+            }
+            drawCtx.lineCap = 'round';
+            drawCtx.beginPath();
+            drawCtx.moveTo(p.x, p.y);
+        }
+
         if (erasing) showEraserCursor(true);
 
         redrawVisibleFromTemp();
     }
+
 
     function onPointerMove(e) {
         if (!drawing) return;
@@ -452,7 +474,7 @@ function prepareTempCanvas() {
                 tempCtx.globalCompositeOperation = 'destination-out';
                 tempCtx.strokeStyle = 'rgba(0,0,0,1)';
             } else {
-                tempCtx.globalCompositeOperation = 'source-over';
+                tempCtx.globalCompositeOperation = 'source-over';                
                 tempCtx.strokeStyle = color;
             }
 
@@ -518,6 +540,9 @@ function prepareTempCanvas() {
     function onPointerUp(e) {
         if (!drawing) return;
         drawing = false;
+        drawCtx.globalCompositeOperation = 'source-over';
+        showEraserCursor(false);
+
         const p = getPosFromEvent(e);
         const mode = drawMode.value;
         const lw = brushSize;/* * dpr;*/
