@@ -502,6 +502,18 @@ overflow-wrap: break-word;
     gap: 6px;
 }
 
+#eraserCursor {
+    position: fixed;
+    pointer-events: none;
+    border: 2px solid red;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 9999;
+}
+
 #expandToggle,
 #drawCopy {
     width: 34px !important;
