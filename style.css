@@ -502,7 +502,8 @@ overflow-wrap: break-word;
     gap: 6px;
 }
 
-#expandToggle {
+#expandToggle,
+#drawCopy {
     width: 34px !important;
     min-width: 34px !important;
     max-width: 34px !important;
