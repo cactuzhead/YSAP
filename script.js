@@ -106,6 +106,20 @@ colorPicker.addEventListener("input", () => {
     presetButtons.forEach(b => b.classList.remove("selected"));
 });
 
+let erasing = false;
+
+document.getElementById("drawEraser").addEventListener("click", () => {
+    erasing = !erasing;
+
+    // Toggle the selected look
+    document.querySelectorAll('.square-btn, .shape-btn').forEach(btn => 
+        btn.classList.remove('selected')
+    );
+
+    if (erasing) {
+        drawEraser.classList.add("selected");
+    }
+});
 
 
 const MAX_HISTORY = 5;
@@ -439,9 +453,25 @@ function prepareTempCanvas() {
         // Shape preview
         redrawVisibleFromTemp();
         drawCtx.save();
-        drawCtx.strokeStyle = color;
+        // drawCtx.strokeStyle = color;
+        // drawCtx.lineWidth = lw;
+        // drawCtx.lineCap = 'round';
+
+        if (erasing) {
+            drawCtx.globalCompositeOperation = "destination-out";  // ERASE mode
+            drawCtx.strokeStyle = "rgba(0,0,0,1)";
+        } else {
+            drawCtx.globalCompositeOperation = "source-over";      // normal draw mode
+            drawCtx.strokeStyle = color;
+        }
         drawCtx.lineWidth = lw;
         drawCtx.lineCap = 'round';
+
+        document.querySelectorAll('[data-mode]').forEach(btn => {
+            btn.addEventListener("click", () => erasing = false);
+        });
+
+
 
         const dx = p.x - startX;
         const dy = p.y - startY;
