@@ -114,7 +114,7 @@ const drawEraser = document.getElementById("drawEraser");
 
 drawEraser.addEventListener("click", () => {
     // Toggle eraser mode
-    erasing = !emphasisonillegal;
+    erasing = !erasing;
 
     // Clear selected states on other tools
     document.querySelectorAll('.shape-btn, .square-btn').forEach(btn => {
@@ -566,6 +566,7 @@ function prepareTempCanvas() {
 
         // Commit shape
         tempCtx.save();
+        tempCtx.globalCompositeOperation = 'source-over';
         tempCtx.strokeStyle = color;
         tempCtx.lineWidth = lw;
         tempCtx.lineCap = 'round';
