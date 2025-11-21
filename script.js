@@ -71,6 +71,24 @@ let brushSize = 9; // default brush size
 let erasing = false;
 // const drawEraser = document.getElementById("drawEraser");
 
+const eraserCursor = document.getElementById("eraserCursor");
+
+drawCanvas.addEventListener('mousemove', (e) => {
+    if (!erasing) return;
+
+    eraserCursor.style.display = 'block';
+    eraserCursor.style.width = `${brushSize}px`;
+    eraserCursor.style.height = `${brushSize}px`;
+
+    eraserCursor.style.left = `${e.clientX}px`;
+    eraserCursor.style.top = `${e.clientY}px`;
+});
+
+drawCanvas.addEventListener('mouseleave', () => {
+    eraserCursor.style.display = 'none';
+});
+
+
 const sizeButtons = document.querySelectorAll(".size-btn");
 
 sizeButtons.forEach(btn => {
@@ -126,6 +144,8 @@ drawEraser.addEventListener("click", () => {
         document.querySelectorAll('.shape-btn, .size-btn, .color-btn').forEach(btn => {
             if (btn !== drawEraser) btn.classList.remove("selected");
         });
+
+        drawCanvas.style.cursor = erasing ? 'none' : 'crosshair';
     }
 });
 
