@@ -108,18 +108,22 @@ colorPicker.addEventListener("input", () => {
 
 let erasing = false;
 
-document.getElementById("drawEraser").addEventListener("click", () => {
+const drawEraser = document.getElementById("drawEraser");
+
+drawEraser.addEventListener("click", () => {
     erasing = !erasing;
 
-    // Toggle the selected look
+    // Remove selected from other buttons
     document.querySelectorAll('.square-btn, .shape-btn').forEach(btn => 
-        btn.classList.remove('selected')
+        btn.classList.remove("selected")
     );
 
     if (erasing) {
         drawEraser.classList.add("selected");
+        currentMode = "free"; // force freehand mode
     }
 });
+
 
 
 const MAX_HISTORY = 5;
@@ -456,19 +460,24 @@ function prepareTempCanvas() {
         // drawCtx.strokeStyle = color;
         // drawCtx.lineWidth = lw;
         // drawCtx.lineCap = 'round';
-
         if (erasing) {
-            drawCtx.globalCompositeOperation = "destination-out";  // ERASE mode
+            // ERASE pixels instead of drawing
+            drawCtx.globalCompositeOperation = "destination-out";
             drawCtx.strokeStyle = "rgba(0,0,0,1)";
         } else {
-            drawCtx.globalCompositeOperation = "source-over";      // normal draw mode
+            // Normal drawing
+            drawCtx.globalCompositeOperation = "source-over";
             drawCtx.strokeStyle = color;
         }
+
         drawCtx.lineWidth = lw;
         drawCtx.lineCap = 'round';
 
-        document.querySelectorAll('[data-mode]').forEach(btn => {
-            btn.addEventListener("click", () => erasing = false);
+        document.querySelectorAll('#shapeTools .shape-btn').forEach(btn => {
+            btn.addEventListener("click", () => {
+                erasing = false;
+                drawEraser.classList.remove("selected");
+            });
         });
 
 
