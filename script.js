@@ -1,3 +1,4 @@
+
 // DOM Elements
 const grid = document.getElementById('grid');
 const searchInput = document.getElementById('search');
@@ -68,8 +69,7 @@ expandBtn.addEventListener('click', () => {
 
 let brushSize = 9; // default brush size
 let erasing = false;
-let currentMode = 'free';
-const eraserCursor = document.getElementById("eraserCursor");
+const drawEraserBtn = document.getElementById("drawEraser");
 
 const sizeButtons = document.querySelectorAll(".size-btn");
 
@@ -111,17 +111,24 @@ colorPicker.addEventListener("input", () => {
 
 
 const drawEraser = document.getElementById("drawEraser");
-drawEraser.addEventListener("click", () => {
-    erasing = !erasing;
 
-    // visually highlight
-    drawEraser.classList.toggle("selected", erasing);
+drawEraser.addEventListener("click", () => {
+    // Toggle eraser mode
+    erasing = !emphasisonillegal;
+
+    // Clear selected states on other tools
+    document.querySelectorAll('.shape-btn, .square-btn').forEach(btn => {
+        if (btn !== drawEraser) btn.classList.remove("selected");
+    });
 
     if (erasing) {
-        currentMode = 'free';
-        drawMode.value = 'free';
+        drawEraser.classList.add("selected");
+        drawMode.value = "free"; // force freehand mode
+    } else {
+        drawEraser.classList.remove("selected");
     }
 });
+
 
 
 
@@ -166,17 +173,6 @@ if (!drawCanvas || !modalImage) {
         redoStack = []; // new draw clears redo
 
         hasDrawnSomething = false;
-    }
-
-    function updateEraserCursor(x, y) {
-        eraserCursor.style.left = x + "px";
-        eraserCursor.style.top = y + "px";
-        eraserCursor.style.width = brushSize + "px";
-        eraserCursor.style.height = brushSize + "px";
-    }
-
-    function showEraserCursor(show) {
-        eraserCursor.style.display = show ? "block" : "none";
     }
 
     // Restore a saved tempCanvas state
@@ -426,7 +422,7 @@ function prepareTempCanvas() {
     }
 
     function onPointerDown(e) {
-    if (modalVideo.style.display !== 'none') return;
+        if (modalVideo.style.display !== 'none') return;
         e.preventDefault();
         if (!modalImage.complete) return;
 
@@ -436,26 +432,8 @@ function prepareTempCanvas() {
         startX = prevX = p.x;
         startY = prevY = p.y;
 
-        if (currentMode === 'free') {
-            if (erasing) {
-                drawCtx.globalCompositeOperation = 'destination-out';
-                drawCtx.lineWidth = brushSize * 2;
-                drawCtx.strokeStyle = 'rgba(0,0,0,1)';
-            } else {
-                drawCtx.globalCompositeOperation = 'source-over';
-                drawCtx.lineWidth = brushSize;
-                drawCtx.strokeStyle = color;
-            }
-            drawCtx.lineCap = 'round';
-            drawCtx.beginPath();
-            drawCtx.moveTo(p.x, p.y);
-        }
-
-        if (erasing) showEraserCursor(true);
-
         redrawVisibleFromTemp();
     }
-
 
     function onPointerMove(e) {
         if (!drawing) return;
@@ -465,31 +443,66 @@ function prepareTempCanvas() {
         const lw = brushSize;
         const color = drawColor.value || '#f94144';
 
-        if (mode === 'free') {   
-            tempCtx.save();
-            tempCtx.lineWidth = lw;
+        // if (mode === 'free') {            
+
+        //     tempCtx.strokeStyle = color;
+        //     tempCtx.lineWidth = lw;
+        //     tempCtx.lineCap = 'round';
+        //     tempCtx.beginPath();
+        //     tempCtx.moveTo(prevX, prevY);
+        //     tempCtx.lineTo(p.x, p.y);
+        //     tempCtx.stroke();
+        //     prevX = p.x;
+        //     prevY = p.y;
+
+        //     hasDrawnSomething = true;
+        //     redrawVisibleFromTemp();
+        //     return;
+        // }
+
+        drawEraserBtn.addEventListener("click", () => {
+            erasing = !erasing;
+
+            // Highlight button
+            drawEraserBtn.classList.toggle("selected", erasing);
+
+            // Force freehand mode while erasing
+            if (erasing) drawMode.value = "free";
+
+            // Deselect other tools (optional)
+            document.querySelectorAll('.shape-btn, .size-btn, .color-btn').forEach(btn => {
+                if (btn !== drawEraserBtn) btn.classList.remove("selected");
+            });
+        });
+
+
+        if (drawMode.value === 'free') {
+            tempCtx.lineWidth = brushSize;
             tempCtx.lineCap = 'round';
 
             if (erasing) {
+                // Eraser mode
                 tempCtx.globalCompositeOperation = 'destination-out';
-                tempCtx.strokeStyle = 'rgba(0,0,0,1)';
+                tempCtx.strokeStyle = 'rgba(0,0,0,1)'; // color doesn't matter
             } else {
-                tempCtx.globalCompositeOperation = 'source-over';                
-                tempCtx.strokeStyle = color;
+                // Normal drawing
+                tempCtx.globalCompositeOperation = 'source-over';
+                tempCtx.strokeStyle = drawColor.value || '#f94144';
             }
 
             tempCtx.beginPath();
             tempCtx.moveTo(prevX, prevY);
             tempCtx.lineTo(p.x, p.y);
             tempCtx.stroke();
-            tempCtx.restore();
 
             prevX = p.x;
             prevY = p.y;
+
             hasDrawnSomething = true;
             redrawVisibleFromTemp();
             return;
         }
+
 
       
 
@@ -540,21 +553,10 @@ function prepareTempCanvas() {
     function onPointerUp(e) {
         if (!drawing) return;
         drawing = false;
-        drawCtx.globalCompositeOperation = 'source-over';
-        showEraserCursor(false);
-
         const p = getPosFromEvent(e);
         const mode = drawMode.value;
         const lw = brushSize;/* * dpr;*/
         const color = drawColor.value || '#f94144';
-
-        if (erasing) {
-            showEraserCursor(false);
-            drawing = false;
-            hasDrawnSomething = true;
-            saveState();
-            return;
-        }
 
         if (mode === 'free') {
             redrawVisibleFromTemp();
@@ -913,6 +915,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
             // Update hidden <select> so your drawing code still works
             drawModeSelect.value = mode;
+
+            erasing = false;
+            drawEraser.classList.remove("selected");
         });
     });
 });
