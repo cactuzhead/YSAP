@@ -67,6 +67,7 @@ expandBtn.addEventListener('click', () => {
 
 
 let brushSize = 9; // default brush size
+let erasing = false;
 
 const sizeButtons = document.querySelectorAll(".size-btn");
 
@@ -106,23 +107,27 @@ colorPicker.addEventListener("input", () => {
     presetButtons.forEach(b => b.classList.remove("selected"));
 });
 
-let erasing = false;
 
 const drawEraser = document.getElementById("drawEraser");
 
 drawEraser.addEventListener("click", () => {
-    erasing = !erasing;
+    // Toggle eraser mode
+    erasing = !emphasisonillegal;
 
-    // Remove selected from other buttons
-    document.querySelectorAll('.square-btn, .shape-btn').forEach(btn => 
-        btn.classList.remove("selected")
-    );
+    // Clear selected states on other tools
+    document.querySelectorAll('.shape-btn, .square-btn').forEach(btn => {
+        if (btn !== drawEraser) btn.classList.remove("selected");
+    });
 
     if (erasing) {
         drawEraser.classList.add("selected");
-        currentMode = "free"; // force freehand mode
+        drawMode.value = "free"; // force freehand mode
+    } else {
+        drawEraser.classList.remove("selected");
     }
 });
+
+
 
 
 
@@ -436,15 +441,41 @@ function prepareTempCanvas() {
         const lw = brushSize;
         const color = drawColor.value || '#f94144';
 
-        if (mode === 'free') {            
+        // if (mode === 'free') {            
 
-            tempCtx.strokeStyle = color;
+        //     tempCtx.strokeStyle = color;
+        //     tempCtx.lineWidth = lw;
+        //     tempCtx.lineCap = 'round';
+        //     tempCtx.beginPath();
+        //     tempCtx.moveTo(prevX, prevY);
+        //     tempCtx.lineTo(p.x, p.y);
+        //     tempCtx.stroke();
+        //     prevX = p.x;
+        //     prevY = p.y;
+
+        //     hasDrawnSomething = true;
+        //     redrawVisibleFromTemp();
+        //     return;
+        // }
+        if (mode === 'free') {
+
+            if (erasing) {
+                // ERASE using destination-out
+                tempCtx.globalCompositeOperation = "destination-out";
+                tempCtx.strokeStyle = "rgba(0,0,0,1)";
+            } else {
+                // Normal drawing
+                tempCtx.globalCompositeOperation = "source-over";
+                tempCtx.strokeStyle = color;
+            }
+
             tempCtx.lineWidth = lw;
             tempCtx.lineCap = 'round';
             tempCtx.beginPath();
             tempCtx.moveTo(prevX, prevY);
             tempCtx.lineTo(p.x, p.y);
             tempCtx.stroke();
+
             prevX = p.x;
             prevY = p.y;
 
@@ -452,35 +483,15 @@ function prepareTempCanvas() {
             redrawVisibleFromTemp();
             return;
         }
+
       
 
         // Shape preview
         redrawVisibleFromTemp();
         drawCtx.save();
-        // drawCtx.strokeStyle = color;
-        // drawCtx.lineWidth = lw;
-        // drawCtx.lineCap = 'round';
-        if (erasing) {
-            // ERASE pixels instead of drawing
-            drawCtx.globalCompositeOperation = "destination-out";
-            drawCtx.strokeStyle = "rgba(0,0,0,1)";
-        } else {
-            // Normal drawing
-            drawCtx.globalCompositeOperation = "source-over";
-            drawCtx.strokeStyle = color;
-        }
-
+        drawCtx.strokeStyle = color;
         drawCtx.lineWidth = lw;
         drawCtx.lineCap = 'round';
-
-        document.querySelectorAll('#shapeTools .shape-btn').forEach(btn => {
-            btn.addEventListener("click", () => {
-                erasing = false;
-                drawEraser.classList.remove("selected");
-            });
-        });
-
-
 
         const dx = p.x - startX;
         const dy = p.y - startY;
@@ -884,6 +895,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
             // Update hidden <select> so your drawing code still works
             drawModeSelect.value = mode;
+
+            erasing = false;
+            drawEraser.classList.remove("selected");
         });
     });
 });
