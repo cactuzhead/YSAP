@@ -464,6 +464,12 @@ function prepareTempCanvas() {
         redoStack = [];
     }
 
+    function colorsMatch(c1, c2, tol = 10) {
+        return Math.abs(c1.r - c2.r) <= tol &&
+            Math.abs(c1.g - c2.g) <= tol &&
+            Math.abs(c1.b - c2.b) <= tol;
+    }
+
     function onPointerDown(e) {
         if (modalVideo.style.display !== 'none') return;
         e.preventDefault();
@@ -479,10 +485,14 @@ function prepareTempCanvas() {
         const color = drawColor.value;
 
         if (mode === "fill") {
-            const px = Math.round(startX);
-            const py = Math.round(startY);
+            // convert pointer internal canvas coordinates
+            const x = Math.round(startX * dpr);
+            const y = Math.round(startY * dpr);
 
-            floodFillAt(px, py, color);
+            floodFillAt(x, y, color);
+
+            hasDrawnSomething = true;
+            saveState();
 
             redrawVisibleFromTemp();
             drawing = false;
@@ -577,63 +587,73 @@ function prepareTempCanvas() {
         drawCtx.restore();
     }
     
-    function floodFillAt(x, y, fillColor) {
-        const ctx = tempCtx; // This is your annotation canvas
-
+    function floodFillAt(sx, sy, fillColor) {
+        const ctx = tempCtx;               // fill on the master canvas
         const w = tempCanvas.width;
         const h = tempCanvas.height;
 
-        const imgData = ctx.getImageData(0, 0, w, h);
-        const data = imgData.data;
+        // safety
+        if (sx < 0 || sy < 0 || sx >= w || sy >= h) return;
 
-        // Convert fillColor "#rrggbb" => [r,g,b]
-        const rF = parseInt(fillColor.slice(1, 3), 16);
-        const gF = parseInt(fillColor.slice(3, 5), 16);
-        const bF = parseInt(fillColor.slice(5, 7), 16);
+        const img = ctx.getImageData(0, 0, w, h);
+        const data = img.data;
 
-        // Pixel index helper
-        const idx = (x, y) => (y * w + x) * 4;
+        // target color = pixel at start
+        const idx = (sy * w + sx) * 4;
+        const targetR = data[idx];
+        const targetG = data[idx + 1];
+        const targetB = data[idx + 2];
+        const targetA = data[idx + 3];
 
-        const r0 = data[idx(x, y)];
-        const g0 = data[idx(x, y) + 1];
-        const b0 = data[idx(x, y) + 2];
-        const a0 = data[idx(x, y) + 3];
+        // convert CSS color → rgba
+        const fill = hexToRGBA(fillColor);
 
-        // If already same color → skip
-        if (r0 === rF && g0 === gF && b0 === bF && a0 === 255) return;
+        // If target == fill, nothing to do
+        if (
+            targetR === fill.r &&
+            targetG === fill.g &&
+            targetB === fill.b &&
+            targetA === data[idx + 3] // compare to itself, or ignore alpha
+        ) return;
 
-        const stack = [];
-        stack.push([x, y]);
+        const stack = [[sx, sy]];
 
         while (stack.length) {
-            const [px, py] = stack.pop();
-            let i = idx(px, py);
+            const [x, y] = stack.pop();
+            const i = (y * w + x) * 4;
 
-            // Bounds check
-            if (px < 0 || py < 0 || px >= w || py >= h) continue;
-
-            // Must match original target color
+            // skip if not the target color
             if (
-                data[i] !== r0 ||
-                data[i + 1] !== g0 ||
-                data[i + 2] !== b0 ||
-                data[i + 3] !== a0
+                data[i] !== targetR ||
+                data[i + 1] !== targetG ||
+                data[i + 2] !== targetB ||
+                data[i + 3] !== targetA
             ) continue;
 
-            // Fill pixel
-            data[i] = rF;
-            data[i + 1] = gF;
-            data[i + 2] = bF;
+            // fill it
+            data[i] = fill.r;
+            data[i + 1] = fill.g;
+            data[i + 2] = fill.b;
             data[i + 3] = 255;
 
-            // Add neighbors
-            stack.push([px + 1, py]);
-            stack.push([px - 1, py]);
-            stack.push([px, py + 1]);
-            stack.push([px, py - 1]);
+            // push neighbors
+            if (x + 1 < w) stack.push([x + 1, y]);
+            if (x - 1 >= 0) stack.push([x - 1, y]);
+            if (y + 1 < h) stack.push([x, y + 1]);
+            if (y - 1 >= 0) stack.push([x, y - 1]);
         }
 
-        ctx.putImageData(imgData, 0, 0);
+        ctx.putImageData(img, 0, 0);
+    }
+
+
+    function hexToRGBA(hex) {
+        const c = hex.replace('#', '');
+        return {
+            r: parseInt(c.substring(0, 2), 16),
+            g: parseInt(c.substring(2, 4), 16),
+            b: parseInt(c.substring(4, 6), 16)
+        };
     }
 
 
