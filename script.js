@@ -486,8 +486,8 @@ function prepareTempCanvas() {
 
         if (mode === "fill") {
             // convert pointer internal canvas coordinates
-            const x = Math.round(startX * dpr);
-            const y = Math.round(startY * dpr);
+            const x = Math.round(startX);
+            const y = Math.round(startY);
 
             floodFillAt(x, y, color);
 
@@ -616,10 +616,13 @@ function prepareTempCanvas() {
             targetA === data[idx + 3] // compare to itself, or ignore alpha
         ) return;
 
-        const stack = [[sx, sy]];
+        // const stack = [[sx, sy]];
 
-        while (stack.length) {
-            const [x, y] = stack.pop();
+        // while (stack.length) {
+        const queue = [[sx, sy]];
+
+        while(queue.length) {
+            const [x, y] = queue.shift();
             const i = (y * w + x) * 4;
 
             // skip if not the target color
@@ -652,7 +655,8 @@ function prepareTempCanvas() {
         return {
             r: parseInt(c.substring(0, 2), 16),
             g: parseInt(c.substring(2, 4), 16),
-            b: parseInt(c.substring(4, 6), 16)
+            b: parseInt(c.substring(4, 6), 16),
+            a: 255
         };
     }
 
