@@ -506,7 +506,7 @@ overflow-wrap: break-word;
     position: fixed;
     pointer-events: none;
     border: 1px solid black;
-    box-shadow: 0 0 0 2px white;
+    box-shadow: 0 0 0 1px white;
     border-radius: 50%;
     width: 20px;
     height: 20px;
