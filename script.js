@@ -67,7 +67,7 @@ expandBtn.addEventListener('click', () => {
 });
 
 
-let brushSize = 9; // default brush size
+let brushSize = 12; // default brush size
 let erasing = false;
 let filling = false;
 // const drawEraser = document.getElementById("drawEraser");
@@ -484,16 +484,28 @@ function prepareTempCanvas() {
         const mode = drawMode.value;
         const color = drawColor.value;
 
+        // if (mode === "fill") {
+        //     // convert pointer internal canvas coordinates
+        //     const x = Math.round(startX);
+        //     const y = Math.round(startY);
+
+        //     floodFillAt(x, y, color);
+
+        //     hasDrawnSomething = true;
+        //     saveState();
+
+        //     redrawVisibleFromTemp();
+        //     drawing = false;
+        //     return;
+        // }
+
         if (mode === "fill") {
-            // convert pointer internal canvas coordinates
             const x = Math.round(startX);
             const y = Math.round(startY);
-
-            floodFillAt(x, y, color);
-
-            hasDrawnSomething = true;
+            const ctx = annotationCtx;
+            
+            floodFill(ctx, p.x, p.y, hexToRGBA(drawColor.value));
             saveState();
-
             redrawVisibleFromTemp();
             drawing = false;
             return;
