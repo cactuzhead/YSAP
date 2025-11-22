@@ -602,59 +602,72 @@ function prepareTempCanvas() {
     }
     
     function floodFillAt(sx, sy, fillColor) {
+        const ctx = tempCtx;               // fill on the master canvas
         const w = tempCanvas.width;
         const h = tempCanvas.height;
 
+        // safety
+        if (sx < 0 || sy < 0 || sx >= w || sy >= h) return;
+
+        // Fill strokes layer
         const img = tempCtx.getImageData(0, 0, w, h);
         const data = img.data;
 
-        const startIndex = (sy * w + sx) * 4;
-        const target = {
-            r: data[startIndex],
-            g: data[startIndex + 1],
-            b: data[startIndex + 2],
-            a: data[startIndex + 3]
-        };
+        // Base layer (image) to ignore
+        const base = baseCtx.getImageData(0, 0, w, h).data;
 
+
+        // target color = pixel at start
+        const idx = (sy * w + sx) * 4;
+        const targetR = data[idx];
+        const targetG = data[idx + 1];
+        const targetB = data[idx + 2];
+        const targetA = data[idx + 3];
+
+        // convert CSS color → rgba
         const fill = hexToRGBA(fillColor);
 
-        // Do nothing if the target color is already the fill color
+        // If target == fill, nothing to do
         if (
-            target.r === fill.r &&
-            target.g === fill.g &&
-            target.b === fill.b &&
-            target.a === 255
+            targetR === fill.r &&
+            targetG === fill.g &&
+            targetB === fill.b &&
+            targetA === data[idx + 3] // compare to itself, or ignore alpha
         ) return;
 
+        // const stack = [[sx, sy]];
+
+        // while (stack.length) {
         const queue = [[sx, sy]];
 
-        while (queue.length) {
+        while(queue.length) {
             const [x, y] = queue.shift();
-            const idx = (y * w + x) * 4;
+            const i = (y * w + x) * 4;
 
-            // skip if not matching target
+            // skip if not the target color
             if (
-                data[idx] !== target.r ||
-                data[idx+1] !== target.g ||
-                data[idx+2] !== target.b ||
-                data[idx+3] !== target.a
+                data[i] !== targetR ||
+                data[i + 1] !== targetG ||
+                data[i + 2] !== targetB ||
+                data[i + 3] !== targetA
             ) continue;
 
-            // apply fill color
-            data[idx] = fill.r;
-            data[idx+1] = fill.g;
-            data[idx+2] = fill.b;
-            data[idx+3] = 255;
+            // fill it
+            data[i] = fill.r;
+            data[i + 1] = fill.g;
+            data[i + 2] = fill.b;
+            data[i + 3] = 255;
 
-            if (x > 0) queue.push([x - 1, y]);
-            if (x < w-1) queue.push([x + 1, y]);
-            if (y > 0) queue.push([x, y - 1]);
-            if (y < h-1) queue.push([x, y + 1]);
+            // push neighbors
+            if (x + 1 < w) queue.push([x + 1, y]);
+            if (x - 1 >= 0) queue.push([x - 1, y]);
+            if (y + 1 < h) queue.push([x, y + 1]);
+            if (y - 1 >= 0) queue.push([x, y - 1]);
+
         }
 
-        tempCtx.putImageData(img, 0, 0);
+        ctx.putImageData(img, 0, 0);
     }
-
 
 
     function hexToRGBA(hex) {
