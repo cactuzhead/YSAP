@@ -16,6 +16,11 @@ const modalAuthor = document.getElementById('modalAuthor');
 const modalStats = document.getElementById('modalStats');
 const modalDesc = document.getElementById('modalDesc');
 const thumbs = document.getElementById('thumbs');
+
+// base image canvas
+const baseCanvas = document.createElement('canvas');
+const baseCtx = baseCanvas.getContext('2d');
+
 // const prevShot = document.getElementById('prevShot');
 // const nextShot = document.getElementById('nextShot');
 
@@ -450,10 +455,19 @@ function prepareTempCanvas() {
 
     function redrawVisibleFromTemp() {
         drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+
+        // First draw base image
+        drawCtx.drawImage(
+            baseCanvas,
+            0, 0, baseCanvas.width, baseCanvas.height,
+            0, 0, drawCanvas.width, drawCanvas.height
+        );
+
+        // Then draw strokes on top
         drawCtx.drawImage(
             tempCanvas,
-            0, 0, tempCanvas.width, tempCanvas.height, // source full-res
-            0, 0, drawCanvas.width, drawCanvas.height  // scaled to CSS size
+            0, 0, tempCanvas.width, tempCanvas.height,
+            0, 0, drawCanvas.width, drawCanvas.height
         );
     }
 
@@ -595,8 +609,13 @@ function prepareTempCanvas() {
         // safety
         if (sx < 0 || sy < 0 || sx >= w || sy >= h) return;
 
-        const img = ctx.getImageData(0, 0, w, h);
+        // Fill strokes layer
+        const img = tempCtx.getImageData(0, 0, w, h);
         const data = img.data;
+
+        // Base layer (image) to ignore
+        const base = baseCtx.getImageData(0, 0, w, h).data;
+
 
         // target color = pixel at start
         const idx = (sy * w + sx) * 4;
@@ -625,13 +644,14 @@ function prepareTempCanvas() {
             const [x, y] = queue.shift();
             const i = (y * w + x) * 4;
 
+            if (base[i+3] !== 0) continue;
             // skip if not the target color
-            if (
-                data[i] !== targetR ||
-                data[i + 1] !== targetG ||
-                data[i + 2] !== targetB ||
-                data[i + 3] !== targetA
-            ) continue;
+            // if (
+            //     data[i] !== targetR ||
+            //     data[i + 1] !== targetG ||
+            //     data[i + 2] !== targetB ||
+            //     data[i + 3] !== targetA
+            // ) continue;
 
             // fill it
             data[i] = fill.r;
@@ -1013,7 +1033,17 @@ function showMedia(idx) {
 
         // Save the initial state as the image itself
         tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
-        tempCtx.drawImage(modalImage, 0, 0, tempCanvas.width, tempCanvas.height);
+        // tempCtx.drawImage(modalImage, 0, 0, tempCanvas.width, tempCanvas.height);
+        baseCanvas.width = modalImage.naturalWidth;
+        baseCanvas.height = modalImage.naturalHeight;
+        baseCtx.drawImage(modalImage, 0, 0, baseCanvas.width, baseCanvas.height);
+
+        // IMPORTANT: tempCanvas must start *EMPTY*
+        tempCanvas.width = baseCanvas.width;
+        tempCanvas.height = baseCanvas.height;
+        tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+
         undoStack = [tempCanvas.toDataURL()];
         redoStack = [];
 
