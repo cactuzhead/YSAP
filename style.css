@@ -561,9 +561,16 @@ overflow-wrap: break-word;
 
 #Tools {
     display: grid;
-    grid-template-columns: repeat(2, 36px); /* 2 buttons per row */
+    grid-template-columns: repeat(3, 36px); /* 3 buttons per row */
+    grid-template-rows: 36px 36px;
     gap: 6px;
 }
+
+#drawUndo { grid-column: 1; grid-row: 1; }
+#drawRedo { grid-column: 2; grid-row: 1; }
+#drawEraser { grid-column: 1; grid-row: 2; }
+#drawFill { grid-column: 2; grid-row: 2; }
+#drawClear { grid-column: 3; grid-row: 2; }
 
 .tooltip {
     position: relative;
