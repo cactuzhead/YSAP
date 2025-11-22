@@ -484,28 +484,16 @@ function prepareTempCanvas() {
         const mode = drawMode.value;
         const color = drawColor.value;
 
-        // if (mode === "fill") {
-        //     // convert pointer internal canvas coordinates
-        //     const x = Math.round(startX);
-        //     const y = Math.round(startY);
-
-        //     floodFillAt(x, y, color);
-
-        //     hasDrawnSomething = true;
-        //     saveState();
-
-        //     redrawVisibleFromTemp();
-        //     drawing = false;
-        //     return;
-        // }
-
         if (mode === "fill") {
+            // convert pointer internal canvas coordinates
             const x = Math.round(startX);
             const y = Math.round(startY);
-            const ctx = annotationCtx;
-            
-            floodFill(ctx, p.x, p.y, hexToRGBA(drawColor.value));
+
+            floodFillAt(x, y, color);
+
+            hasDrawnSomething = true;
             saveState();
+
             redrawVisibleFromTemp();
             drawing = false;
             return;
@@ -652,10 +640,11 @@ function prepareTempCanvas() {
             data[i + 3] = 255;
 
             // push neighbors
-            if (x + 1 < w) stack.push([x + 1, y]);
-            if (x - 1 >= 0) stack.push([x - 1, y]);
-            if (y + 1 < h) stack.push([x, y + 1]);
-            if (y - 1 >= 0) stack.push([x, y - 1]);
+            if (x + 1 < w) queue.push([x + 1, y]);
+            if (x - 1 >= 0) queue.push([x - 1, y]);
+            if (y + 1 < h) queue.push([x, y + 1]);
+            if (y - 1 >= 0) queue.push([x, y - 1]);
+
         }
 
         ctx.putImageData(img, 0, 0);
