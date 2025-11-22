@@ -505,15 +505,17 @@ overflow-wrap: break-word;
 #eraserCursor {
     position: fixed;
     pointer-events: none;
-    border: 2px dashed black;
+    border: 1px solid black;
+    box-shadow: 0 0 0 2px white;
     border-radius: 50%;
     width: 20px;
     height: 20px;
     transform: translate(-50%, -50%);
     display: none;
     z-index: 99999999;
-    background-color: rgba(255, 255, 255, 0.608);
+    background-color: rgba(255, 255, 255, 0.6);
 }
+
 
 #expandToggle,
 #drawCopy {
