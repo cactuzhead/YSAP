@@ -16,8 +16,8 @@ const modalAuthor = document.getElementById('modalAuthor');
 const modalStats = document.getElementById('modalStats');
 const modalDesc = document.getElementById('modalDesc');
 const thumbs = document.getElementById('thumbs');
-const prevShot = document.getElementById('prevShot');
-const nextShot = document.getElementById('nextShot');
+// const prevShot = document.getElementById('prevShot');
+// const nextShot = document.getElementById('nextShot');
 
 // State
 let maps = [];
@@ -776,12 +776,12 @@ function openModal(map) {
     const gallery = modal.querySelector(".gallery");
     const mediaWrap = modal.querySelector(".media-wrap");
     const details = modal.querySelector(".details");
-    const prevBtn = document.getElementById("prevShot");
-    const nextBtn = document.getElementById("nextShot");
+    // const prevBtn = document.getElementById("prevShot");
+    // const nextBtn = document.getElementById("nextShot");
 
     details.style.display = isBiomeMap ? "none" : "block";
-    prevBtn.style.display = isBiomeMap ? "none" : "flex";
-    nextBtn.style.display = isBiomeMap ? "none" : "flex";
+    // prevBtn.style.display = isBiomeMap ? "none" : "flex";
+    // nextBtn.style.display = isBiomeMap ? "none" : "flex";
     gallery.style.flex = isBiomeMap ? "1 1 100%" : "2 1 600px";
     mediaWrap.style.maxHeight = isBiomeMap ? "85vh" : "78vh";
 
@@ -970,15 +970,15 @@ function closeModalFn() {
 }
 
 // Modal navigation
-prevShot.addEventListener('click', () => {
-    const i = Number(modal.dataset.idx || 0);
-    showMedia((i - 1 + current.media.length) % current.media.length);
-});
+// prevShot.addEventListener('click', () => {
+//     const i = Number(modal.dataset.idx || 0);
+//     showMedia((i - 1 + current.media.length) % current.media.length);
+// });
 
-nextShot.addEventListener('click', () => {
-    const i = Number(modal.dataset.idx || 0);
-    showMedia((i + 1) % current.media.length);
-});
+// nextShot.addEventListener('click', () => {
+//     const i = Number(modal.dataset.idx || 0);
+//     showMedia((i + 1) % current.media.length);
+// });
 
 // Close modal events
 closeModal.addEventListener('click', closeModalFn);
