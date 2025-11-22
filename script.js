@@ -69,6 +69,7 @@ expandBtn.addEventListener('click', () => {
 
 let brushSize = 9; // default brush size
 let erasing = false;
+let filling = false;
 // const drawEraser = document.getElementById("drawEraser");
 
 const eraserCursor = document.getElementById("eraserCursor");
@@ -149,6 +150,13 @@ drawEraser.addEventListener("click", () => {
     }
 });
 
+
+drawFill.addEventListener('click', () => {
+    mode = "fill";
+    erasing = false;
+    filling = true;
+    updateActiveButton(drawFill);
+});
 
 function drawEraserCursor(x, y) {
     if (!erasing) return; // only show when erasing
@@ -466,6 +474,18 @@ function prepareTempCanvas() {
         startX = prevX = p.x;
         startY = prevY = p.y;
 
+        if (mode === "fill") {
+            const px = Math.round(startX);
+            const py = Math.round(startY);
+
+            floodFillAt(px, py, color);
+
+            redrawVisibleFromTemp(); // Refresh visible scaled canvas
+            drawing = false;         // No drag
+            return;
+        }
+
+
         redrawVisibleFromTemp();
     }
 
@@ -552,6 +572,66 @@ function prepareTempCanvas() {
         drawCtx.stroke();
         drawCtx.restore();
     }
+    
+    function floodFillAt(x, y, fillColor) {
+        const ctx = tempCtx; // This is your annotation canvas
+
+        const w = tempCanvas.width;
+        const h = tempCanvas.height;
+
+        const imgData = ctx.getImageData(0, 0, w, h);
+        const data = imgData.data;
+
+        // Convert fillColor "#rrggbb" => [r,g,b]
+        const rF = parseInt(fillColor.slice(1, 3), 16);
+        const gF = parseInt(fillColor.slice(3, 5), 16);
+        const bF = parseInt(fillColor.slice(5, 7), 16);
+
+        // Pixel index helper
+        const idx = (x, y) => (y * w + x) * 4;
+
+        const r0 = data[idx(x, y)];
+        const g0 = data[idx(x, y) + 1];
+        const b0 = data[idx(x, y) + 2];
+        const a0 = data[idx(x, y) + 3];
+
+        // If already same color → skip
+        if (r0 === rF && g0 === gF && b0 === bF && a0 === 255) return;
+
+        const stack = [];
+        stack.push([x, y]);
+
+        while (stack.length) {
+            const [px, py] = stack.pop();
+            let i = idx(px, py);
+
+            // Bounds check
+            if (px < 0 || py < 0 || px >= w || py >= h) continue;
+
+            // Must match original target color
+            if (
+                data[i] !== r0 ||
+                data[i + 1] !== g0 ||
+                data[i + 2] !== b0 ||
+                data[i + 3] !== a0
+            ) continue;
+
+            // Fill pixel
+            data[i] = rF;
+            data[i + 1] = gF;
+            data[i + 2] = bF;
+            data[i + 3] = 255;
+
+            // Add neighbors
+            stack.push([px + 1, py]);
+            stack.push([px - 1, py]);
+            stack.push([px, py + 1]);
+            stack.push([px, py - 1]);
+        }
+
+        ctx.putImageData(imgData, 0, 0);
+    }
+
 
     // drawEraser.addEventListener("click", () => {
     //     erasing = !erasing;
