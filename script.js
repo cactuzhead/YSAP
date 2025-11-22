@@ -474,14 +474,17 @@ function prepareTempCanvas() {
         startX = prevX = p.x;
         startY = prevY = p.y;
 
+        const mode = drawMode.value;
+        const color = drawColor.value;
+
         if (mode === "fill") {
             const px = Math.round(startX);
             const py = Math.round(startY);
 
             floodFillAt(px, py, color);
 
-            redrawVisibleFromTemp(); // Refresh visible scaled canvas
-            drawing = false;         // No drag
+            redrawVisibleFromTemp();
+            drawing = false;
             return;
         }
 
