@@ -152,11 +152,12 @@ drawEraser.addEventListener("click", () => {
 
 
 drawFill.addEventListener('click', () => {
-    mode = "fill";
+    drawMode.value = "fill";
     erasing = false;
     filling = true;
     updateActiveButton(drawFill);
 });
+
 
 function drawEraserCursor(x, y) {
     if (!erasing) return; // only show when erasing
