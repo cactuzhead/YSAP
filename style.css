@@ -496,12 +496,6 @@ overflow-wrap: break-word;
     box-shadow: 0 0 4px #fff;
 }
 
-#shapeTools {
-    display: grid;
-    grid-template-columns: repeat(3, 36px); /* 3 buttons per row */
-    gap: 6px;
-}
-
 #eraserCursor {
     position: fixed;
     pointer-events: none;
@@ -559,11 +553,15 @@ overflow-wrap: break-word;
 
 
 
-#Tools {
+#Tools,
+#shapeTools,
+#brushSizes
+ {
     display: grid;
     grid-template-columns: repeat(3, 36px); /* 3 buttons per row */
     grid-template-rows: 36px 36px;
     gap: 6px;
+    margin-bottom: 10px;
 }
 
 #drawUndo { grid-column: 1; grid-row: 1; }
@@ -649,27 +647,6 @@ overflow-wrap: break-word;
 .shape-btn.selected svg {
     stroke: white;
 }
-
-#brushSizes {
-    display: grid;
-    grid-template-columns: repeat(3, 36px);
-    gap: 6px;
-    margin-bottom: 10px;
-}
-
-/* .size-btn {
-    width: 34px;
-    height: 34px;
-    border-radius: 6px;
-    border: 1px solid var(--border, #aaa);
-    background: var(--bg, #eee);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    padding: 0;
-    transition: background 0.15s, border-color 0.15s;
-} */
 
 .size-btn.selected {
     color: #ffffff;
