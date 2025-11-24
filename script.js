@@ -74,21 +74,21 @@ let filling = false;
 
 const eraserCursor = document.getElementById("eraserCursor");
 
-// drawCanvas.addEventListener('mousemove', (e) => {
-//     if (!erasing) {
-//         eraserCursor.style.display = 'none';
-//         drawCanvas.style.cursor = '';
-//         return;
-//     }
+drawCanvas.addEventListener('mousemove', (e) => {
+    if (!erasing) {
+        eraserCursor.style.display = 'none';
+        drawCanvas.style.cursor = '';
+        return;
+    }
 
-//     eraserCursor.style.display = 'block';
-//     eraserCursor.style.width = `${brushSize}px`;
-//     eraserCursor.style.height = `${brushSize}px`;
+    eraserCursor.style.display = 'block';
+    eraserCursor.style.width = `${brushSize}px`;
+    eraserCursor.style.height = `${brushSize}px`;
 
-//     eraserCursor.style.left = `${e.clientX}px`;
-//     eraserCursor.style.top = `${e.clientY}px`;
+    eraserCursor.style.left = `${e.clientX}px`;
+    eraserCursor.style.top = `${e.clientY}px`;
     
-// });
+});
 
 drawCanvas.addEventListener('mouseleave', () => {
     eraserCursor.style.display = 'none';
