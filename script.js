@@ -520,29 +520,36 @@ function prepareTempCanvas() {
 
         const shouldShowCursor = ((erasing && drawMode.value === "erase") || drawMode.value === 'free');
         if (!shouldShowCursor) {
-            eraserCursor.style.display = 'none';
-            drawCanvas.style.cursor = '';
+            // eraserCursor.style.display = 'none';
+            // drawCanvas.style.cursor = '';
         } else {
-            eraserCursor.style.display = 'block';
-            eraserCursor.style.width = `${brushSize}px`;
-            eraserCursor.style.height = `${brushSize}px`;
-            eraserCursor.style.left = `${e.clientX}px`;
-            eraserCursor.style.top = `${e.clientY}px`;
+            // eraserCursor.style.display = 'block';
+            // eraserCursor.style.width = `${brushSize}px`;
+            // eraserCursor.style.height = `${brushSize}px`;
+            // eraserCursor.style.left = `${e.clientX}px`;
+            // eraserCursor.style.top = `${e.clientY}px`;
         }
 
         if (drawMode.value === 'free') {
             tempCtx.lineWidth = brushSize;
             tempCtx.lineCap = 'round';
 
-            if (erasing) {
+            if (erasing || drawMode.value === 'free') {
                 // Eraser mode
-                // drawEraserCursor(p.x, p.y);
-                // tempCtx.globalCompositeOperation = 'destination-out';
-                // tempCtx.strokeStyle = 'rgba(0,0,0,1)';
+                drawEraserCursor(p.x, p.y);
+                tempCtx.globalCompositeOperation = 'destination-out';
+                tempCtx.strokeStyle = 'rgba(0,0,0,1)';
+                eraserCursor.style.display = 'none';
+             drawCanvas.style.cursor = '';
             } else {
                 // Normal drawing
                 tempCtx.globalCompositeOperation = 'source-over';
                 tempCtx.strokeStyle = drawColor.value || '#f94144';
+                 eraserCursor.style.display = 'block';
+                eraserCursor.style.width = `${brushSize}px`;
+                eraserCursor.style.height = `${brushSize}px`;
+                eraserCursor.style.left = `${e.clientX}px`;
+                eraserCursor.style.top = `${e.clientY}px`;
             }
 
             tempCtx.beginPath();
