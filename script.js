@@ -75,7 +75,11 @@ let filling = false;
 const eraserCursor = document.getElementById("eraserCursor");
 
 drawCanvas.addEventListener('mousemove', (e) => {
-    if (!erasing) return;
+    if (!erasing) {
+        eraserCursor.style.display = 'none';
+        drawCanvas.style.cursor = '';
+        return;
+    }
 
     eraserCursor.style.display = 'block';
     eraserCursor.style.width = `${brushSize}px`;
@@ -83,6 +87,7 @@ drawCanvas.addEventListener('mousemove', (e) => {
 
     eraserCursor.style.left = `${e.clientX}px`;
     eraserCursor.style.top = `${e.clientY}px`;
+    
 });
 
 drawCanvas.addEventListener('mouseleave', () => {
