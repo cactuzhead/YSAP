@@ -387,6 +387,7 @@ overflow-wrap: break-word;
   top: 0;
   left: 0;
   pointer-events: auto;
+  z-index: 10;
 }
 
 
