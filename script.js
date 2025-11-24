@@ -518,18 +518,16 @@ function prepareTempCanvas() {
         const lw = brushSize;
         const color = drawColor.value || '#f94144';
 
-        if (!erasing) {
+        if (!erasing || !drawMode.value === 'free') {
             eraserCursor.style.display = 'none';
             drawCanvas.style.cursor = '';
-            // return;
+        } else {
+            eraserCursor.style.display = 'block';
+            eraserCursor.style.width = `${brushSize}px`;
+            eraserCursor.style.height = `${brushSize}px`;
+            eraserCursor.style.left = `${e.clientX}px`;
+            eraserCursor.style.top = `${e.clientY}px`;
         }
-
-        eraserCursor.style.display = 'block';
-        eraserCursor.style.width = `${brushSize}px`;
-        eraserCursor.style.height = `${brushSize}px`;
-
-        eraserCursor.style.left = `${e.clientX}px`;
-        eraserCursor.style.top = `${e.clientY}px`;
 
         if (drawMode.value === 'free') {
             tempCtx.lineWidth = brushSize;
