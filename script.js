@@ -518,7 +518,8 @@ function prepareTempCanvas() {
         const lw = brushSize;
         const color = drawColor.value || '#f94144';
 
-        if (!erasing || !drawMode.value === 'free') {
+        const shouldShowCursor = (erasing && drawMode.value === "erase");
+        if (!shouldShowCursor) {
             eraserCursor.style.display = 'none';
             drawCanvas.style.cursor = '';
         } else {
