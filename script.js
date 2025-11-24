@@ -75,7 +75,7 @@ let filling = false;
 const eraserCursor = document.getElementById("eraserCursor");
 
 drawCanvas.addEventListener('mousemove', (e) => {
-    if (!erasing ||  !drawMode.value === "free") {
+    if (!erasing || !drawMode.value === "free") {
         eraserCursor.style.display = 'none';
         drawCanvas.style.cursor = '';
         return;
@@ -746,7 +746,7 @@ function prepareTempCanvas() {
 
     // Attach pointer events (mouse + touch)
     drawCanvas.addEventListener('mousedown', onPointerDown);
-    drawCanvas.addEventListener('mousemove', onPointerMove);
+    // drawCanvas.addEventListener('mousemove', onPointerMove);
     window.addEventListener('mouseup', onPointerUp);
 
     // Touch equivalents
