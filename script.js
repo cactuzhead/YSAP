@@ -75,47 +75,19 @@ let filling = false;
 const eraserCursor = document.getElementById("eraserCursor");
 
 drawCanvas.addEventListener('mousemove', (e) => {
-    // show custom cursor for two cases:
-    //  - erasing = true
-    //  - or drawMode is freehand (drawMode.value === 'free') AND erasing is false
-    const isFreehandActive = drawMode && drawMode.value === 'free';
-    const shouldShow = erasing || isFreehandActive;
+    if (!erasing) return;
 
-    if (!shouldShow) {
-        // If not showing, ensure it's hidden and exit
-        if (eraserCursor.style.display !== 'none') hideBrushCursor();
-        return;
-    }
+    eraserCursor.style.display = 'block';
+    eraserCursor.style.width = `${brushSize}px`;
+    eraserCursor.style.height = `${brushSize}px`;
 
-    // show centered at pointer
-    showBrushCursor(e.clientX, e.clientY);
+    eraserCursor.style.left = `${e.clientX}px`;
+    eraserCursor.style.top = `${e.clientY}px`;
 });
 
 drawCanvas.addEventListener('mouseleave', () => {
-    hideBrushCursor();
+    eraserCursor.style.display = 'none';
 });
-window.addEventListener('blur', hideBrushCursor);
-
-const resizeObserver = new MutationObserver(() => {
-    // If visible, refresh size/position (no-op if hidden)
-    const rect = eraserCursor.getBoundingClientRect();
-    if (eraserCursor.style.display !== 'none') {
-        // keep it centered where it is - size will update next mousemove, but force immediate update
-        eraserCursor.style.width = `${brushSize}px`;
-        eraserCursor.style.height = `${brushSize}px`;
-    }
-});
-
-resizeObserver.observe(eraserCursor, { attributes: true });
-
-document.addEventListener('click', () => {
-    // force an immediate hide/show update (if cursor currently over canvas, mousemove will run soon)
-    if (eraserCursor.style.display !== 'none' && drawMode && drawMode.value !== 'free' && !erasing) {
-        hideBrushCursor();
-    }
-});
-
-
 
 
 const sizeButtons = document.querySelectorAll(".size-btn");
@@ -389,22 +361,7 @@ function updateCanvasPosition() {
     syncCanvasToImage();
 }
 
-function showBrushCursor(clientX, clientY) {
-    eraserCursor.style.display = 'block';
-    eraserCursor.style.width = `${brushSize}px`;
-    eraserCursor.style.height = `${brushSize}px`;
-    eraserCursor.style.left = `${clientX}px`;
-    eraserCursor.style.top = `${clientY}px`;
 
-    // hide default canvas cursor while custom cursor visible
-    drawCanvas.style.cursor = 'none';
-}
-
-function hideBrushCursor() {
-    eraserCursor.style.display = 'none';
-    // restore default cursor when custom is hidden
-    drawCanvas.style.cursor = '';
-}
 
 
 window.addEventListener('resize', updateCanvasPosition);
@@ -784,7 +741,7 @@ function prepareTempCanvas() {
 
     // Attach pointer events (mouse + touch)
     drawCanvas.addEventListener('mousedown', onPointerDown);
-    // drawCanvas.addEventListener('mousemove', onPointerMove);
+    drawCanvas.addEventListener('mousemove', onPointerMove);
     window.addEventListener('mouseup', onPointerUp);
 
     // Touch equivalents
