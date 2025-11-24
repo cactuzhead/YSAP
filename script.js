@@ -75,7 +75,7 @@ let filling = false;
 const eraserCursor = document.getElementById("eraserCursor");
 
 drawCanvas.addEventListener('mousemove', (e) => {
-    if (!erasing ||  drawMode.value === "free") {
+    if (!erasing ||  !drawMode.value === "free") {
         eraserCursor.style.display = 'none';
         drawCanvas.style.cursor = '';
         return;
