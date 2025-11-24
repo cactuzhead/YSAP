@@ -521,7 +521,7 @@ function prepareTempCanvas() {
         if (!erasing) {
             eraserCursor.style.display = 'none';
             drawCanvas.style.cursor = '';
-            return;
+            // return;
         }
 
         eraserCursor.style.display = 'block';
