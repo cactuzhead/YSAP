@@ -522,17 +522,6 @@ function prepareTempCanvas() {
         if (!shouldShowCursor) {
             eraserCursor.style.display = 'none';
             drawCanvas.style.cursor = '';
-        } else {
-            eraserCursor.style.display = 'block';
-            eraserCursor.style.width = `${brushSize}px`;
-            eraserCursor.style.height = `${brushSize}px`;
-            eraserCursor.style.left = `${e.clientX}px`;
-            eraserCursor.style.top = `${e.clientY}px`;
-        }
-
-        if (drawMode.value === 'free') {
-            tempCtx.lineWidth = brushSize;
-            tempCtx.lineCap = 'round';
 
             if (erasing) {
                 // Eraser mode
@@ -545,7 +534,20 @@ function prepareTempCanvas() {
                 // Normal drawing
                 tempCtx.globalCompositeOperation = 'source-over';
                 tempCtx.strokeStyle = drawColor.value || '#f94144';
-            }
+            }            
+        } else {
+            eraserCursor.style.display = 'block';
+            eraserCursor.style.width = `${brushSize}px`;
+            eraserCursor.style.height = `${brushSize}px`;
+            eraserCursor.style.left = `${e.clientX}px`;
+            eraserCursor.style.top = `${e.clientY}px`;
+        }
+
+        if (drawMode.value === 'free') {
+            tempCtx.lineWidth = brushSize;
+            tempCtx.lineCap = 'round';
+
+            
 
             tempCtx.beginPath();
             tempCtx.moveTo(prevX, prevY);
