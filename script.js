@@ -75,7 +75,7 @@ let filling = false;
 const eraserCursor = document.getElementById("eraserCursor");
 
 // drawCanvas.addEventListener('mousemove', (e) => {
-//     if (!erasing || !drawMode.value === "free") {
+//     if (!erasing) {
 //         eraserCursor.style.display = 'none';
 //         drawCanvas.style.cursor = '';
 //         return;
@@ -518,7 +518,7 @@ function prepareTempCanvas() {
         const lw = brushSize;
         const color = drawColor.value || '#f94144';
 
-         if (!erasing || !drawMode.value === "free") {
+        if (!erasing) {
             eraserCursor.style.display = 'none';
             drawCanvas.style.cursor = '';
             return;
@@ -530,7 +530,6 @@ function prepareTempCanvas() {
 
         eraserCursor.style.left = `${e.clientX}px`;
         eraserCursor.style.top = `${e.clientY}px`;
-        
 
         if (drawMode.value === 'free') {
             tempCtx.lineWidth = brushSize;
