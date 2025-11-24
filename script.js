@@ -518,7 +518,7 @@ function prepareTempCanvas() {
         const lw = brushSize;
         const color = drawColor.value || '#f94144';
 
-        const shouldShowCursor = (erasing && drawMode.value === "erase" || drawMode.value === 'free');
+        const shouldShowCursor = ((erasing && drawMode.value === "erase") || drawMode.value === 'free');
         if (!shouldShowCursor) {
             eraserCursor.style.display = 'none';
             drawCanvas.style.cursor = '';
@@ -536,9 +536,9 @@ function prepareTempCanvas() {
 
             if (erasing) {
                 // Eraser mode
-                drawEraserCursor(p.x, p.y);
-                tempCtx.globalCompositeOperation = 'destination-out';
-                tempCtx.strokeStyle = 'rgba(0,0,0,1)';
+                // drawEraserCursor(p.x, p.y);
+                // tempCtx.globalCompositeOperation = 'destination-out';
+                // tempCtx.strokeStyle = 'rgba(0,0,0,1)';
             } else {
                 // Normal drawing
                 tempCtx.globalCompositeOperation = 'source-over';
