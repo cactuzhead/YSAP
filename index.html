@@ -58,66 +58,66 @@
 					<!-- Toolbar -->
 					<div id="drawTools" class="draw-tools">
 
-					<button id="expandToggle" class="square-btn tooltip" data-tooltip="Expand / Shrink"><i data-lucide="expand"></i></button>
-					
-					<div id="brushSizes">
-						<button class="size-btn tooltip" data-size="5" data-tooltip="Brush #1"><span class="dot" style="width: 3px; height: 3px;"></span></button>
-						<button class="size-btn tooltip" data-size="7" data-tooltip="Brush #2"><span class="dot" style="width: 7px; height: 7px;"></span></button>
-						<button class="size-btn tooltip" data-size="9" data-tooltip="Brush #3"><span class="dot" style="width: 11px; height: 11px;"></span></button>
-						<button class="size-btn tooltip" data-size="12" data-tooltip="Brush #4"><span class="dot" style="width: 15px; height: 15px;"></span></button>
-						<button class="size-btn tooltip" data-size="15" data-tooltip="Brush #5"><span class="dot" style="width: 19px; height: 19px;"></span></button>
-						<button class="size-btn tooltip" data-size="20" data-tooltip="Brush #6"><span class="dot" style="width: 24px; height: 24px;"></span></button>
-					</div>
+						<button id="expandToggle" class="square-btn tooltip" data-tooltip="Expand / Shrink"><i data-lucide="expand"></i></button>
+						
+						<div id="brushSizes">
+							<button class="size-btn tooltip" data-size="5" data-tooltip="Brush #1"><span class="dot" style="width: 3px; height: 3px;"></span></button>
+							<button class="size-btn tooltip" data-size="7" data-tooltip="Brush #2"><span class="dot" style="width: 7px; height: 7px;"></span></button>
+							<button class="size-btn tooltip" data-size="9" data-tooltip="Brush #3"><span class="dot" style="width: 11px; height: 11px;"></span></button>
+							<button class="size-btn tooltip" data-size="12" data-tooltip="Brush #4"><span class="dot" style="width: 15px; height: 15px;"></span></button>
+							<button class="size-btn tooltip" data-size="15" data-tooltip="Brush #5"><span class="dot" style="width: 19px; height: 19px;"></span></button>
+							<button class="size-btn tooltip" data-size="20" data-tooltip="Brush #6"><span class="dot" style="width: 24px; height: 24px;"></span></button>
+						</div>
 
-					<div id="colorPresets">
-						<button class="color-btn tooltip" data-color="#f94144" data-tooltip="Red"></button>
-						<button class="color-btn tooltip" data-color="#ff8c00" data-tooltip="Orange"></button>
-						<button class="color-btn tooltip" data-color="#fee440" data-tooltip="Yellow"></button>
-						<button class="color-btn tooltip" data-color="#11cc99" data-tooltip="Green"></button>
-						<button class="color-btn tooltip" data-color="#5591f5" data-tooltip="Blue"></button>				
-						<button class="color-btn tooltip" data-color="#b429f9" data-tooltip="Purple"></button>
-					</div>
-					<input type="color" id="drawColor" value="#f94144" class="tooltip" data-tooltip="Palette">					
-					
-					<div id="shapeTools">
-						<button data-mode="free" class="shape-btn tooltip selected" data-tooltip="Draw tool">
-							<i data-lucide="pencil"></i>
-						</button>
-						<button data-mode="circle" class="shape-btn tooltip" data-tooltip="Circle tool">
-							<i data-lucide="circle"></i>
-						</button>
-						<button data-mode="square" class="shape-btn tooltip" data-tooltip="Square tool">
-							<i data-lucide="square"></i>
-						</button>
-						<button data-mode="triangle" class="shape-btn tooltip" data-tooltip="Triangle tool">
-							<i data-lucide="triangle"></i>
-						</button>
-						<button data-mode="hex" class="shape-btn tooltip" data-tooltip="Hexagon tool">
-							<i data-lucide="hexagon"></i>
-						</button>
-						<button data-mode="star" class="shape-btn tooltip" data-tooltip="Star tool">
-							<i data-lucide="star"></i>
-						</button>
-					</div>
+						<div id="colorPresets">
+							<button class="color-btn tooltip" data-color="#f94144" data-tooltip="Red"></button>
+							<button class="color-btn tooltip" data-color="#ff8c00" data-tooltip="Orange"></button>
+							<button class="color-btn tooltip" data-color="#fee440" data-tooltip="Yellow"></button>
+							<button class="color-btn tooltip" data-color="#11cc99" data-tooltip="Green"></button>
+							<button class="color-btn tooltip" data-color="#5591f5" data-tooltip="Blue"></button>				
+							<button class="color-btn tooltip" data-color="#b429f9" data-tooltip="Purple"></button>
+						</div>
+						<input type="color" id="drawColor" value="#f94144" class="tooltip" data-tooltip="Palette">					
+						
+						<div id="shapeTools">
+							<button data-mode="free" class="shape-btn tooltip selected" data-tooltip="Draw tool">
+								<i data-lucide="pencil"></i>
+							</button>
+							<button data-mode="circle" class="shape-btn tooltip" data-tooltip="Circle tool">
+								<i data-lucide="circle"></i>
+							</button>
+							<button data-mode="square" class="shape-btn tooltip" data-tooltip="Square tool">
+								<i data-lucide="square"></i>
+							</button>
+							<button data-mode="triangle" class="shape-btn tooltip" data-tooltip="Triangle tool">
+								<i data-lucide="triangle"></i>
+							</button>
+							<button data-mode="hex" class="shape-btn tooltip" data-tooltip="Hexagon tool">
+								<i data-lucide="hexagon"></i>
+							</button>
+							<button data-mode="star" class="shape-btn tooltip" data-tooltip="Star tool">
+								<i data-lucide="star"></i>
+							</button>
+						</div>
 
-					<select id="drawMode" style="display:none;">
-						<option value="free">✏ Freehand</option>
-						<option value="circle">● Circle</option>
-						<option value="square">■ Square</option>
-						<option value="triangle">▲ Triangle</option>
-						<option value="hex">⬣ Hexagon</option>
-						<option value="star">★ Star</option>
-					</select>
-					
-					<div id="Tools">
-						<button id="drawUndo" class="square-btn tooltip" data-tooltip="Undo"><i data-lucide="undo"></i></button>
-						<button id="drawRedo" class="square-btn tooltip" data-tooltip="Redo"><i data-lucide="redo"></i></button>
-						<button id="drawEraser" class="square-btn tooltip" data-tooltip="Eraser"><i data-lucide="eraser"></i></button>
-						<button id="drawFill" class="square-btn tooltip" data-tooltip="Paint Bucket"><i data-lucide="paint-bucket"></i></button>
-						<button id="drawClear" class="square-btn tooltip" data-tooltip="Clear all anotations"><i data-lucide="brush-cleaning"></i></button>
-					</div>
+						<select id="drawMode" style="display:none;">
+							<option value="free">✏ Freehand</option>
+							<option value="circle">● Circle</option>
+							<option value="square">■ Square</option>
+							<option value="triangle">▲ Triangle</option>
+							<option value="hex">⬣ Hexagon</option>
+							<option value="star">★ Star</option>
+						</select>
+						
+						<div id="Tools">
+							<button id="drawUndo" class="square-btn tooltip" data-tooltip="Undo"><i data-lucide="undo"></i></button>
+							<button id="drawRedo" class="square-btn tooltip" data-tooltip="Redo"><i data-lucide="redo"></i></button>
+							<button id="drawEraser" class="square-btn tooltip" data-tooltip="Eraser"><i data-lucide="eraser"></i></button>
+							<button id="drawFill" class="square-btn tooltip" data-tooltip="Paint Bucket"><i data-lucide="paint-bucket"></i></button>
+							<button id="drawClear" class="square-btn tooltip" data-tooltip="Clear all anotations"><i data-lucide="brush-cleaning"></i></button>
+						</div>
 
-					<button id="drawCopy" class="square-btn tooltip" data-tooltip="Copy to clipboard"><i data-lucide="clipboard-copy"></i></button>
+						<button id="drawCopy" class="square-btn tooltip" data-tooltip="Copy to clipboard"><i data-lucide="clipboard-copy"></i></button>
 
 					</div>
 				</div>

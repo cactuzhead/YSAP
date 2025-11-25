@@ -294,7 +294,15 @@ overflow-wrap: break-word;
 .stats{display:flex;flex-direction:column;gap:6px;margin:12px 0}
 .stat-row{display:flex;justify-content:space-between;padding:8px;border-radius:8px;background:var(--glass)}
 .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.thumb-btn{width:64px;height:46px;object-fit:cover;border-radius:6px;cursor:pointer}
+
+.thumb-btn{
+    width: 64px;
+    height: 46px;
+    object-fit: cover;
+    border-radius: 6px;
+    cursor: pointer
+}
+
 .close-btn {
     position: absolute;
     right: 12px;
@@ -639,12 +647,14 @@ overflow-wrap: break-word;
     background: var(--hover, #ddd);
 }
 
-.shape-btn.selected {
+.shape-btn.selected,
+#drawEraser.selected {
     background: var(--accent-bg, #4287f5);
     border-color: var(--accent-border, #1c5ed6);
 }
 
-.shape-btn.selected svg {
+.shape-btn.selected svg,
+#drawEraser.selected svg {
     stroke: white;
 }
 

@@ -75,16 +75,19 @@ let filling = false;
 const eraserCursor = document.getElementById("eraserCursor");
 
 drawCanvas.addEventListener('mousemove', (e) => {
-    if (!erasing) {
+    const useCustomCursor = erasing || drawMode.value === 'free';
+
+
+    if (!useCustomCursor) {
         eraserCursor.style.display = 'none';
-        drawCanvas.style.cursor = '';
+        drawCanvas.style.cursor = 'crosshair';
         return;
     }
 
+    drawCanvas.style.cursor = 'none';
     eraserCursor.style.display = 'block';
     eraserCursor.style.width = `${brushSize}px`;
     eraserCursor.style.height = `${brushSize}px`;
-
     eraserCursor.style.left = `${e.clientX}px`;
     eraserCursor.style.top = `${e.clientY}px`;
     
@@ -134,26 +137,35 @@ colorPicker.addEventListener("input", () => {
 });
 
 
+// *** Eraser Button *****************************************
 const drawEraser = document.getElementById("drawEraser");
+const freeButton = document.querySelector('#shapeTools .shape-btn[data-mode="free"]');
 
 drawEraser.addEventListener("click", () => {
     erasing = !erasing;
 
-    // Highlight button
+    // highlight eraser button
     drawEraser.classList.toggle("selected", erasing);
 
     if (erasing) {
-        // Force freehand mode when erasing
-        drawMode.value = "free";
-
-        // Deselect other tools
-        document.querySelectorAll('.shape-btn, .size-btn, .color-btn').forEach(btn => {
+        // Deselect all other tools
+        document.querySelectorAll('.shape-btn, .color-btn').forEach(btn => {
             if (btn !== drawEraser) btn.classList.remove("selected");
         });
-
-        drawCanvas.style.cursor = erasing ? 'none' : 'crosshair';
+        
+    } else {        
+        freeButton.classList.add("selected");       
+        drawCanvas.style.cursor = 'crosshair';
+        eraserCursor.style.display = 'none';
     }
+
+    // Force freehand mode when toggling erase button
+    drawMode.value = "free"; 
+    // drawCanvas.style.cursor = 'none';
+    // eraserCursor.style.display = 'block';
+    // drawCanvas.style.cursor = erasing ? '' : 'crosshair';
 });
+
 
 
 drawFill.addEventListener('click', () => {
@@ -289,28 +301,28 @@ if (!drawCanvas || !modalImage) {
     let drawing = false;
     let startX = 0, startY = 0;
     let prevX = 0, prevY = 0;
-    let imgNaturalW = 0, imgNaturalH = 0;
+    // let imgNaturalW = 0, imgNaturalH = 0;
     let dpr = Math.max(window.devicePixelRatio || 1, 1);
 
-    function resampleTempCanvasTo(newW, newH) {
-        // if same size, nothing to do
-        if (tempCanvas.width === newW && tempCanvas.height === newH) return;
+    // function resampleTempCanvasTo(newW, newH) {
+    //     // if same size, nothing to do
+    //     if (tempCanvas.width === newW && tempCanvas.height === newH) return;
 
-        // create an intermediate canvas with target size
-        const tmp = document.createElement('canvas');
-        tmp.width = newW;
-        tmp.height = newH;
-        const tctx = tmp.getContext('2d');
+    //     // create an intermediate canvas with target size
+    //     const tmp = document.createElement('canvas');
+    //     tmp.width = newW;
+    //     tmp.height = newH;
+    //     const tctx = tmp.getContext('2d');
 
-        // draw old temp into the new size (this rescales strokes)
-        tctx.drawImage(tempCanvas, 0, 0, newW, newH);
+    //     // draw old temp into the new size (this rescales strokes)
+    //     tctx.drawImage(tempCanvas, 0, 0, newW, newH);
 
-        // copy resampled back into tempCanvas: adjust tempCanvas size then draw
-        tempCanvas.width = newW;
-        tempCanvas.height = newH;
-        tempCtx.clearRect(0, 0, newW, newH);
-        tempCtx.drawImage(tmp, 0, 0);
-    }
+    //     // copy resampled back into tempCanvas: adjust tempCanvas size then draw
+    //     tempCanvas.width = newW;
+    //     tempCanvas.height = newH;
+    //     tempCtx.clearRect(0, 0, newW, newH);
+    //     tempCtx.drawImage(tmp, 0, 0);
+    // }
 
     // Prepare canvases to match the image natural size (and scale for DPR)
     function prepareDrawCanvas() {
@@ -407,40 +419,40 @@ async function copyAnnotatedImageToClipboard() {
 
 }
 
-function showCopyMessage(msg) {
-    const el = document.createElement("div");
-    el.textContent = msg;
-    Object.assign(el.style, {
-        position: "fixed",
-        bottom: "20px",
-        left: "50%",
-        transform: "translateX(-50%)",
-        background: "#333",
-        color: "#fff",
-        padding: "10px 20px",
-        borderRadius: "5px",
-        zIndex: 9999,
-        opacity: 0,
-        transition: "opacity 0.3s"
-    });
-    document.body.appendChild(el);
-    requestAnimationFrame(() => el.style.opacity = 1);
-    setTimeout(() => {
-        el.style.opacity = 0;
-        setTimeout(() => el.remove(), 300);
-    }, 2000);
-}
+// function showCopyMessage(msg) {
+//     const el = document.createElement("div");
+//     el.textContent = msg;
+//     Object.assign(el.style, {
+//         position: "fixed",
+//         bottom: "20px",
+//         left: "50%",
+//         transform: "translateX(-50%)",
+//         background: "#333",
+//         color: "#fff",
+//         padding: "10px 20px",
+//         borderRadius: "5px",
+//         zIndex: 9999,
+//         opacity: 0,
+//         transition: "opacity 0.3s"
+//     });
+//     document.body.appendChild(el);
+//     requestAnimationFrame(() => el.style.opacity = 1);
+//     setTimeout(() => {
+//         el.style.opacity = 0;
+//         setTimeout(() => el.remove(), 300);
+//     }, 2000);
+// }
 
-function prepareTempCanvas() {
-    imgNaturalW = modalImage.naturalWidth;
-    imgNaturalH = modalImage.naturalHeight;
+// function prepareTempCanvas() {
+//     imgNaturalW = modalImage.naturalWidth;
+//     imgNaturalH = modalImage.naturalHeight;
 
-    tempCanvas.width = imgNaturalW;
-    tempCanvas.height = imgNaturalH;
-    tempCtx.clearRect(0, 0, imgNaturalW, imgNaturalH);
+//     tempCanvas.width = imgNaturalW;
+//     tempCanvas.height = imgNaturalH;
+//     tempCtx.clearRect(0, 0, imgNaturalW, imgNaturalH);
 
-    redrawVisibleFromTemp();
-}
+//     redrawVisibleFromTemp();
+// }
 
     function getPosFromEvent(e) {
         const rect = drawCanvas.getBoundingClientRect();
@@ -464,18 +476,18 @@ function prepareTempCanvas() {
         );
     }
 
-    function pushInitialState() {
-        // Always push a blank state first
-        const dataURL = tempCanvas.toDataURL();
-        undoStack.push(dataURL);
-        redoStack = [];
-    }
+    // function pushInitialState() {
+    //     // Always push a blank state first
+    //     const dataURL = tempCanvas.toDataURL();
+    //     undoStack.push(dataURL);
+    //     redoStack = [];
+    // }
 
-    function colorsMatch(c1, c2, tol = 10) {
-        return Math.abs(c1.r - c2.r) <= tol &&
-            Math.abs(c1.g - c2.g) <= tol &&
-            Math.abs(c1.b - c2.b) <= tol;
-    }
+    // function colorsMatch(c1, c2, tol = 10) {
+    //     return Math.abs(c1.r - c2.r) <= tol &&
+    //         Math.abs(c1.g - c2.g) <= tol &&
+    //         Math.abs(c1.b - c2.b) <= tol;
+    // }
 
     function onPointerDown(e) {
         if (modalVideo.style.display !== 'none') return;
@@ -518,9 +530,8 @@ function prepareTempCanvas() {
         const lw = brushSize;
         const color = drawColor.value || '#f94144';
 
-
         if (drawMode.value === 'free') {
-            tempCtx.lineWidth = brushSize;
+            tempCtx.lineWidth = brushSize * dpr;
             tempCtx.lineCap = 'round';
 
             if (erasing) {
@@ -1052,6 +1063,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
             erasing = false;
             drawEraser.classList.remove("selected");
+
+            // update cursor immediately
+            if (mode === 'free') {
+                drawCanvas.style.cursor = 'none';
+                eraserCursor.style.display = 'block';
+            } else {
+                drawCanvas.style.cursor = 'crosshair';
+                eraserCursor.style.display = 'none';
+            }
         });
     });
 });
