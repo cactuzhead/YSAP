@@ -45,7 +45,6 @@ const detailsCol = modalMain.querySelector('.details');
 const icon = expandBtn.querySelector('i');
 
 modalImage.addEventListener("load", () => {
-    // resizeCanvas();
 });
 
 expandBtn.addEventListener('click', () => {
@@ -70,13 +69,10 @@ expandBtn.addEventListener('click', () => {
 let brushSize = 12; // default brush size
 let erasing = false;
 let filling = false;
-// const drawEraser = document.getElementById("drawEraser");
-
 const eraserCursor = document.getElementById("eraserCursor");
 
 drawCanvas.addEventListener('mousemove', (e) => {
     const useCustomCursor = erasing || drawMode.value === 'free';
-
 
     if (!useCustomCursor) {
         eraserCursor.style.display = 'none';
@@ -90,8 +86,8 @@ drawCanvas.addEventListener('mousemove', (e) => {
     eraserCursor.style.height = `${brushSize}px`;
     eraserCursor.style.left = `${e.clientX}px`;
     eraserCursor.style.top = `${e.clientY}px`;
-    
 });
+
 
 drawCanvas.addEventListener('mouseleave', () => {
     eraserCursor.style.display = 'none';
@@ -115,7 +111,6 @@ sizeButtons.forEach(btn => {
 // Select default button visually
 sizeButtons.forEach(b => b.classList.remove("selected"));
 document.querySelector('.size-btn[data-size="9"]').classList.add("selected");
-
 
 presetButtons.forEach(btn => {
     const color = btn.dataset.color;
@@ -161,9 +156,6 @@ drawEraser.addEventListener("click", () => {
 
     // Force freehand mode when toggling erase button
     drawMode.value = "free"; 
-    // drawCanvas.style.cursor = 'none';
-    // eraserCursor.style.display = 'block';
-    // drawCanvas.style.cursor = erasing ? '' : 'crosshair';
 });
 
 
@@ -190,7 +182,6 @@ function drawEraserCursor(x, y) {
     drawCtx.stroke();
     drawCtx.restore();
 }
-
 
 
 const MAX_HISTORY = 5;
@@ -301,28 +292,7 @@ if (!drawCanvas || !modalImage) {
     let drawing = false;
     let startX = 0, startY = 0;
     let prevX = 0, prevY = 0;
-    // let imgNaturalW = 0, imgNaturalH = 0;
     let dpr = Math.max(window.devicePixelRatio || 1, 1);
-
-    // function resampleTempCanvasTo(newW, newH) {
-    //     // if same size, nothing to do
-    //     if (tempCanvas.width === newW && tempCanvas.height === newH) return;
-
-    //     // create an intermediate canvas with target size
-    //     const tmp = document.createElement('canvas');
-    //     tmp.width = newW;
-    //     tmp.height = newH;
-    //     const tctx = tmp.getContext('2d');
-
-    //     // draw old temp into the new size (this rescales strokes)
-    //     tctx.drawImage(tempCanvas, 0, 0, newW, newH);
-
-    //     // copy resampled back into tempCanvas: adjust tempCanvas size then draw
-    //     tempCanvas.width = newW;
-    //     tempCanvas.height = newH;
-    //     tempCtx.clearRect(0, 0, newW, newH);
-    //     tempCtx.drawImage(tmp, 0, 0);
-    // }
 
     // Prepare canvases to match the image natural size (and scale for DPR)
     function prepareDrawCanvas() {
@@ -364,7 +334,7 @@ if (!drawCanvas || !modalImage) {
 
     // Store current annotations as an offscreen canvas
     let annotations = document.createElement('canvas');
-    let annotationsCtx = annotations.getContext('2d');
+    // let annotationsCtx = annotations.getContext('2d');
 
     expandBtn.addEventListener('click', () => {
         modal.classList.toggle("expanded");
@@ -377,7 +347,6 @@ if (!drawCanvas || !modalImage) {
 function updateCanvasPosition() {
     syncCanvasToImage();
 }
-
 
 
 
@@ -419,41 +388,6 @@ async function copyAnnotatedImageToClipboard() {
 
 }
 
-// function showCopyMessage(msg) {
-//     const el = document.createElement("div");
-//     el.textContent = msg;
-//     Object.assign(el.style, {
-//         position: "fixed",
-//         bottom: "20px",
-//         left: "50%",
-//         transform: "translateX(-50%)",
-//         background: "#333",
-//         color: "#fff",
-//         padding: "10px 20px",
-//         borderRadius: "5px",
-//         zIndex: 9999,
-//         opacity: 0,
-//         transition: "opacity 0.3s"
-//     });
-//     document.body.appendChild(el);
-//     requestAnimationFrame(() => el.style.opacity = 1);
-//     setTimeout(() => {
-//         el.style.opacity = 0;
-//         setTimeout(() => el.remove(), 300);
-//     }, 2000);
-// }
-
-// function prepareTempCanvas() {
-//     imgNaturalW = modalImage.naturalWidth;
-//     imgNaturalH = modalImage.naturalHeight;
-
-//     tempCanvas.width = imgNaturalW;
-//     tempCanvas.height = imgNaturalH;
-//     tempCtx.clearRect(0, 0, imgNaturalW, imgNaturalH);
-
-//     redrawVisibleFromTemp();
-// }
-
     function getPosFromEvent(e) {
         const rect = drawCanvas.getBoundingClientRect();
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -476,18 +410,6 @@ async function copyAnnotatedImageToClipboard() {
         );
     }
 
-    // function pushInitialState() {
-    //     // Always push a blank state first
-    //     const dataURL = tempCanvas.toDataURL();
-    //     undoStack.push(dataURL);
-    //     redoStack = [];
-    // }
-
-    // function colorsMatch(c1, c2, tol = 10) {
-    //     return Math.abs(c1.r - c2.r) <= tol &&
-    //         Math.abs(c1.g - c2.g) <= tol &&
-    //         Math.abs(c1.b - c2.b) <= tol;
-    // }
 
     function onPointerDown(e) {
         if (modalVideo.style.display !== 'none') return;
@@ -518,11 +440,12 @@ async function copyAnnotatedImageToClipboard() {
             return;
         }
 
-
         redrawVisibleFromTemp();
     }
 
+
     function onPointerMove(e) {
+        if (erasing && drawMode.value !== "free") return;
         if (!drawing) return;
         e.preventDefault();
         const p = getPosFromEvent(e);
@@ -533,6 +456,7 @@ async function copyAnnotatedImageToClipboard() {
         if (drawMode.value === 'free') {
             tempCtx.lineWidth = brushSize * dpr;
             tempCtx.lineCap = 'round';
+            tempCtx.lineJoin = 'round';
 
             if (erasing) {
                 // Eraser mode
@@ -549,6 +473,8 @@ async function copyAnnotatedImageToClipboard() {
             tempCtx.moveTo(prevX, prevY);
             tempCtx.lineTo(p.x, p.y);
             tempCtx.stroke();
+            tempCtx.closePath();
+            tempCtx.globalCompositeOperation = erasing ? 'destination-out' : 'source-over';
 
             prevX = p.x;
             prevY = p.y;
@@ -556,10 +482,7 @@ async function copyAnnotatedImageToClipboard() {
             hasDrawnSomething = true;
             redrawVisibleFromTemp();
             return;
-        }
-
-
-      
+        }      
 
         // Shape preview
         redrawVisibleFromTemp();
@@ -604,9 +527,10 @@ async function copyAnnotatedImageToClipboard() {
         drawCtx.stroke();
         drawCtx.restore();
     }
+
     
     function floodFillAt(sx, sy, fillColor) {
-        const ctx = tempCtx;               // fill on the master canvas
+        const ctx = tempCtx; // fill on the master canvas
         const w = tempCanvas.width;
         const h = tempCanvas.height;
 
@@ -679,40 +603,53 @@ async function copyAnnotatedImageToClipboard() {
     }
 
 
-    // drawEraser.addEventListener("click", () => {
-    //     erasing = !erasing;
-
-    //     // Highlight button
-    //     drawEraser.classList.toggle("selected", erasing);
-
-    //     // Force freehand mode while erasing
-    //     if (erasing) drawMode.value = "free";
-
-    //     // Deselect other tools (optional)
-    //     document.querySelectorAll('.shape-btn, .size-btn, .color-btn').forEach(btn => {
-    //         if (btn !== drawEraser) btn.classList.remove("selected");
-    //     });
-    // });
-
     function onPointerUp(e) {
         if (!drawing) return;
         drawing = false;
+
         const p = getPosFromEvent(e);
         const mode = drawMode.value;
-        const lw = brushSize;/* * dpr;*/
+        const lw = brushSize;
         const color = drawColor.value || '#f94144';
 
+        // FREEHAND: already drawn segments onto tempCtx during move
+        // ensure visible canvas shows final result and save state
         if (mode === 'free') {
+            // finalize any preview/overlays then save if something has changed
+            redrawVisibleFromTemp();  
+            tempCtx.globalCompositeOperation = 'source-over';   
+            
+            const after = tempCanvas.toDataURL();
+            const before = undoStack.length ? undoStack[undoStack.length-1] : null;
+
+            if (!before || before !== after) {
+                hasDrawnSomething = true;
+                saveState();
+            }
+
+                return;
+        }
+
+        // If erasing somehow became active outside 'free', treat it like freehand commit
+        if (erasing) {
             redrawVisibleFromTemp();
-            saveState();
+            const after = tempCanvas.toDataURL();
+            const before = undoStack.length ? undoStack[undoStack.length-1] : null;
+
+            if (!before || before !== after) {
+                hasDrawnSomething = true;
+                saveState();
+            }
             return;
         }
 
-        // Commit shape
+
+        // SHAPE final commit: draw the final shape into tempCtx (internal co-ords)
+        // then update visible canvas and save state
         tempCtx.save();
         tempCtx.globalCompositeOperation = 'source-over';
         tempCtx.strokeStyle = color;
-        tempCtx.lineWidth = lw;
+        tempCtx.lineWidth = lw * dpr;
         tempCtx.lineCap = 'round';
         tempCtx.beginPath();
 
@@ -720,37 +657,41 @@ async function copyAnnotatedImageToClipboard() {
         const dy = p.y - startY;
         const size = Math.sqrt(dx*dx + dy*dy);
 
-        switch(mode){
-            case 'circle': tempCtx.arc(startX,startY,size,0,Math.PI*2); break;
-            case 'square': tempCtx.rect(startX-size,startY-size,size*2,size*2); break;
+        switch (mode) {
+            case 'circle': tempCtx.arc(startX, startY, size, 0, Math.PI*2); break;
+            case 'square': tempCtx.rect(startX - size, startY - size, size*2, size*2); break;
             case 'triangle':
-                tempCtx.moveTo(startX,startY-size);
-                tempCtx.lineTo(startX-size,startY+size);
-                tempCtx.lineTo(startX+size,startY+size);
-                tempCtx.closePath(); break;
+                tempCtx.moveTo(startX, startY - size);
+                tempCtx.lineTo(startX - size, startY + size);
+                tempCtx.lineTo(startX + size, startY + size);
+                tempCtx.closePath();
+                break;
             case 'hex':
-                for(let i=0;i<6;i++){
+                for (let i=0;i<6;i++){
                     const angle=Math.PI/3*i;
                     const px=startX+Math.cos(angle)*size;
                     const py=startY+Math.sin(angle)*size;
                     if(i===0) tempCtx.moveTo(px,py); else tempCtx.lineTo(px,py);
                 }
-                tempCtx.closePath(); break;
+                tempCtx.closePath();
+                break;
             case 'star':
-                for(let i=0;i<10;i++){
+                for (let i=0;i<10;i++){
                     const angle=Math.PI/5*i;
                     const radius=(i%2===0)?size:size*0.45;
                     const px=startX+Math.cos(angle)*radius;
                     const py=startY+Math.sin(angle)*radius;
                     if(i===0) tempCtx.moveTo(px,py); else tempCtx.lineTo(px,py);
                 }
-                tempCtx.closePath(); break;
+                tempCtx.closePath();
+                break;
         }
 
         tempCtx.stroke();
         tempCtx.restore();
-        redrawVisibleFromTemp();
 
+        // Show final result and save
+        redrawVisibleFromTemp();
         hasDrawnSomething = true;
         saveState();
     }
@@ -811,6 +752,7 @@ function secToMinSec(seconds) {
     const sec = seconds % 60;
     return `${minutes}:${sec < 10 ? '0' : ''}${sec}`;
 }
+
 
 function renderCard(map) {
     const card = document.createElement('article');
@@ -883,6 +825,7 @@ function populateFilters(maps) {
     }
 }
 
+
 // Render the grid of map cards
 function renderGrid(list){
     grid.innerHTML = '';
@@ -892,6 +835,7 @@ function renderGrid(list){
     }
     list.forEach(map => grid.appendChild(renderCard(map)));
 }
+
 
 // Open modal for a specific map
 function openModal(map) {
