@@ -560,10 +560,10 @@ overflow-wrap: break-word;
 }
 
 
-
 #Tools,
 #shapeTools,
-#brushSizes
+#brushSizes,
+#saveTools
  {
     display: grid;
     grid-template-columns: repeat(3, 36px); /* 3 buttons per row */
@@ -572,8 +572,17 @@ overflow-wrap: break-word;
     margin-bottom: 10px;
 }
 
+#saveTools {   
+    grid-template-columns: repeat(1, 36px); /* 1 button per row */
+}
+
+#Tools {
+    z-index: 6000;
+}
+
 #drawUndo { grid-column: 1; grid-row: 1; }
 #drawRedo { grid-column: 2; grid-row: 1; }
+#drawText { grid-column: 3; grid-row: 1; }
 #drawEraser { grid-column: 1; grid-row: 2; }
 #drawFill { grid-column: 2; grid-row: 2; }
 #drawClear { grid-column: 3; grid-row: 2; }
@@ -628,7 +637,8 @@ overflow-wrap: break-word;
 
 .square-btn,
 .shape-btn,
-.size-btn {
+.size-btn,
+.tool-btn {
     width: 34px;
     height: 34px;
     display: flex;
@@ -648,13 +658,15 @@ overflow-wrap: break-word;
 }
 
 .shape-btn.selected,
-#drawEraser.selected {
+#drawEraser.selected,
+#drawText.selected {
     background: var(--accent-bg, #4287f5);
     border-color: var(--accent-border, #1c5ed6);
 }
 
 .shape-btn.selected svg,
-#drawEraser.selected svg {
+#drawEraser.selected svg,
+#drawText.selected svg {
     stroke: white;
 }
 

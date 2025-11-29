@@ -34,6 +34,7 @@ const drawColor = document.getElementById('drawColor');
 const drawMode = document.getElementById('drawMode');
 const drawClear = document.getElementById('drawClear');
 const drawCopy = document.getElementById('drawCopy');
+const drawSave = document.getElementById('drawSave');
 const imgContainer = document.querySelector('.img-container');
 
 const presetButtons = document.querySelectorAll(".color-btn");
@@ -69,7 +70,10 @@ expandBtn.addEventListener('click', () => {
 let brushSize = 12; // default brush size
 let erasing = false;
 let filling = false;
+let isTextMode = false;
+let activeTextInput = null;
 const eraserCursor = document.getElementById("eraserCursor");
+const drawTextBtn = document.getElementById("drawText");
 
 drawCanvas.addEventListener('mousemove', (e) => {
     const useCustomCursor = erasing || drawMode.value === 'free';
@@ -87,6 +91,96 @@ drawCanvas.addEventListener('mousemove', (e) => {
     eraserCursor.style.left = `${e.clientX}px`;
     eraserCursor.style.top = `${e.clientY}px`;
 });
+
+drawTextBtn.addEventListener("click", () => {
+    isTextMode = true;
+    drawCanvas.style.cursor = "text";
+
+    // Deselect other shape buttons
+    // document.querySelectorAll("#shapeTools .shape-btn").forEach(btn => btn.classList.remove("selected"));
+    document.querySelectorAll('.shape-btn, .color-btn, .tool-btn').forEach(btn => {
+            if (btn !== drawTextBtn) btn.classList.remove("selected");
+        });
+
+    drawTextBtn.classList.add("selected");
+
+    // Disable eraser
+    erasing = false;
+    drawEraser.classList.remove("selected");
+
+    // highlight eraser button
+    drawEraser.classList.toggle("selected", erasing);
+
+    // Update drawMode
+    drawMode.value = "text";
+});
+
+function handleCanvasClickForText(e) {
+    if (!isTextMode || activeTextInput) return;
+
+    const rect = drawCanvas.getBoundingClientRect();
+    // const x = ((e.clientX - rect.left) / rect.width) * tempCanvas.width;
+    // const y = ((e.clientY - rect.top) / rect.height) * tempCanvas.height;
+
+    const scaleX = tempCanvas.width / rect.width;
+    const scaleY = tempCanvas.height / rect.height;
+
+    const x = (e.clientX - rect.left) * scaleX;
+    const y = (e.clientY - rect.top) * scaleY;
+
+    // Create input box
+    const input = document.createElement("input");
+    input.type = "text";
+    input.style.position = "absolute";
+    input.style.left = `${e.clientX}px`;
+    input.style.top = `${e.clientY}px`;
+    input.style.fontSize = `${brushSize * 3}px`;
+    input.style.color = drawColor.value;
+    input.style.border = "1px dashed #888";
+    input.style.background = "transparent";
+    input.style.padding = "0px";
+    input.style.zIndex = 1000;
+    input.style.outline = "none";
+
+    document.body.appendChild(input);
+    input.focus();
+    activeTextInput = input;
+
+    function commitText() {
+        if (!input.value.trim()) {
+            cleanup();
+            return;
+        }
+
+        tempCtx.save();
+        tempCtx.fillStyle = drawColor.value;
+
+        const fontSize = brushSize * 3 * scaleY;
+        tempCtx.font = `${fontSize}px sans-serif`;
+        tempCtx.textBaseline = "top";
+        tempCtx.fillText(input.value, x, y);
+        tempCtx.restore();
+
+        redrawVisibleFromTemp();
+        saveState();
+        cleanup();
+    }
+
+    function cleanup() {
+        input.remove();
+        activeTextInput = null;
+    }
+
+    input.addEventListener("keydown", (evt) => {
+        if (evt.key === "Enter") commitText();
+        if (evt.key === "Escape") cleanup();
+    });
+
+    input.addEventListener("blur", commitText);
+}
+
+// Attach click listener
+drawCanvas.addEventListener("click", handleCanvasClickForText);
 
 
 drawCanvas.addEventListener('mouseleave', () => {
@@ -144,7 +238,7 @@ drawEraser.addEventListener("click", () => {
 
     if (erasing) {
         // Deselect all other tools
-        document.querySelectorAll('.shape-btn, .color-btn').forEach(btn => {
+        document.querySelectorAll('.shape-btn, .color-btn, .tool-btn').forEach(btn => {
             if (btn !== drawEraser) btn.classList.remove("selected");
         });
         
@@ -385,8 +479,67 @@ async function copyAnnotatedImageToClipboard() {
             alert("Clipboard copy failed - opened exported image in new tab.");
         }
     }, "image/png");
-
 }
+
+
+function saveAnnotatedImageJPG() {
+    if (!modalImage.src) {
+        alert("No image to save.");
+        return;
+    }
+
+    const canvas = document.createElement("canvas");
+    canvas.width = modalImage.naturalWidth;
+    canvas.height = modalImage.naturalHeight;
+    const ctx = canvas.getContext("2d");
+
+    // Draw base image
+    ctx.drawImage(modalImage, 0, 0, canvas.width, canvas.height);
+
+    // Draw annotations
+    ctx.drawImage(
+        tempCanvas,
+        0, 0, tempCanvas.width, tempCanvas.height,
+        0, 0, canvas.width, canvas.height
+    );
+
+    // ---- Build filename ----
+    const now = new Date();
+    const pad = n => n.toString().padStart(2, "0");
+
+    const year = now.getFullYear();
+    const month = pad(now.getMonth() + 1);
+    const day = pad(now.getDate());
+
+    const hours = pad(now.getHours());
+    const minutes = pad(now.getMinutes());
+    const seconds = pad(now.getSeconds());
+
+    const timeString = `${year}-${month}-${day} @${hours}:${minutes}:${seconds}`;
+    const safeMapName = (currentMapName || "Map").trim();
+    const filename = `${timeString} - ${safeMapName}.jpg`;
+
+    // ---- Export JPG ----
+    canvas.toBlob((blob) => {
+        if (!blob) {
+            alert("Failed to create JPG file.");
+            return;
+        }
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+
+        document.body.appendChild(a);
+        a.click();
+
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+    }, "image/jpeg", 0.85);
+}
+
 
     function getPosFromEvent(e) {
         const rect = drawCanvas.getBoundingClientRect();
@@ -421,9 +574,10 @@ async function copyAnnotatedImageToClipboard() {
         const p = getPosFromEvent(e);
         startX = prevX = p.x;
         startY = prevY = p.y;
-
+console.log("Start drawing mode 1:", drawMode.value);
         const mode = drawMode.value;
         const color = drawColor.value;
+console.log("Start drawing mode 2:", mode);
 
         if (mode === "fill") {
             // convert pointer internal canvas coordinates
@@ -488,8 +642,9 @@ async function copyAnnotatedImageToClipboard() {
         redrawVisibleFromTemp();
         drawCtx.save();
         drawCtx.strokeStyle = color;
-        drawCtx.lineWidth = lw;
+        drawCtx.lineWidth = lw * dpr;
         drawCtx.lineCap = 'round';
+        drawCtx.lineJoin = 'miter';
 
         const dx = p.x - startX;
         const dy = p.y - startY;
@@ -498,14 +653,36 @@ async function copyAnnotatedImageToClipboard() {
         drawCtx.beginPath();
         switch(mode) {
             case 'circle':
-                drawCtx.arc(startX, startY, size, 0, Math.PI * 2); break;
-            case 'square':
-                drawCtx.rect(startX - size, startY - size, size*2, size*2); break;
+                drawCtx.arc(startX, startY, size, 0, Math.PI * 2);
+                break;
+            // case 'square':
+            //     drawCtx.rect(startX - size, startY - size, size*2, size*2);
+            //     break;
+            case 'rectangle':
+                drawCtx.save();
+                drawCtx.strokeStyle = color;
+                drawCtx.lineWidth = lw * dpr;
+                drawCtx.beginPath();
+                const rectX = startX;
+                const rectY = startY;
+                const rectW = p.x - startX;
+                const rectH = p.y - startY;
+                drawCtx.rect(rectX, rectY, rectW, rectH);
+                if (shiftPressed) {
+                    drawCtx.fillStyle = color;
+                    drawCtx.fill();
+                }
+                drawCtx.strokeStyle = color;
+                drawCtx.lineWidth = lw * dpr;
+                drawCtx.stroke();
+                drawCtx.restore();
+                break;
             case 'triangle':
                 drawCtx.moveTo(startX, startY - size);
                 drawCtx.lineTo(startX - size, startY + size);
                 drawCtx.lineTo(startX + size, startY + size);
-                drawCtx.closePath(); break;
+                drawCtx.closePath();
+                break;
             case 'hex':
                 for(let i=0;i<6;i++){
                     const angle = Math.PI/3*i;
@@ -513,7 +690,8 @@ async function copyAnnotatedImageToClipboard() {
                     const py = startY + Math.sin(angle)*size;
                     if(i===0) drawCtx.moveTo(px,py); else drawCtx.lineTo(px,py);
                 }
-                drawCtx.closePath(); break;
+                drawCtx.closePath();
+                break;
             case 'star':
                 for(let i=0; i<10; i++){
                     const angle = Math.PI/5*i;
@@ -522,7 +700,8 @@ async function copyAnnotatedImageToClipboard() {
                     const py = startY + Math.sin(angle)*radius;
                     if(i===0) drawCtx.moveTo(px,py); else drawCtx.lineTo(px,py);
                 }
-                drawCtx.closePath(); break;
+                drawCtx.closePath();
+                break;
         }
         drawCtx.stroke();
         drawCtx.restore();
@@ -651,6 +830,7 @@ async function copyAnnotatedImageToClipboard() {
         tempCtx.strokeStyle = color;
         tempCtx.lineWidth = lw * dpr;
         tempCtx.lineCap = 'round';
+        tempCtx.lineJoin = 'miter';
         tempCtx.beginPath();
 
         const dx = p.x - startX;
@@ -658,8 +838,28 @@ async function copyAnnotatedImageToClipboard() {
         const size = Math.sqrt(dx*dx + dy*dy);
 
         switch (mode) {
-            case 'circle': tempCtx.arc(startX, startY, size, 0, Math.PI*2); break;
-            case 'square': tempCtx.rect(startX - size, startY - size, size*2, size*2); break;
+            case 'circle':tempCtx.arc(startX, startY, size, 0, Math.PI*2);
+                break;
+            // case 'square': tempCtx.rect(startX - size, startY - size, size*2, size*2); break;
+            case 'rectangle':
+                tempCtx.save();
+                tempCtx.strokeStyle = color;
+                tempCtx.lineWidth = lw * dpr;
+                tempCtx.beginPath();
+                const rectX2 = startX;
+                const rectY2 = startY;
+                const rectW2 = p.x - startX;
+                const rectH2 = p.y - startY;
+                tempCtx.rect(rectX2, rectY2, rectW2, rectH2);
+                if (shiftPressed) {
+                    tempCtx.fillStyle = color;
+                    tempCtx.fill();
+                }
+                tempCtx.strokeStyle = color;
+                tempCtx.lineWidth = lw * dpr;
+                tempCtx.stroke();
+                tempCtx.restore();
+                break;
             case 'triangle':
                 tempCtx.moveTo(startX, startY - size);
                 tempCtx.lineTo(startX - size, startY + size);
@@ -717,7 +917,14 @@ async function copyAnnotatedImageToClipboard() {
         if (!modalImage.src) return alert('No image to copy.');
 
         copyAnnotatedImageToClipboard();       
-});
+    });
+
+    // Save to disk: produce FULL-RES PNG matching image natural size
+    drawSave.addEventListener('click', async () => {
+        if (!modalImage.src) return alert('No image to copy.');
+
+        saveAnnotatedImageJPG();       
+    });
 
 const expandToggleBtn = document.getElementById('expandToggle');
     if (expandToggleBtn) {
@@ -839,6 +1046,7 @@ function renderGrid(list){
 
 // Open modal for a specific map
 function openModal(map) {
+    window.currentMapName = map.name || "Map";
     // ===== BIOME OVERVIEW MAP FULLSCREEN MODE =====
     const isBiomeMap = map.stats && (map.stats["Map Type"] || "").trim().toLowerCase() === "biome";
 
@@ -999,7 +1207,9 @@ window.addEventListener("DOMContentLoaded", () => {
             const mode = btn.dataset.mode;
 
             // Highlight selected button
-            shapeBtns.forEach(b => b.classList.remove("selected"));
+            document.querySelectorAll('.shape-btn, .color-btn, .tool-btn').forEach(btn => {
+               btn.classList.remove("selected");
+            });
             btn.classList.add("selected");
 
             // Update hidden <select> so your drawing code still works
@@ -1058,6 +1268,17 @@ function closeModalFn() {
 //     const i = Number(modal.dataset.idx || 0);
 //     showMedia((i + 1) % current.media.length);
 // });
+
+let shiftPressed = false;
+
+window.addEventListener('keydown', e => {
+    if (e.key === "Shift") shiftPressed = true;
+});
+
+window.addEventListener('keyup', e => {
+    if (e.key === "Shift") shiftPressed = false;
+});
+
 
 // Close modal events
 closeModal.addEventListener('click', closeModalFn);
