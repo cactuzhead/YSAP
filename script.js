@@ -653,7 +653,17 @@ console.log("Start drawing mode 2:", mode);
         drawCtx.beginPath();
         switch(mode) {
             case 'circle':
+                drawCtx.save(); // save context
+                drawCtx.beginPath();
                 drawCtx.arc(startX, startY, size, 0, Math.PI * 2);
+                if (shiftPressed) {
+                    drawCtx.fillStyle = color;
+                    drawCtx.fill();
+                }
+                drawCtx.strokeStyle = color;
+                drawCtx.lineWidth = lw * dpr;
+                drawCtx.stroke();
+                drawCtx.restore();
                 break;
             // case 'square':
             //     drawCtx.rect(startX - size, startY - size, size*2, size*2);
@@ -678,29 +688,54 @@ console.log("Start drawing mode 2:", mode);
                 drawCtx.restore();
                 break;
             case 'triangle':
+                drawCtx.save();
+                drawCtx.beginPath();
                 drawCtx.moveTo(startX, startY - size);
                 drawCtx.lineTo(startX - size, startY + size);
                 drawCtx.lineTo(startX + size, startY + size);
                 drawCtx.closePath();
+                if (shiftPressed) drawCtx.fillStyle = color, drawCtx.fill();
+                drawCtx.strokeStyle = color;
+                drawCtx.lineWidth = lw * dpr;
+                drawCtx.stroke();
+                drawCtx.restore();
                 break;
+
             case 'hex':
-                for(let i=0;i<6;i++){
-                    const angle = Math.PI/3*i;
-                    const px = startX + Math.cos(angle)*size;
-                    const py = startY + Math.sin(angle)*size;
-                    if(i===0) drawCtx.moveTo(px,py); else drawCtx.lineTo(px,py);
+                drawCtx.save();
+                drawCtx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    const angle = Math.PI / 3 * i;
+                    const px = startX + Math.cos(angle) * size;
+                    const py = startY + Math.sin(angle) * size;
+                    if (i === 0) drawCtx.moveTo(px, py);
+                    else drawCtx.lineTo(px, py);
                 }
                 drawCtx.closePath();
+                if (shiftPressed) drawCtx.fillStyle = color, drawCtx.fill();
+                drawCtx.strokeStyle = color;
+                drawCtx.lineWidth = lw * dpr;
+                drawCtx.stroke();
+                drawCtx.restore();
                 break;
+
             case 'star':
-                for(let i=0; i<10; i++){
-                    const angle = Math.PI/5*i;
-                    const radius = (i%2===0)?size:size*0.45;
-                    const px = startX + Math.cos(angle)*radius;
-                    const py = startY + Math.sin(angle)*radius;
-                    if(i===0) drawCtx.moveTo(px,py); else drawCtx.lineTo(px,py);
+                drawCtx.save();
+                drawCtx.beginPath();
+                for (let i = 0; i < 10; i++) {
+                    const angle = Math.PI / 5 * i;
+                    const radius = (i % 2 === 0) ? size : size * 0.45;
+                    const px = startX + Math.cos(angle) * radius;
+                    const py = startY + Math.sin(angle) * radius;
+                    if (i === 0) drawCtx.moveTo(px, py);
+                    else drawCtx.lineTo(px, py);
                 }
                 drawCtx.closePath();
+                if (shiftPressed) drawCtx.fillStyle = color, drawCtx.fill();
+                drawCtx.strokeStyle = color;
+                drawCtx.lineWidth = lw * dpr;
+                drawCtx.stroke();
+                drawCtx.restore();
                 break;
         }
         drawCtx.stroke();
@@ -838,7 +873,18 @@ console.log("Start drawing mode 2:", mode);
         const size = Math.sqrt(dx*dx + dy*dy);
 
         switch (mode) {
-            case 'circle':tempCtx.arc(startX, startY, size, 0, Math.PI*2);
+            case 'circle':
+                tempCtx.save(); // save context
+                tempCtx.beginPath();
+                tempCtx.arc(startX, startY, size, 0, Math.PI * 2);
+                if (shiftPressed) {
+                    tempCtx.fillStyle = color;
+                    tempCtx.fill();
+                }
+                tempCtx.strokeStyle = color;
+                tempCtx.lineWidth = lw * dpr;
+                tempCtx.stroke();
+                tempCtx.restore();
                 break;
             // case 'square': tempCtx.rect(startX - size, startY - size, size*2, size*2); break;
             case 'rectangle':
@@ -861,29 +907,52 @@ console.log("Start drawing mode 2:", mode);
                 tempCtx.restore();
                 break;
             case 'triangle':
+                tempCtx.save();
+                tempCtx.beginPath();
                 tempCtx.moveTo(startX, startY - size);
                 tempCtx.lineTo(startX - size, startY + size);
                 tempCtx.lineTo(startX + size, startY + size);
                 tempCtx.closePath();
+                if (shiftPressed) tempCtx.fillStyle = color, tempCtx.fill();
+                tempCtx.strokeStyle = color;
+                tempCtx.lineWidth = lw * dpr;
+                tempCtx.stroke();
+                tempCtx.restore();
                 break;
             case 'hex':
-                for (let i=0;i<6;i++){
-                    const angle=Math.PI/3*i;
-                    const px=startX+Math.cos(angle)*size;
-                    const py=startY+Math.sin(angle)*size;
-                    if(i===0) tempCtx.moveTo(px,py); else tempCtx.lineTo(px,py);
+                tempCtx.save();
+                tempCtx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    const angle = Math.PI / 3 * i;
+                    const px = startX + Math.cos(angle) * size;
+                    const py = startY + Math.sin(angle) * size;
+                    if (i === 0) tempCtx.moveTo(px, py);
+                    else tempCtx.lineTo(px, py);
                 }
                 tempCtx.closePath();
+                if (shiftPressed) tempCtx.fillStyle = color, tempCtx.fill();
+                tempCtx.strokeStyle = color;
+                tempCtx.lineWidth = lw * dpr;
+                tempCtx.stroke();
+                tempCtx.restore();
                 break;
             case 'star':
-                for (let i=0;i<10;i++){
-                    const angle=Math.PI/5*i;
-                    const radius=(i%2===0)?size:size*0.45;
-                    const px=startX+Math.cos(angle)*radius;
-                    const py=startY+Math.sin(angle)*radius;
-                    if(i===0) tempCtx.moveTo(px,py); else tempCtx.lineTo(px,py);
+                tempCtx.save();
+                tempCtx.beginPath();
+                for (let i = 0; i < 10; i++) {
+                    const angle = Math.PI / 5 * i;
+                    const radius = (i % 2 === 0) ? size : size * 0.45;
+                    const px = startX + Math.cos(angle) * radius;
+                    const py = startY + Math.sin(angle) * radius;
+                    if (i === 0) tempCtx.moveTo(px, py);
+                    else tempCtx.lineTo(px, py);
                 }
                 tempCtx.closePath();
+                if (shiftPressed) tempCtx.fillStyle = color, tempCtx.fill();
+                tempCtx.strokeStyle = color;
+                tempCtx.lineWidth = lw * dpr;
+                tempCtx.stroke();
+                tempCtx.restore();
                 break;
         }
 
@@ -951,6 +1020,7 @@ const expandToggleBtn = document.getElementById('expandToggle');
     window.addEventListener('resize', updateCanvasOverlay);
     window.addEventListener('scroll', updateCanvasOverlay, true);
 }
+
 
 
 // Convert seconds to "minutes:seconds" format
