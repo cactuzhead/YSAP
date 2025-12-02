@@ -1118,6 +1118,7 @@ function renderGrid(list){
 
 // Open modal for a specific map
 function openModal(map) {
+    resetModal();
     window.currentMapName = map.name || "Map";
     // ===== BIOME OVERVIEW MAP FULLSCREEN MODE =====
     const isBiomeMap = map.stats && (map.stats["Map Type"] || "").trim().toLowerCase() === "biome";
@@ -1186,6 +1187,28 @@ function openModal(map) {
     modal.classList.add('show');
     modal.setAttribute('aria-hidden', 'false');
 }
+
+function resetModal() {
+    const modalMain = document.querySelector(".modal-main");
+    const gallery = document.querySelector(".gallery");
+    const detailsCol = document.querySelector(".details");
+    const icon = document.querySelector("#expandToggle i");
+
+    // remove expanded state
+    modalMain.classList.remove("expanded");
+
+    // Restore gallery width
+    if (gallery) gallery.style.flex = "2 1 600px";
+
+    // Restore details
+    if (detailsCol) detailsCol.style.display = "";
+
+    // Reset icon
+    if (icon) icon.setAttribute("data-lucide", "expand");
+
+    lucide.createIcons();
+}
+
 
 // Clear both canvases
 function clearCanvas() {
