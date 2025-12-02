@@ -138,11 +138,11 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     display: none !important;
 }
 
-.modal-content.fullscreen-image #prevShot,
+/* .modal-content.fullscreen-image #prevShot,
 .modal-content.fullscreen-image #nextShot {
     height: 90vh;
     align-items: center;
-}
+} */
 
 .modal-body {
     display: flex;
@@ -266,6 +266,31 @@ html,body{height:100%;margin:0;font-family:Roboto, system-ui, -apple-system, 'Se
     pointer-events: none;
     z-index: 2;
 }
+
+.media-wrap iframe {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    border-radius: 0;
+}
+
+.media-wrap.video-active {
+    width: 100%;
+    max-width: none;
+    height: 95vh;
+}
+
+.media-wrap.video-active .img-container {
+    width: 100%;
+    height: 100%;
+}
+
+.media-wrap.video-active iframe {
+    width: 100%;
+    height: 100%;
+}
+
+
 
 .nav-btn {
     background: none;
@@ -440,7 +465,7 @@ overflow-wrap: break-word;
 .draw-tools .tooltip {
     position: relative;
     overflow: visible !important;
-    z-index: 5001;
+    z-index: 55001;
 }
 
 /* When expand mode active, hide stats column */
@@ -591,8 +616,7 @@ overflow-wrap: break-word;
     position: relative;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    z-index: 9999;
+    justify-content: center;    
 }
 
 .tooltip::after {
@@ -627,10 +651,11 @@ overflow-wrap: break-word;
     transition: opacity 0.15s ease;
 }
 
+.tooltip,
 .tooltip:hover::after,
 .tooltip:hover::before {
     opacity: 1;
-        z-index: 99999;
+    z-index: 99999;
 }
 
 
@@ -638,7 +663,8 @@ overflow-wrap: break-word;
 .square-btn,
 .shape-btn,
 .size-btn,
-.tool-btn {
+.tool-btn,
+.save-btn {
     width: 34px;
     height: 34px;
     display: flex;

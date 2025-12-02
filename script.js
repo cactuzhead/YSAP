@@ -231,6 +231,7 @@ const drawEraser = document.getElementById("drawEraser");
 const freeButton = document.querySelector('#shapeTools .shape-btn[data-mode="free"]');
 
 drawEraser.addEventListener("click", () => {
+    disableTextMode();
     erasing = !erasing;
 
     // highlight eraser button
@@ -255,6 +256,7 @@ drawEraser.addEventListener("click", () => {
 
 
 drawFill.addEventListener('click', () => {
+    disableTextMode();
     drawMode.value = "fill";
     erasing = false;
     filling = true;
@@ -574,10 +576,10 @@ function saveAnnotatedImageJPG() {
         const p = getPosFromEvent(e);
         startX = prevX = p.x;
         startY = prevY = p.y;
-console.log("Start drawing mode 1:", drawMode.value);
+// console.log("Start drawing mode 1:", drawMode.value);
         const mode = drawMode.value;
         const color = drawColor.value;
-console.log("Start drawing mode 2:", mode);
+// console.log("Start drawing mode 2:", mode);
 
         if (mode === "fill") {
             // convert pointer internal canvas coordinates
@@ -1123,20 +1125,10 @@ function openModal(map) {
     const modalMain = modal.querySelector(".modal-main");
     const gallery = modal.querySelector(".gallery");
     const mediaWrap = modal.querySelector(".media-wrap");
-    const details = modal.querySelector(".details");
-    // const prevBtn = document.getElementById("prevShot");
-    // const nextBtn = document.getElementById("nextShot");
+    const modalStats = document.getElementById("modalStats");
 
-    details.style.display = isBiomeMap ? "none" : "block";
-    // prevBtn.style.display = isBiomeMap ? "none" : "flex";
-    // nextBtn.style.display = isBiomeMap ? "none" : "flex";
-    gallery.style.flex = isBiomeMap ? "1 1 100%" : "2 1 600px";
-    mediaWrap.style.maxHeight = isBiomeMap ? "85vh" : "78vh";
+    if (modalStats) modalStats.style.display = isBiomeMap ? "none" : "block";
 
-    modalMain.classList.toggle("fullscreen-image", isBiomeMap);
-
-
-    
     current.index = maps.indexOf(map);
     current.media = map.screenshots || (map.thumbnail ? [map.thumbnail] : []);
     current.video = map.video || null;
@@ -1147,30 +1139,29 @@ function openModal(map) {
     modalAuthor.textContent = map.author || '';
     modalDesc.textContent = map.description || '';
 
-    modalStats.innerHTML = '';
-
     if (!isBiomeMap && map.stats) {
-    Object.entries(map.stats).forEach(([key, value]) => {
-        let displayValue = value;
+        modalStats.innerHTML = '';  
+        Object.entries(map.stats).forEach(([key, value]) => {
+            let displayValue = value;
 
-        // Format Date
-        if (key.toLowerCase() === 'date' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
-            displayValue = formatDate(value);
-        }
+            // Format Date
+            if (key.toLowerCase() === 'date' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+                displayValue = formatDate(value);
+            }
 
-        // Format time values
-        if (key === 'Round Time' || key === 'Fuel Time') {
-            displayValue = secToMinSec(value);
-        }
+            // Format time values
+            if (key === 'Round Time' || key === 'Fuel Time') {
+                displayValue = secToMinSec(value);
+            }
 
-        // Create stat row
-        const statRow = document.createElement('div');
-        statRow.className = 'stat-row';
-        statRow.innerHTML = `<strong>${key}</strong><span>${displayValue}</span>`;
+            // Create stat row
+            const statRow = document.createElement('div');
+            statRow.className = 'stat-row';
+            statRow.innerHTML = `<strong>${key}</strong><span>${displayValue}</span>`;
 
-        modalStats.appendChild(statRow);
-    });
-}
+            modalStats.appendChild(statRow);
+        });
+    }
 
 
     // Thumbnails and video buttons
@@ -1221,12 +1212,46 @@ function resetDrawingForNewImage() {
     redrawVisibleFromTemp();
 }
 
+
+function disableTextMode() {
+    if (!isTextMode) return;
+    isTextMode = false;    
+
+    drawTextBtn.classList.remove("selected");
+
+    if (activeTextInput) {
+        activeTextInput.remove();
+        activeTextInput = null;
+    }
+
+    drawCanvas.style.cursor = "crosshair";
+    drawMode.value = "free";
+}
+
+
 // Show a specific screenshot in the modal
 function showMedia(idx) {
     const mediaWrap = modalImage.closest('.media-wrap');
     modalImage.style.display = '';
     modalVideo.style.display = 'none';
+    mediaWrap.classList.remove('video-active');
+    modalVideo.src = '';
     modal.dataset.idx = idx;
+
+    // Show draw tools for images
+    const drawTools = document.getElementById('drawTools');
+    if (drawTools) drawTools.style.display = '';
+
+    // Reset canvas for drawing
+    const canvas = document.getElementById('drawCanvas');
+    if (canvas) canvas.style.display = 'block';
+
+    const details = document.querySelector('.details');
+    if (details) details.style.display = '';
+
+    mediaWrap.style.height = '';
+    mediaWrap.style.maxHeight = '';
+    mediaWrap.style.flex = '';
 
     // Remove no-image state initially
     mediaWrap.classList.remove('no-image');
@@ -1274,6 +1299,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     shapeBtns.forEach(btn => {
         btn.addEventListener("click", () => {
+            disableTextMode();
             const mode = btn.dataset.mode;
 
             // Highlight selected button
@@ -1308,36 +1334,53 @@ window.addEventListener("DOMContentLoaded", () => {
 function showVideo() {
     if (!current.video) return;
 
+    const mediaWrap = modalVideo.closest('.media-wrap');
+    const canvas = document.getElementById('drawCanvas');
+
+    // Hide image and canvas
     modalImage.style.display = 'none';
-    modalVideo.parentElement.style.display = '';
-    modalVideo.style.display = '';
+    if (canvas) canvas.style.display = 'none';
 
+    // Hide draw tools for videos
+    const drawTools = document.getElementById('drawTools');
+    if (drawTools) drawTools.style.display = 'none';
+
+    modalVideo.style.display = 'block';
+    mediaWrap.classList.add('video-active');  // << add class
+
+    // Set iframe src
     let url = current.video;
-
-    // Convert standard YouTube URLs to embed format
     if (url.includes('watch?v=')) url = url.replace('watch?v=', 'embed/');
     if (url.includes('youtu.be/')) url = url.replace('youtu.be/', 'www.youtube.com/embed/');
-
     modalVideo.src = url + '?autoplay=1&rel=0';
 }
+
+
 
 // Close modal
 function closeModalFn() {
     modal.classList.remove('show');
     modal.setAttribute('aria-hidden', 'true');
     modalVideo.src = '';
+
+    // Reset expand/fullscreen state
+    const modalMain = modal.querySelector('.modal-main');
+    if (modalMain) {
+        modalMain.classList.remove('expanded', 'fullscreen-image');
+    }
+
+    // Reset details visibility
+    const details = modal.querySelector('.details');
+    if (details) details.style.display = '';
+
+    // Reset expand icon
+    if (expandBtn) {
+        const icon = expandBtn.querySelector('i');
+        if (icon) icon.setAttribute('data-lucide', 'expand');
+        lucide.createIcons();
+    }
 }
 
-// Modal navigation
-// prevShot.addEventListener('click', () => {
-//     const i = Number(modal.dataset.idx || 0);
-//     showMedia((i - 1 + current.media.length) % current.media.length);
-// });
-
-// nextShot.addEventListener('click', () => {
-//     const i = Number(modal.dataset.idx || 0);
-//     showMedia((i + 1) % current.media.length);
-// });
 
 let shiftPressed = false;
 
