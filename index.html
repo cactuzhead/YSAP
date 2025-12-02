@@ -75,7 +75,8 @@
 								<button class="color-btn tooltip" data-color="#5591f5" data-tooltip="Blue"></button>				
 								<button class="color-btn tooltip" data-color="#b429f9" data-tooltip="Purple"></button>
 							</div>
-							<input type="color" id="drawColor" value="#f94144" class="tooltip" data-tooltip="Palette">					
+
+							<input type="color" id="drawColor" value="#f94144" class="tooltip" data-tooltip="Color Picker">					
 							
 							<div id="shapeTools">
 								<button data-mode="free" class="shape-btn tooltip selected" data-tooltip="Draw tool">
@@ -100,20 +101,20 @@
 
 							<!-- hidden select that runs tools -->
 							<select id="drawMode" style="display:none;">
-								<option value="free">✏ Freehand</option>
-								<option value="circle">● Circle</option>
-								<option value="rectangle">■ Rectangle</option>
-								<option value="triangle">▲ Triangle</option>
-								<option value="hex">⬣ Hexagon</option>
-								<option value="star">★ Star</option>
+								<option value="free">Freehand</option>
+								<option value="circle">Circle</option>
+								<option value="rectangle">Rectangle</option>
+								<option value="triangle">Triangle</option>
+								<option value="hex">Hexagon</option>
+								<option value="star">Star</option>
 							</select>
 							
 							<div id="Tools">
-								<button id="drawUndo" class="tool-btn tooltip" data-tooltip="Undo"><i data-lucide="undo"></i></button>
-								<button id="drawRedo" class="tool-btn tooltip" data-tooltip="Redo"><i data-lucide="redo"></i></button>
-								<button id="drawText" class="tool-btn tooltip" data-tooltip="Text"><i data-lucide="type"></i></button>
-								<button id="drawEraser" class="tool-btn tooltip" data-tooltip="Eraser"><i data-lucide="eraser"></i></button>
-								<button id="drawFill" class="tool-btn tooltip" data-tooltip="Paint bucket"><i data-lucide="paint-bucket"></i></button>
+								<button id="drawUndo" class="tool-btn tooltip" data-tooltip="Undowwwwwwwwwwwwwwwwwwwwwwwwww"><i data-lucide="undo"></i></button>
+								<button id="drawRedo" class="tool-btn tooltip" data-tooltip="Redowwwwwwwwwwwwwwwwww"><i data-lucide="redo"></i></button>
+								<button id="drawText" class="tool-btn tooltip" data-tooltip="Textwwwwwwwwwwwwwwwwww"><i data-lucide="type"></i></button>
+								<button id="drawEraser" class="tool-btn tooltip" data-tooltip="Eraserdddddddddddddddddddd"><i data-lucide="eraser"></i></button>
+								<button id="drawFill" class="tool-btn tooltip" data-tooltip="Paint bucketssssssssssssssssssssssssssssssssssssssssss"><i data-lucide="paint-bucket"></i></button>
 								<button id="drawClear" class="tool-btn tooltip" data-tooltip="Clear all anotations"><i data-lucide="brush-cleaning"></i></button>
 							</div>
 
@@ -140,6 +141,7 @@
 	</div>
 
 	<div id="eraserCursor"></div>
+	<div id="globalTooltip"></div>
 
 	<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 	<script src="script.js"></script>	

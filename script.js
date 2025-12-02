@@ -1115,6 +1115,29 @@ function renderGrid(list){
     list.forEach(map => grid.appendChild(renderCard(map)));
 }
 
+const tooltip = document.getElementById("globalTooltip");
+
+document.addEventListener("mouseover", (e) => {
+    const tipTarget = e.target.closest("[data-tooltip]");
+    if (tipTarget) {
+        const rect = tipTarget.getBoundingClientRect();
+
+        tooltip.textContent = tipTarget.dataset.tooltip;
+        tooltip.style.left = (rect.left + rect.width / 2) + "px";
+        tooltip.style.top = (rect.top - 28) + "px";
+        tooltip.style.opacity = 1;
+    }
+});
+
+document.addEventListener("mouseout", (e) => {
+    const tipTarget = e.target.closest("[data-tooltip]");
+    if (tipTarget) {
+        tooltip.style.opacity = 0;
+    }
+});
+
+
+
 
 // Open modal for a specific map
 function openModal(map) {
