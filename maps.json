@@ -3,7 +3,7 @@
         "name": "Grasslands",
         "author": "Cactuzhead",
         "base": "Grasslands",
-        "extra_screenshots": null,
+        "extra_screenshots": ["island1", "island2", "island3", "mysteryisland1", "mysteryisland2", "mysteryisland3"],
         "video": null,
         "description": "Cactuzhead's map overview of the grasslands biome to help you navigate the overworld.",
         "stats": {
